@@ -10,6 +10,7 @@
               <xsd:element name="user"/>
               <xsd:element name="pass"/>
               <xsd:element name="databaseServer"/>
+              <xsd:element name="databaseType"/>
             </xsd:sequence>
             <xsd:attribute name="type" type="xsd:string" use="required" />
             <xsd:attribute name="inUse" type="xsd:boolean" use="optional" default="false"/>
