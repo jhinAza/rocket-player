@@ -2,7 +2,7 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="server_settings.xsd">
   <environment type="dev" inUse="true">
-    <database>weblayerev</database>
+    <database>webplayerdev</database>
     <user>jhin</user>
     <pass>pass</pass>
     <databaseServer>localhost</databaseServer>
