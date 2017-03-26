@@ -10,6 +10,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="/static/librerias/js/jquery.min.js" charset="utf-8"></script>
       <script src="/static/librerias/js/bootstrap.min.js" charset="utf-8"></script>
+      <script src="/static/js/main.min.js" charset="utf-8"></script>
       <link rel="stylesheet" href="/static/librerias/css/night.min.css">
       <link rel="stylesheet" href="/static/css/night.css">
     </head>

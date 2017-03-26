@@ -106,3 +106,14 @@
 .logo {
   width: 4em;
 }
+
+.formUsers {
+  padding: 0em 1em;
+}
+
+.formUsers .row {
+  margin-bottom: 5px;
+}
+.formUsers button {
+  width: 50%
+}
