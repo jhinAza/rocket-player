@@ -8,4 +8,11 @@
     <databaseServer>localhost</databaseServer>
     <databaseType>MySQL</databaseType>
   </environment>
+  <environment type="prod" inUse="false">
+    <database>webplayer</database>
+    <user>jhin</user>
+    <pass>pass</pass>
+    <databaseServer>localhost</databaseServer>
+    <databaseType>MySQL</databaseType>
+  </environment>
 </settings>

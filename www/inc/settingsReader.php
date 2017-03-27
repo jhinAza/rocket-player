@@ -17,11 +17,43 @@
     }
 
     function readDBUser() {
-      return $this->settings->environment->user;
+      foreach ($this->settings as $env) {
+        if ($env["inUse"][0] == "true") {
+          return $env->user->__toString();
+        }
+      }
     }
 
     function readDBPass() {
-      return $this->settings->environment->pass;
+      foreach ($this->settings as $env) {
+        if ($env["inUse"][0] == "true") {
+          return $env->pass->__toString();
+        }
+      }
+    }
+
+    function readDBServer() {
+      foreach ($this->settings as $env) {
+        if ($env["inUse"][0] == "true") {
+          return $env->server->__toString();
+        }
+      }
+    }
+
+    function readDBName() {
+      foreach ($this->settings as $env) {
+        if ($env["inUse"][0] == "true") {
+          return $env->database->__toString();
+        }
+      }
+    }
+
+    function readDBType() {
+      foreach ($this->settings as $env) {
+        if ($env["inUse"][0] == "true") {
+          return $env->databaseType->__toString();
+        }
+      }
     }
   }
 
