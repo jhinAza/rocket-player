@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="settings">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="environment" minOccurs="1" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="database"/>
+              <xsd:element name="user"/>
+              <xsd:element name="pass"/>
+              <xsd:element name="databaseServer"/>
+              <xsd:element name="databaseType"/>
+            </xsd:sequence>
+            <xsd:attribute name="type" type="xsd:string" use="required" />
+            <xsd:attribute name="inUse" type="xsd:boolean" use="optional" default="false"/>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>
