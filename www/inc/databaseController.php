@@ -1,7 +1,7 @@
 <?php
   class DatabaseController {
     function __construct() {
-      require_once("/inc/settingsReader.php");
+      require_once("inc/settingsReader.php");
       $settings = new SettingsReader();
       $this->server = $settings->readDBServer();
       $this->user = $settings->readDBUser();
