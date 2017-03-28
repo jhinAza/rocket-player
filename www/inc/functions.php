@@ -19,7 +19,7 @@
   }
 
   function writeNavbar(){
-    include_once("/static/html/header.html");
+    include_once("static/html/header.html");
   }
 
   function writeFooter() {
