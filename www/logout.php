@@ -1,5 +1,5 @@
 <?php
-  require_once("/inc/functions.php");
+  require_once("inc/functions.php");
   if (isUserLoggedIn()) {
     session_start();
     unset($_SESSION["user"]);

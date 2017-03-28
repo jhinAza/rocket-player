@@ -1,11 +1,11 @@
 <!-- This file is for the sole purpose of log-in a user -->
 <?php
-  require_once "/inc/functions.php";
+  require_once("inc/functions.php");
   writeHeader("login");
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Then we will read the user and password data and try to check the credentials
     if (isset($_POST["user"]) && isset($_POST["pass"])) {
-      require_once "/inc/databaseController.php";
+      require_once("inc/databaseController.php");
       $db = new DatabaseController();
       if ($db->loginUser($_POST["user"], $_POST["pass"])) {
         session_start();
