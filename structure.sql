@@ -8,9 +8,10 @@ CREATE TABLE IF NOT EXISTS users
   (
      id           INT auto_increment,
      username     VARCHAR(20) NOT NULL,
+     userEmail    VARCHAR(100) NOT NULL,
      userPassword VARCHAR(256),
-     creationdate DATE NOT NULL,
-     active       BOOLEAN NOT NULL,
+     creationdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     active       BOOLEAN NOT NULL DEFAULT TRUE,
      CONSTRAINT badusersprimarykey PRIMARY KEY (id)
   );
 

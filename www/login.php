@@ -5,7 +5,17 @@
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Then we will read the user and password data and try to check the credentials
     if (isset($_POST["user"]) && isset($_POST["pass"])) {
-      print "<h1>Logueando</h1>";
+      require_once "/inc/databaseController.php";
+      $db = new DatabaseController();
+      if ($db->loginUser($_POST["user"], $_POST["pass"])) {
+        session_start();
+        $_SESSION["user"] = $_POST["user"];
+        $_SESSION["UID"] = $_POST["user"];
+        header("Location:/home.php");
+      } else {
+        print "<h3>Ha ocurrido un error</h3>";
+        print "<a href=/login.php>Pulse aqui</a> para reintentar";
+      }
     }
   } else {
     // Is GET and then we need to show the data.
@@ -73,7 +83,7 @@
                 <div class="input-group-addon">
                   <span class="glyphicon glyphicon-lock"></span>
                 </div>
-                <input type="email" name="passRegister" placeholder="Contraseña" id="passRegister" class="form-control">
+                <input type="password" name="passRegister" placeholder="Contraseña" id="passRegister" class="form-control">
               </div>
             </div>
             <div class="row">
