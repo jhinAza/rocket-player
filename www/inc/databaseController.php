@@ -60,5 +60,70 @@
       }
     }
 
+    function checkUserUID($user,$UID) {
+      $id = $this->getUserID($user);
+      $data = $this->selectUIDRow($user);
+      if (count($data) == 1) {
+        $row = $data[0];
+        return ($id == $row["uid"]) && ($UID == $row["token"]);
+      }
+      return false;
+    }
+
+    function setUID($user) {
+      $timestamp = time();
+      $hash = hash("sha256", "$user-$timestamp");
+      $data = $this->selectUIDRow($user);
+      $date = date('Y-m-d H:i:s',$timestamp);
+      $id = $this->getUserID($user);
+      if (count($data) == 0) {
+        $stm = $this->connect->prepare("insert into uuid values (:hash, :id, :time)");
+        $stm->bindParam(":hash",$hash);
+        $stm->bindParam(":id",$id);
+        $stm->bindParam(":time", $date);
+        $result = $stm->execute();
+        if ($result) {
+          return $hash;
+        }
+      } else {
+        $stm = $this->connect->prepare("update uuid set token = :hash, date = :time where uid = :id");
+        $stm->bindParam(":hash",$hash);
+        $stm->bindParam(":id",$id);
+        $stm->bindParam(":time", $date);
+        $result = $stm->execute();
+        if ($result) {
+          return $hash;
+        }
+      }
+      return false;
+    }
+
+    function getUserID($user) {
+      $stm = $this->connect->prepare("select ID from users where username = :user");
+      $stm->bindParam(":user",$user);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          $id = $data[0]['ID'];
+          return $id;
+        }
+      }
+      return false;
+    }
+
+    function selectUIDRow($user) {
+      $id = $this->getUserID($user);
+      if ($id) {
+        $stm = $this->connect->prepare("select * from uuid where uid = :id");
+        $stm->bindParam(":id",$id);
+        $result = $stm->execute();
+        if ($result) {
+          $data = $stm->fetchAll();
+          return $data;
+        }
+      }
+      return false;
+    }
   }
 ?>

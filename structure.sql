@@ -93,3 +93,11 @@ CREATE TABLE IF NOT EXISTS resources_video
      CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource)
      REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
+
+CREATE TABLE IF NOT EXISTS uuid
+  (
+     token CHAR(64),
+     uid   INT,
+     date DATETIME DEFAULT CURRENT_TIMESTAMP,
+     CONSTRAINT baduuiduidforeignkey FOREIGN KEY (uid) REFERENCES users (id)
+  );
