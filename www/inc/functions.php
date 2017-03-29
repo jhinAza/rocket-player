@@ -31,6 +31,16 @@
 
   function isUserLoggedIn() {
     session_start();
-    return isset($_SESSION["user"]) && isset($_SESSION["UID"]);
+    $isLoggedIn = false;
+    if (isset($_SESSION["user"]) && isset($_SESSION["UID"])) {
+      $user = $_SESSION["user"];
+      $uid = $_SESSION["UID"];
+      session_write_close();
+      require_once("inc/databaseController.php");
+      $db = new DatabaseController();
+      $isValid = $db->checkUserUID($user,$uid);
+      return $isValid;
+    }
+    return $isLoggedIn;
   }
 ?>

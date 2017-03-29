@@ -10,7 +10,10 @@
       if ($db->loginUser($_POST["user"], $_POST["pass"])) {
         session_start();
         $_SESSION["user"] = $_POST["user"];
-        $_SESSION["UID"] = $_POST["user"];
+        $UID = $db->setUID($_SESSION["user"]);
+        if ($UID) {
+          $_SESSION["UID"] = $UID;
+        }
         header("Location:/home.php");
       } else {
         print "<h3>Ha ocurrido un error</h3>";
