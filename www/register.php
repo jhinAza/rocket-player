@@ -7,7 +7,18 @@
       $db = new DatabaseController();
       $bool = $db->registerUser($_POST["userRegister"], $_POST["passRegister"], $_POST["mailRegister"]);
       if ($bool) {
-        header("Location:/login.php");
+        $id = $db->getUserID($_POST["userRegister"]);
+        if ($id) {
+          $filename = "user_$id.xml";
+          $default = "default.xml";
+          $folder = "userSettings/";
+          if (file_exists($folder.$filename)) {
+            unlink($folder.$filename);
+          }
+          if (copy($folder.$default, $folder.$filename)) {
+            header("Location:/login.php");
+          }
+        }
       } else {
         print "<h3>Ha ocurrido un error</h3>";
         print "<a href=/login.php>Pulse aqui</a> para reintentar";
