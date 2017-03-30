@@ -43,4 +43,10 @@
     }
     return $isLoggedIn;
   }
+
+  function debug($file,$function,$line) {
+    // debug(__FILE__,__FUNCTION__,__LINE__);
+    print("<H1>$file-$function-$line</H1>");
+    error_log("<H1>$file-$function-$line</H1>");
+  }
 ?>
