@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="user_settings.xsd" user_id="-1">
+  <theme name="night"></theme>
+  <resources>
+    <sign_language toggle="false"></sign_language>
+    <subtitles toggle="false"></subtitles>
+    <transcription toggle="false"></transcription>
+    <dubbing toggle="false"></dubbing>
+  </resources>
+  <languages>
+    <language lang="es-es" order="1"></language>
+  </languages>
+</settings>
