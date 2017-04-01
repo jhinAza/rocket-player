@@ -6,6 +6,7 @@
       require_once("/inc/databaseController.php");
       $db = new DatabaseController();
       $bool = $db->registerUser($_POST["userRegister"], $_POST["passRegister"], $_POST["mailRegister"]);
+      $bool = true;
       if ($bool) {
         $id = $db->getUserID($_POST["userRegister"]);
         if ($id) {
@@ -16,6 +17,9 @@
             unlink($folder.$filename);
           }
           if (copy($folder.$default, $folder.$filename)) {
+            $file = simplexml_load_file($folder.$filename);
+            $file->attributes()->user_id = $id;
+            $file->asXML($folder.$filename);
             header("Location:/login.php");
           }
         }
