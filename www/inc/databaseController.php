@@ -79,7 +79,27 @@
       $data = $this->selectUIDRow($user);
       if (count($data) == 1) {
         $row = $data[0];
-        return ($id == $row["uid"]) && ($UID == $row["token"]);
+        if (($id == $row["uid"]) && ($UID == $row["token"])) {
+          $uidDate = strtotime($row["date"]);
+          $currentDate = time();
+          if ($uidDate + (40 * 60) > $currentDate) {
+            // Si aun no han pasado mas de 40 minutos
+            if ($uidDate + (30 * 60) > $currentDate) {
+              // Si aun no han pasado mas de 30 minutos
+              return true;
+            } else {
+              // Si han pasado generamos uno nuevo
+              session_start();
+              $_SESSION["UID"] = $this->setUID($user);
+              session_write_close();
+              return true;
+            }
+          } else {
+            // El token ha caducado
+            $this->deleteUIDRow($user);
+            return false;
+          }
+        }
       }
       return false;
     }
@@ -150,6 +170,13 @@
         }
       }
       return false;
+    }
+
+    function deleteUIDRow($user) {
+      $id = $this->getUserID($user);
+      $stm = $this->connect->prepare("delete from uuid where uid = :id");
+      $stm->bindParam("id", $id);
+      $stm->execute();
     }
   }
 ?>

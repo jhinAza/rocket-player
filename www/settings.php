@@ -6,8 +6,8 @@
     session_start();
     $user = $_SESSION["user"];
     $uid = $_SESSION["UID"];
+    session_write_close();
     $tmp = "<h1>$user</h1> $uid";
-    error_log($tmp);
     $reader = new UserSettingsReader($user);
     $theme = $reader->readTheme();
     $signLang = $reader->isToggledSignLanguage();
@@ -22,6 +22,7 @@
     session_start();
     $user = $_SESSION["user"];
     $uid = $_SESSION["UID"];
+    session_write_close();
     $reader = new UserSettingsReader($user);
     $theme = $_POST["themes"];
     $sign = $_POST["sign"];

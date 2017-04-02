@@ -54,7 +54,6 @@
 
   function isUserLoggedIn() {
     session_start();
-    $isLoggedIn = false;
     if (isset($_SESSION["user"]) && isset($_SESSION["UID"])) {
       $user = $_SESSION["user"];
       $uid = $_SESSION["UID"];
@@ -64,7 +63,8 @@
       $isValid = $db->checkUserUID($user,$uid);
       return $isValid;
     }
-    return $isLoggedIn;
+    session_write_close();
+    return false;
   }
 
   function debug($file,$function,$line) {
