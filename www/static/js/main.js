@@ -21,9 +21,10 @@ $(function() {
         var temp = $.get({
           "url": "/settings.php",
           "success": success,
-          dataType: "html"
+          "dataType": "html"
         });
       });
+
       function success(data) {
         console.log("Imprimendo datos");
         $("body").append(data);
@@ -32,6 +33,17 @@ $(function() {
         $(myModal).on("hidden.bs.modal", function(e) {
           $(this).detach();
         });
+        $(save).click(function(e) {
+          $.post({
+            "url": "/settings.php",
+            "data": $(settingsModal).serialize(),
+            "success": saveSuccess
+          });
+        });
+
+        function saveSuccess(data) {
+          console.log(data);
+        }
       }
       break;
     default:
