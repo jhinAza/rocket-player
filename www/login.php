@@ -14,6 +14,7 @@
         if ($UID) {
           $_SESSION["UID"] = $UID;
         }
+        session_write_close();
         header("Location:/home.php");
       } else {
         print "<h3>Ha ocurrido un error</h3>";

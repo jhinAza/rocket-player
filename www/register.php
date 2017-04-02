@@ -6,8 +6,21 @@
       require_once("/inc/databaseController.php");
       $db = new DatabaseController();
       $bool = $db->registerUser($_POST["userRegister"], $_POST["passRegister"], $_POST["mailRegister"]);
+      $bool = true;
       if ($bool) {
-        header("Location:/login.php");
+        $id = $db->getUserID($_POST["userRegister"]);
+        if ($id) {
+          $filename = "user_$id.xml";
+          $default = "default.xml";
+          $folder = "userSettings/";
+          if (file_exists($folder.$filename)) {
+            unlink($folder.$filename);
+          }
+          $file = simplexml_load_file($folder.$default);
+          $file->attributes()->user_id = $id;
+          $file->asXML($folder.$filename);
+          header("Location:/login.php");
+        }
       } else {
         print "<h3>Ha ocurrido un error</h3>";
         print "<a href=/login.php>Pulse aqui</a> para reintentar";

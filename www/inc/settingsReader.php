@@ -8,7 +8,6 @@
       $filepath = "serverSettings/server_settings.xml";
       if (file_exists($filepath)) {
         $this->settings = simplexml_load_file($filepath);
-        print $this->settings->__toString();
       }
     }
 
