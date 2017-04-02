@@ -7,27 +7,25 @@
         </div>
         <div class="modal-body">
           <!-- Aqui irá todo el contenido del formulario para pedir al usuario los ajustes. -->
-          <form class="form-horizontal" action="#" method="post">
+          <form class="form-horizontal" action="#" method="post" id="settingsModal">
             <div class="form-group">
               <label for="themes" class="control-label col-md-4 radio-label">Elige el tema que quieres usar</label>
               <div class="col-md-8">
+                <select class="form-control col-md-8" name="themes">
                 <?php
-                  if ($theme == "night") {
+                      if ($theme == "night") {
                     ?>
-                    <select class="form-control col-md-8" name="themes">
-                      <option value="night" selected>Modo noche</option>
+                     <option value="night" selected>Modo noche</option>
                       <option value="day">Modo dia</option>
-                    </select>
                     <?php
-                  } elseif ($theme == "day") {
+                      } elseif ($theme == "day") {
                     ?>
-                    <select class="form-control col-md-8" name="themes">
-                      <option value="night">Modo noche</option>
+                     <option value="night">Modo noche</option>
                       <option value="day" selected>Modo dia</option>
-                    </select>
                     <?php
-                  }
-                ?>
+                      }
+                    ?>
+               </select>
               </div>
             </div>
             <div class="row choices">
@@ -36,33 +34,77 @@
                   <label for='name-id' class="control-label col-md-6 radio-label">Lenguaje de señas</label>
 
                   <div class="btn-group col-md-6" data-toggle="buttons">
-                    <label class="btn btn-primary active">Si <input type="radio" name="sign" value="si"></label>
-                    <label class="btn btn-primary">No <input type="radio" name="sign" value="si"></label>
-                  </div>
+                    <?php
+                      if ($signLang === "true") {
+                    ?>
+                      <label class="btn btn-primary active">Si <input type="radio" name="sign" value="true" checked></label>
+                      <label class="btn btn-primary">No <input type="radio" name="sign" value="false"></label>
+                      <?php
+                        } else {
+                      ?>
+                      <label class="btn btn-primary">Si <input type="radio" name="sign" value="true"></label>
+                      <label class="btn btn-primary active">No <input type="radio" name="sign" value="false" checked></label>
+                    <?php
+                      }
+                    ?>
+                 </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <label for='name-id' class="control-label col-md-6 radio-label">Subtitulos</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
-                  <label class="btn btn-primary radio">Si <input type="radio" name="sign" value="si"></label>
-                  <label class="btn btn-primary active radio">No <input type="radio" name="sign" value="si"></label>
-                </div>
+                  <?php
+                    if ($subs === "true") {
+                  ?>
+                   <label class="btn btn-primary radio active ">Si <input type="radio" name="subs" value="true" checked></label>
+                  <label class="btn btn-primary radio">No <input type="radio" name="subs" value="false"></label>
+                  <?php
+                    } else {
+                  ?>
+                   <label class="btn btn-primary radio ">Si <input type="radio" name="subs" value="true"></label>
+                  <label class="btn btn-primary radio active">No <input type="radio" name="subs" value="false" checked></label>
+                  <?php
+                    }
+                  ?>
+               </div>
               </div>
             </div>
             <div class="row choices">
               <div class="col-md-6">
                 <label for='name-id' class="control-label col-md-6 radio-label">Transcripcion</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
-                  <label class="btn btn-primary active">Si <input type="radio" name="sign" value="si" ></label>
-                  <label class="btn btn-primary">No <input type="radio" name="sign" value="si"></label>
-                </div>
+                  <?php
+                    if ($subs === "true") {
+                  ?>
+                  <label class="btn btn-primary radio active ">Si <input type="radio" name="trans" value="true" checked></label>
+                  <label class="btn btn-primary radio">No <input type="radio" name="trans" value="false"></label>
+                  <?php
+                    } else {
+                  ?>
+                  <label class="btn btn-primary radio ">Si <input type="radio" name="trans" value="true"></label>
+                  <label class="btn btn-primary radio active">No <input type="radio" name="trans" value="false" checked></label>
+                  <?php
+                    }
+                  ?>
+               </div>
               </div>
               <div class="col-md-6">
                 <label for='name-id' class="control-label col-md-6 radio-label">Doblaje</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
-                  <label class="btn btn-primary ">Si <input type="radio" name="sign" value="si"></label>
-                  <label class="btn btn-primary active">No <input type="radio" name="sign" value="si"></label>
-                </div>
+                  <?php
+                    if ($dub === "true") {
+                  ?>
+                  <label class="btn btn-primary radio active ">Si <input type="radio" name="dub" value="true" checked></label>
+                  <label class="btn btn-primary radio">No <input type="radio" name="dub" value="false"></label>
+                  <?php
+                    } else {
+                  ?>
+                  <label class="btn btn-primary radio">Si <input type="radio" name="dub" value="true"></label>
+                  <label class="btn btn-primary radio active">No <input type="radio" name="dub" value="false" checked></label>
+                  <?php
+                    }
+                  ?>
+               </div>
               </div>
             </div>
             <div class="form-group">
@@ -87,7 +129,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-primary" id="save">Save changes</button>
         </div>
       </div>
     </div>
