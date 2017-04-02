@@ -178,5 +178,32 @@
       $stm->bindParam("id", $id);
       $stm->execute();
     }
+
+    function isUserAdmin($user) {
+      $id = $this->getUserID($user);
+      $stm = $this->connect->prepare("select userRole from users where id = :id");
+      $stm->bindParam(":id", $id);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          $row = $data[0];
+          return $row["userRole"] === "admin";
+        }
+      }
+      return false;
+    }
+
+    function getAllTables() {
+      $stm = $this->connect->prepare("show tables");
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
   }
 ?>
