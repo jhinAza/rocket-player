@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users
      userPassword VARCHAR(256),
      creationdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      active       BOOLEAN NOT NULL DEFAULT TRUE,
+     userRole     ENUM('user', 'admin') DEFAULT 'user';
      CONSTRAINT badusersprimarykey PRIMARY KEY (id)
   );
 
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS resources
      id           INT auto_increment,
      file         VARCHAR(100),
      creationdate DATE,
-     userID        INT,
+     userID       INT,
      type         ENUM('subtitles', "transcription", "signal-language", "additional-audio"),
      CONSTRAINT badresourcesprimarykey PRIMARY KEY (id),
      CONSTRAINT badresourcesusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
