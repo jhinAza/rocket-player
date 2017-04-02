@@ -15,6 +15,7 @@ $(function() {
         return isValid;
       });
       break;
+    case "/":
     case "/home.php":
       $(settings).click(function(e) {
         var temp = $.get({
