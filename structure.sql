@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users
      userPassword VARCHAR(256),
      creationdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
      active       BOOLEAN NOT NULL DEFAULT TRUE,
-     userRole     ENUM('user', 'admin') DEFAULT 'user';
+     userRole     ENUM('user', 'admin') DEFAULT 'user',
      CONSTRAINT badusersprimarykey PRIMARY KEY (id)
   );
 
