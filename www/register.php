@@ -16,12 +16,10 @@
           if (file_exists($folder.$filename)) {
             unlink($folder.$filename);
           }
-          if (copy($folder.$default, $folder.$filename)) {
-            $file = simplexml_load_file($folder.$filename);
-            $file->attributes()->user_id = $id;
-            $file->asXML($folder.$filename);
-            header("Location:/login.php");
-          }
+          $file = simplexml_load_file($folder.$default);
+          $file->attributes()->user_id = $id;
+          $file->asXML($folder.$filename);
+          header("Location:/login.php");
         }
       } else {
         print "<h3>Ha ocurrido un error</h3>";
