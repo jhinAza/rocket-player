@@ -11,15 +11,31 @@
       <script src="/static/librerias/js/jquery.min.js" charset="utf-8"></script>
       <script src="/static/librerias/js/bootstrap.min.js" charset="utf-8"></script>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
-      <link rel="stylesheet" href="/static/librerias/css/night.min.css">
-      <link rel="stylesheet" href="/static/css/night.css">
+      <?php
+        require_once("inc/userSettingsReader.php");
+        session_start();
+        $reader = new UserSettingsReader($_SESSION["user"]);
+        session_write_close();
+        $theme = $reader->readTheme();
+        if ($theme === "day") {
+          ?>
+          <link rel="stylesheet" href="/static/librerias/css/day.min.css">
+          <link rel="stylesheet" href="/static/css/main.css">
+          <?php
+        } else {
+          ?>
+          <link rel="stylesheet" href="/static/librerias/css/night.min.css">
+          <link rel="stylesheet" href="/static/css/night.css">
+          <?php
+        }
+      ?>
     </head>
     <body>
     <?php
   }
 
   function writeNavbar(){
-    include_once("static/html/header.html");
+    require_once("static/html/header.html");
   }
 
   function writeFooter() {

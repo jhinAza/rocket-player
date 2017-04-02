@@ -34,7 +34,8 @@ $(function() {
         $(save).click(function(e) {
           $.post({
             "url": "/settings.php",
-            "data": $(settingsModal).serialize()
+            "data": $(settingsModal).serialize(),
+            "success": location.reload(true)
           });
         });
       }
