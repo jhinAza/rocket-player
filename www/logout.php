@@ -5,5 +5,5 @@
     unset($_SESSION["user"]);
     unset($_SESSION["UID"]);
   }
-  header("Location:/home.php");
+  header("Location:/login.php");
 ?>

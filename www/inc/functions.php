@@ -12,16 +12,23 @@
       <script src="/static/librerias/js/bootstrap.min.js" charset="utf-8"></script>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
       <?php
-        require_once("inc/userSettingsReader.php");
-        session_start();
-        $reader = new UserSettingsReader($_SESSION["user"]);
-        session_write_close();
-        $theme = $reader->readTheme();
-        if ($theme === "day") {
-          ?>
-          <link rel="stylesheet" href="/static/librerias/css/day.min.css">
-          <link rel="stylesheet" href="/static/css/main.css">
-          <?php
+        if (isUserLoggedIn()) {
+          require_once("inc/userSettingsReader.php");
+          session_start();
+          $reader = new UserSettingsReader($_SESSION["user"]);
+          session_write_close();
+          $theme = $reader->readTheme();
+          if ($theme === "day") {
+            ?>
+            <link rel="stylesheet" href="/static/librerias/css/day.min.css">
+            <link rel="stylesheet" href="/static/css/main.css">
+            <?php
+          } else {
+            ?>
+            <link rel="stylesheet" href="/static/librerias/css/night.min.css">
+            <link rel="stylesheet" href="/static/css/night.css">
+            <?php
+          }
         } else {
           ?>
           <link rel="stylesheet" href="/static/librerias/css/night.min.css">
