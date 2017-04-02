@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS video_tags
   (
      video INT,
      tags  INT,
+     CONSTRAINT badvideo_tagsprimarykey PRIMARY KEY (video, tags),
      CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
      CONSTRAINT badvideo_tagstagsforeignkey FOREIGN KEY (tags) REFERENCES tags (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
@@ -71,6 +72,7 @@ CREATE TABLE IF NOT EXISTS votos_video
      video INT,
      userID INT,
      voto  ENUM("1", "-1"),
+     CONSTRAINT badvotos_videoprimarykey PRIMARY KEY (video, userID),
      CONSTRAINT badvotos_videovideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
      CONSTRAINT badvotos_videouserforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
@@ -80,8 +82,8 @@ CREATE TABLE IF NOT EXISTS votos_comentario
      comments INT,
      userID    INT,
      voto     ENUM("1", "-1"),
-     CONSTRAINT badvotos_comentariovideoforeignkey FOREIGN KEY (comments)
-     REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badvotos_comentarioprimarykey PRIMARY KEY (comments, userID),
+     CONSTRAINT badvotos_comentariovideoforeignkey FOREIGN KEY (comments) REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
      CONSTRAINT badvotos_comentariouserforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
@@ -89,15 +91,16 @@ CREATE TABLE IF NOT EXISTS resources_video
   (
      video    INT,
      resource INT,
+     CONSTRAINT badresources_videoprimarykey PRIMARY KEY (video, resource),
      CONSTRAINT badresources_videovideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource)
-     REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource) REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS uuid
   (
      token CHAR(64),
-     uid   INT,
+     uid   INT ,
      date DATETIME DEFAULT CURRENT_TIMESTAMP,
-     CONSTRAINT baduuiduidforeignkey FOREIGN KEY (uid) REFERENCES users (id)
+     CONSTRAINT baduuidprimarykey PRIMARY KEY (uid),
+     CONSTRAINT baduuiduidforeignkey FOREIGN KEY (uid) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
