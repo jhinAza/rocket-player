@@ -11,6 +11,8 @@ if [ $EUID -eq 0 ]; then
   rm -rf $path/*
   echo "Copying www to " $path
   cp -R www/* $path/
+  echo "Changing the permission of" $path
+  chmod -R a+w $path/*
   echo "Restarting Apache"
   service apache2 restart
 else
