@@ -17,7 +17,6 @@ $(function() {
       break;
     case "/home.php":
       $(settings).click(function(e) {
-        console.log("Abriendo una conexion contra el servidor");
         var temp = $.get({
           "url": "/settings.php",
           "success": success,
@@ -26,7 +25,6 @@ $(function() {
       });
 
       function success(data) {
-        console.log("Imprimendo datos");
         $("body").append(data);
         $(myModal).modal("toggle");
         $(myModal).modal("show");
@@ -36,14 +34,9 @@ $(function() {
         $(save).click(function(e) {
           $.post({
             "url": "/settings.php",
-            "data": $(settingsModal).serialize(),
-            "success": saveSuccess
+            "data": $(settingsModal).serialize()
           });
         });
-
-        function saveSuccess(data) {
-          console.log(data);
-        }
       }
       break;
     default:
