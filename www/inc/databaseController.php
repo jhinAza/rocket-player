@@ -205,5 +205,11 @@
       }
       return false;
     }
+
+    function truncateTable($table) {
+      $stm = $this->connect->prepare("truncate table $table");
+      // $stm->bindParam(":table", $table);
+      $res = $stm->execute();
+    }
   }
 ?>

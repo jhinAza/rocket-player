@@ -114,6 +114,19 @@
 .formUsers .row {
   margin-bottom: 5px;
 }
+
 .formUsers button {
   width: 50%
+}
+
+.check-list {
+  padding: 1.5em 0.3em;
+  border-color: #222;
+  background-color: #375a7f;
+  margin-bottom: 1em;
+  border-radius: 15px;
+}
+.check-list > input[type=checkbox] {
+  margin-right: 10px;
+
 }
