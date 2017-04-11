@@ -41,7 +41,7 @@
         </div>
       <?php
     } else {
-      header("Location:home.php");
+      header("Location: http404.php");
     }
   } elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
     session_start();

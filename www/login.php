@@ -17,8 +17,7 @@
         session_write_close();
         header("Location:/home.php");
       } else {
-        print "<h3>Ha ocurrido un error</h3>";
-        print "<a href=/login.php>Pulse aqui</a> para reintentar";
+        header("Location: http401.php");
       }
     }
   } else {

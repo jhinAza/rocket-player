@@ -22,8 +22,7 @@
           header("Location:/login.php");
         }
       } else {
-        print "<h3>Ha ocurrido un error</h3>";
-        print "<a href=/login.php>Pulse aqui</a> para reintentar";
+        header("Location: http500.php");
       }
     }
   }
