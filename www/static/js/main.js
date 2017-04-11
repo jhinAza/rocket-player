@@ -1,5 +1,8 @@
 $(function() {
   // Events
+  /**
+  * Validate if the user login form is correct
+  */
   $("#loginUser").submit(function(e) {
     var isValid = true;
     if (user.value.length == 0) {
@@ -12,6 +15,9 @@ $(function() {
     }
     return isValid;
   });
+  /**
+  * Makes a AJAX call against the server to retrieve the modal window
+  */
   $("#settings").click(function(e) {
     $.get({
       "url": "/settings.php",
@@ -19,16 +25,25 @@ $(function() {
       "dataType": "html"
     });
   });
+  /**
+  * Checks every item in the truncate view
+  */
   $("#check").click(function(e) {
     $.each($(".check-list"), function() {
       $(this).children("input")[0].checked = true;
     });
   });
+  /**
+  * Uncheck every item in the truncate list
+  */
   $("#uncheck").click(function(e) {
     $.each($(".check-list"), function() {
       $(this).children("input")[0].checked = false;
     });
   });
+  /**
+  * Makes an AJAX call against the server to send the tables that must be truncated
+  */
   $("#send").click(function(e) {
     var list = [];
     $.each($(".check-list"), function() {
@@ -39,19 +54,29 @@ $(function() {
     if (list.length > 0) {
       $.post({
         "url": "/truncate.php",
-        "success": truncateSuccess,
         "data": {"tables": list}
       });
     }
   });
   // Functions
+  /**
+  * Appends the settings modal window to the body and sets the events
+  *
+  * @param {HTMLElement} data
+  */
   function success(data) {
     $("body").append(data);
     $("#myModal").modal("toggle");
     $("#myModal").modal("show");
+    /**
+    * detach the modal window when the user closes it.
+    */
     $("#myModal").on("hidden.bs.modal", function(e) {
       $(this).detach();
     });
+    /**
+    * Makes a AJAX call against the server to save the new settings of the user.
+    */
     $("#save").click(function(e) {
       $.post({
         "url": "/settings.php",
@@ -59,8 +84,5 @@ $(function() {
         "success": location.reload(true)
       });
     });
-  }
-  function truncateSuccess(data) {
-    console.log(data);
   }
 });
