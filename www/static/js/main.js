@@ -15,33 +15,7 @@ $(function() {
     }
     return isValid;
   });
-  /**
-  * Validate if the video upload form is correct
-  */
-  $("#upload").submit(function(e) {
-    var isValid = true;
-    if ($("#video-name").val().length < 10) {
-      isValid = false;
-      // alert("El contenido del campo nombre es demasiado corto.\
-      // Debe contener al menos 10 caracteres.");
-    }
-    if ($("#video-desc").val().length < 10) {
-      isValid = false;
-      // alert("El contenido del campo descripcion es demasiado corto.\
-      // Debe contener al menos 10 caracteres.");
-    }
-    if ($("#video-tags")[0].selectedIndex === -1) {
-      isValid = false;
-      // alert("Debe seleccionar al menos un tag para el video");
-    }
-    if ($("#video-input")[0].files.length === 0) {
-      isValid = false;
-      alert("Debe seleccionar un fichero para subir");
-    }
-    if (!isValid) {
-      return false;
-    }
-  });
+
   /**
   * Makes a AJAX call against the server to retrieve the modal window
   */
