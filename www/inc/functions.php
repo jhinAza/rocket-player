@@ -21,7 +21,7 @@
           if ($theme === "day") {
             ?>
             <link rel="stylesheet" href="/static/librerias/css/day.min.css">
-            <link rel="stylesheet" href="/static/css/main.css">
+            <link rel="stylesheet" href="/static/css/day.min.css">
             <?php
           } else {
             ?>

@@ -1,0 +1,20 @@
+@import "main.scss";
+// Add the selectors needed to customize the theme
+body {
+  background-color: #fffdd3 !important;
+}
+
+.select-label {
+  padding: 0px !important;
+}
+
+.video-panel {
+  background-color: white !important;
+}
+
+.check-list {
+  border-color: #222;
+  border-width: 1px;
+  border-style: dotted;
+  background-color: #fffdd3;
+}
