@@ -7,7 +7,7 @@
     ?>
       <!-- Now we return a form -->
       <div class="container" style="padding-top:76px">
-        <form id="upload" method="post">
+        <form id="upload" method="multipart/form-data">
           <fieldset>
             <legend>Upload form</legend>
             <div class='row'>
@@ -24,7 +24,7 @@
                   <span class="input-group-btn">
                     <label class="file-label btn btn-default">
                       Selecciona el fichero
-                      <input type="file" name="video-input" id="video-input" >
+                      <input type="file" name="video-input" id="video-input" accept="video/*">
                     </label>
                   </span>
                 </div>
@@ -52,7 +52,7 @@
             </div>
             <div class="row">
               <div class="btn-group col-md-4 col-md-push-4">
-                <input type="submit" name="send" id="send" value="Enviar" class="btn btn-success col-md-6">
+                <input type="submit" name="send-form" id="send-form" value="Enviar" class="btn btn-success col-md-6">
                 <input type="reset" name="reset" id="reset" value="Borrar" class="btn btn-danger col-md-6">
               </div>
             </div>
