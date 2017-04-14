@@ -96,6 +96,14 @@
   margin-right: 10px;
 }
 
+.thumbnail img {
+  width: 100%;
+}
+
+.file-label input[type=file] {
+  display: none;
+}
+
 @media (min-width: 1200px) {
   .video-thumb img {
     width: 100%;
