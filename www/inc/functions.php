@@ -1,6 +1,6 @@
 <?php
   // This file contains the needed functions for anything that can appear in any page
-  function writeHeader($title) {
+  function writeHeader($title, $type=false) {
     ?>
     <!DOCTYPE html>
     <html>
@@ -10,6 +10,14 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <script src="/static/librerias/js/jquery.min.js" charset="utf-8"></script>
       <script src="/static/librerias/js/bootstrap.min.js" charset="utf-8"></script>
+      <?php
+        if ($type = "upload") {
+          ?>
+          <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
+          <script src="/static/js/upload.min.js" charset="utf-8"></script>
+          <?php
+        }
+      ?>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
       <?php
         if (isUserLoggedIn()) {

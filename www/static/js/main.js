@@ -15,13 +15,14 @@ $(function() {
     }
     return isValid;
   });
+
   /**
   * Makes a AJAX call against the server to retrieve the modal window
   */
   $("#settings").click(function(e) {
     $.get({
       "url": "/settings.php",
-      "success": success,
+      "success": getSettingsSuccess,
       "dataType": "html"
     });
   });
@@ -64,7 +65,7 @@ $(function() {
   *
   * @param {HTMLElement} data
   */
-  function success(data) {
+  function getSettingsSuccess(data) {
     $("body").append(data);
     $("#myModal").modal("toggle");
     $("#myModal").modal("show");

@@ -96,6 +96,23 @@
   margin-right: 10px;
 }
 
+.thumbnail img {
+  width: 100%;
+}
+
+.file-label input[type=file] {
+  display: none;
+}
+
+.progress {
+  height: 2em;
+}
+
+.progress .progress-bar {
+  font-size: 2em;
+  line-height: 1em;
+}
+
 @media (min-width: 1200px) {
   .video-thumb img {
     width: 100%;

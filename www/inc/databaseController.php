@@ -211,5 +211,42 @@
       // $stm->bindParam(":table", $table);
       $res = $stm->execute();
     }
+
+    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $public=true, $active=true) {
+      // We need to store all the data in the database
+      session_start();
+      $user = $_SESSION["user"];
+      session_write_close();
+      $uid = $this->getUserID($user);
+      $date = date('Y-m-d H:i:s',$time);
+      $stm = $this->connect->prepare("insert into videos (filename, description, creationdate, userID, cat, public, active) values (:filename, :desc, :date, :uid, :cat, :public, :active)");
+      $stm->bindParam(":filename", $videofile);
+      $stm->bindParam(":desc", $desc);
+      $stm->bindParam(":date",$date);
+      $stm->bindParam(":uid",$uid);
+      $stm->bindParam(":cat",$cat);
+      $stm->bindParam(":public",$public);
+      $stm->bindParam(":active",$active);
+      $result = $stm->execute();
+      if ($result) {
+        // Now that we have the video stored in the DB we need the ID
+        $videoID = $this->connect->lastInsertId();
+        print($videoID." video ID\n");
+        foreach ($tags as $tag) {
+          print($tag);
+          $stm = $this->connect->prepare("insert into video_tags values (:video, :tag)");
+          $stm->bindParam(":video", $videoID);
+          $stm->bindParam(":tag", $tag);
+          $result = $stm->execute();
+          print($result);
+          print_r($this->connect->errorInfo());
+          print($this->connect->errorCode());
+        }
+        return true;
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+    }
   }
 ?>
