@@ -20,13 +20,15 @@ CREATE TABLE IF NOT EXISTS videos
   (
      id           INT auto_increment,
      filename     VARCHAR(100) NOT NULL,
-     descrpition  VARCHAR(2000) NOT NULL,
+     description  VARCHAR(2000) NOT NULL,
      creationdate DATE NOT NULL,
-     userID        INT,
+     userID       INT,
+     cat          INT,
      public       BOOLEAN,
      active       BOOLEAN,
      CONSTRAINT badvideosprimarykey PRIMARY KEY (id),
-     CONSTRAINT badvideosusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badvideosusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badvideoscatforeignkey  FOREIGN KEY (cat) REFERENCES categories (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS resources
@@ -53,20 +55,19 @@ CREATE TABLE IF NOT EXISTS comments
      CONSTRAINT badcommentsvideosforeignkey FOREIGN KEY (userID) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS tags
+CREATE TABLE IF NOT EXISTS CATEGORIES
   (
      id     INT auto_increment,
      nombre VARCHAR(50),
-     CONSTRAINT badtagsprimarykey PRIMARY KEY (id)
+     CONSTRAINT badcategoriesprimarykey PRIMARY KEY (id)
   );
 
 CREATE TABLE IF NOT EXISTS video_tags
   (
      video INT,
-     tags  INT,
+     tags  VARCHAR(20),
      CONSTRAINT badvideo_tagsprimarykey PRIMARY KEY (video, tags),
-     CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badvideo_tagstagsforeignkey FOREIGN KEY (tags) REFERENCES tags (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS votos_video
