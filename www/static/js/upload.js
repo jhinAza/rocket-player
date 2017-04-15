@@ -26,7 +26,6 @@ $(function() {
       var fileSize = $("#video-input")[0].files[0].size;
       if (fileSize > 524288000) {
         alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
-        console.log(fileSize);
         isValid =  false;
       }
     } else {
@@ -39,11 +38,14 @@ $(function() {
         target: "upload.php",
         beforeSubmit: prepareUpload,
         success: uploadSuccess,
+        error: uploadError,
         uploadProgress: updateProgressBar,
         resetForm: false,
-        method: "post"
+        method: "post",
+        dataType: "html"
       };
       $(this).ajaxSubmit(options);
+      console.log("YA?");
     }
     return false;
     // Always return false to avoid needless redirects
@@ -58,14 +60,22 @@ $(function() {
   * After the upload will clean the GUI and give feedback
   */
   function uploadSuccess(data) {
-    alert("Subido");
-    console.log(data);
+    $(".container").html("");
+    alert("Se ha subido el video correctamente, ahora seras redireccionado al inicio");
+    setTimeout(function() {window.location.href="home.php", 5000});
   }
   /**
   * Before the upload will prepare a modal window and show a progress bar
   */
   function prepareUpload() {
-    alert("Empezando");
+    $("#main").children("form").hide();
+    $content = '<h1>Se esta subiendo el video</h1>\
+    <div class="progress">\
+      <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="min-width: 10%;">\
+        0%\
+      </div>\
+    </div>';
+    $("#main").append($content);
   }
   /**
   * Will update the progress bar
@@ -76,6 +86,13 @@ $(function() {
   */
   function updateProgressBar(e, position, total, percentComplete) {
     //Actualizar la barra
-    console.log(position, total, percentComplete);
+    $(".progress-bar").html(percentComplete+"%").css("width", percentComplete+"%");
+
   }
+
+  function uploadError(xhr, ajaxOptions, thrownError) {
+    alert("Ha ocurrido un error subiendo el video, por favor recarga la pagina\
+    y vuelve a intentarlo en unos minutos.");
+  }
+
 });
