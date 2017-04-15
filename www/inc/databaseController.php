@@ -219,8 +219,9 @@
       session_write_close();
       $uid = $this->getUserID($user);
       $date = date('Y-m-d H:i:s',$time);
-      $stm = $this->connect->prepare("insert into videos (filename, description, creationdate, userID, cat, public, active) values (:filename, :desc, :date, :uid, :cat, :public, :active)");
+      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active)");
       $stm->bindParam(":filename", $videofile);
+      $stm->bindParam(":videoname",$videoname);
       $stm->bindParam(":desc", $desc);
       $stm->bindParam(":date",$date);
       $stm->bindParam(":uid",$uid);

@@ -100,7 +100,7 @@ require_once("inc/functions.php");
       $file_name = strtolower($_FILES["video-input"]["name"]);
       $ext = substr($file_name, strrpos($file_name, "."));
       $new_name = "$hash_file-$timestamp$ext";
-      $full_name = $uploadDirectory.$new_name;
+      $full_name = $uploadDirectory."/".$new_name;
       move_uploaded_file($_FILES["video-input"]["tmp_name"], $full_name);
       // Now we only need save the data in the database
       $videoname = $_POST["video-name"];

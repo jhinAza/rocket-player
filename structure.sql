@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS videos
   (
      id           INT auto_increment,
      filename     VARCHAR(100) NOT NULL,
+     videoname    VARCHAR(100) NOT NULL,
      description  VARCHAR(2000) NOT NULL,
      creationdate DATE NOT NULL,
      userID       INT,
