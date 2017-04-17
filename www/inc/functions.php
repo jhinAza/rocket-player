@@ -11,10 +11,15 @@
       <script src="/static/librerias/js/jquery.min.js" charset="utf-8"></script>
       <script src="/static/librerias/js/bootstrap.min.js" charset="utf-8"></script>
       <?php
-        if ($type = "upload") {
+        if ($type == "upload") {
           ?>
           <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
           <script src="/static/js/upload.min.js" charset="utf-8"></script>
+          <?php
+        } elseif ($type == "player") {
+          ?>
+          <script src="/static/js/videoController.js" charset="utf-8"></script>
+          <script src="/static/js/video.min.js" charset="utf-8"></script>
           <?php
         }
       ?>
