@@ -155,6 +155,23 @@
       return false;
     }
 
+    function getUserName($uid) {
+      $stm = $this->connect->prepare("select username from users where ID = :user");
+      $stm->bindParam(":user",$uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          $id = $data[0]['username'];
+          return $id;
+        }
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
     function selectUIDRow($user) {
       $id = $this->getUserID($user);
       if ($id) {
@@ -249,5 +266,19 @@
         error_log($result);
       }
     }
+
+    function getVideoInfo($videoID) {
+      $stm = $this->connect->prepare("select * from videos where id = :vid");
+      $stm->bindParam(":vid", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0];
+        }
+      }
+      return false;
+    }
+
   }
 ?>
