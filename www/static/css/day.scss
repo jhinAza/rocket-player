@@ -1,5 +1,7 @@
-@import "main.scss";
 // Add the selectors needed to customize the theme
+$background-color: rgb(47, 164, 231);
+$progress-bar-color: #03435a; 
+$thumb-color: #40e4ff;
 body {
   background-color: #fffdd3 !important;
 }
@@ -16,5 +18,15 @@ body {
   border-color: #222;
   border-width: 1px;
   border-style: dotted;
-  background-color: #fffdd3;
+  background-color: $background-color;
 }
+
+.controls {
+  div {
+    #time,
+    .glyphicon {
+      color: black !important;
+    }
+  }
+}
+@import "main.scss";

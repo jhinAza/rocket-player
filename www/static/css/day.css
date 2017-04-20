@@ -1,3 +1,27 @@
+body {
+  background-color: #fffdd3 !important;
+}
+
+.select-label {
+  padding: 0px !important;
+}
+
+.video-panel {
+  background-color: white !important;
+}
+
+.check-list {
+  border-color: #222;
+  border-width: 1px;
+  border-style: dotted;
+  background-color: #2fa4e7;
+}
+
+.controls div #time,
+.controls div .glyphicon {
+  color: black !important;
+}
+
 .info {
   max-height: 20em;
   float: right;
@@ -45,7 +69,7 @@
   margin-left: 5%;
 }
 
-.video {
+.video_ {
   width: 100%;
 }
 
@@ -133,21 +157,102 @@
   }
 }
 
-body {
-  background-color: #fffdd3 !important;
+.controls {
+  min-height: 2.5em;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  background-color: #2fa4e7;
 }
 
-.select-label {
-  padding: 0px !important;
+.controls div {
+  float: left;
+  margin-right: 0.5em;
 }
 
-.video-panel {
-  background-color: white !important;
+.controls div .glyphicon {
+  font-size: 120%;
 }
 
-.check-list {
-  border-color: #222;
-  border-width: 1px;
-  border-style: dotted;
-  background-color: #fffdd3;
+.controls input[type=range] {
+  -webkit-appearance: none;
+  vertical-align: middle;
+  display: inline;
+}
+
+.controls input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 13px;
+  width: 13px;
+  border-radius: 15px;
+  background: #40e4ff;
+  cursor: pointer;
+  margin-top: -5px;
+}
+
+.controls input[type=range]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 6px;
+  border: 1px solid #6a6a6a;
+  color: #6a6a6a;
+}
+
+.controls input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 13px;
+  width: 13px;
+  border-radius: 15px;
+  background: #40e4ff;
+  cursor: pointer;
+}
+
+.controls input[type=range]::-moz-range-progress {
+  background-color: #03435a;
+}
+
+.controls #playThrough {
+  width: 42% !important;
+}
+
+.controls #playThrough input {
+  width: 100%;
+}
+
+.controls #volume {
+  width: 25%;
+}
+
+.controls #volume input {
+  width: 75% !important;
+  margin-right: 0.5em;
+}
+
+.controls #volume .glyphicon-volume-down {
+  float: left;
+}
+
+.controls #volume .glyphicon-volume-up {
+  float: right;
+}
+
+.controls #fullscreen {
+  float: right;
+}
+
+.controls .pause {
+  display: none;
+}
+
+.fullscreen {
+  width: 100%;
+}
+
+.fullscreen video,
+.fullscreen .controls {
+  width: 96% !important;
+  margin: 0% 2% !important;
+}
+
+#mainVideo {
+  width: 100%;
 }
