@@ -1,0 +1,224 @@
+<?php
+  require_once("inc/functions.php");
+  if (isUserLoggedIn()) {
+    writeHeader("Reproductor", "player");
+    writeNavbar();
+    $video = $_GET["video"];
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $videoInfo = $db->getVideoInfo($video);
+    $videoURL = "/res/video/".$videoInfo["filename"];
+    ?>
+    <!-- TODO:Tengo que planear como obtengo la url del video -->
+    <div class="container" style="padding-top:76px">
+      <div class="video col-md-8 col-xs-12">
+        <ul class="nav nav-pills nav-stacked video-header">
+          <li class="active">
+            <a><h4 class="panel-title"><?php print($videoInfo["videoname"]); ?></h4></a>
+          </li>
+        </ul>
+        <div class="video-container">
+          <video id="mainVideo">
+            <source src="<?php print($videoURL); ?>" type="video/mp4">
+            </video>
+            <div class="controls">
+              <div id="play" class="clickable">
+                <div class="play">
+                  <span class="glyphicon glyphicon-play"></span>
+                </div>
+                <div class="pause">
+                  <span class="glyphicon glyphicon-pause"></span>
+                </div>
+              </div>
+              <div id="stop" class="clickable">
+                <span class="glyphicon glyphicon-stop"></span>
+              </div>
+              <div id="playThrough" >
+                <span class="seek">
+                  <input type="range" name="seekBar" id="seekBar" value="0" min="0" max="1" step="0.01">
+                </span>
+              </div>
+              <div>
+                <span id="time">0:00:00</span>
+              </div>
+              <div id="fullscreen" class="clickable">
+                <span class="glyphicon glyphicon-fullscreen"></span>
+              </div>
+              <div id="mute" class="clickable">
+                <div class="no-volume">
+                  <span class="glyphicon glyphicon-volume-off"></span>
+                </div>
+                <div class="half-volume">
+                  <span class="glyphicon glyphicon-volume-down"></span>
+                </div>
+                <div class="high-volume">
+                  <span class="glyphicon glyphicon-volume-up"></span>
+                </div>
+              </div>
+              <div id="volume" >
+                <span class="glyphicon glyphicon-volume-down volume"></span>
+                <input type="range" name="volumeBar" id="volumeBar" value="0.5" min="0" max="1" step="0.1" >
+                <span class="glyphicon glyphicon-volume-up volume"></span>
+                <span style="padding:8px;">
+                </span>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="info col-md-4 col-xs-12">
+          <div class="panel-group" id="info">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a href="#author" data-toggle="collapse" data-parent="#info">Información <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+              </div>
+              <div class="panel-collapse collapse in" id="author">
+                <div class="panel-body">
+                  <a href="/profile.php?uid=<?php print($videoInfo["userID"]); ?>">
+                    <?php print($db->getUserName($videoInfo["userID"])); ?>
+                  </a><br>
+                  <?php print($videoInfo["description"]); ?>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <h4 class="panel-title"><a href="#downloads" data-toggle="collapse" data-parent="#info">Descargas <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+              </div>
+              <div class="panel-collapse collapse" id="downloads">
+                <div class="panel-body">
+                  <ul class="list-group">
+                    <li class="list-group-item"><a href=<?php print($videoURL); ?> download>Video</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="recomendations col-md-4 col-xs-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h4 class="panel-title">Videos recomendados</h4>
+          </div>
+          <div class="panel-body">
+            <div class="panel-group">
+              <div class="panel panel-info">
+                <div class="panel-body">
+                  <div class='row'>
+                    <div class="col-xs-4 video-thumb">
+                      <img src="video.jpg">
+                    </div>
+                    <div class="col-md-8">
+                      Titulo del video <br> Autor del video
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-info">
+                <div class="panel-body">
+                  <div class='row'>
+                    <div class="col-xs-4 video-thumb">
+                      <img src="video.jpg" >
+                    </div>
+                    <div class="col-md-8">
+                      Titulo del video <br> Autor del video
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-info">
+                <div class="panel-body">
+                  <div class='row'>
+                    <div class="col-xs-4 video-thumb">
+                      <img src="video.jpg" >
+                    </div>
+                    <div class="col-md-8">
+                      Titulo del video <br> Autor del video
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-info">
+                <div class="panel-body">
+                  <div class='row'>
+                    <div class="col-xs-4 video-thumb">
+                      <img src="video.jpg" >
+                    </div>
+                    <div class="col-md-8">
+                      Titulo del video <br> Autor del video
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comments col-md-8 col-xs-12 ">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h4 class="panel-title">Comentarios</h4>
+          </div>
+          <div class="panel-body">
+            <div class="comment">
+              <div class="row">
+                <div class="col-md-3">
+                  <img src="user.png"  class="img-prueba">
+                </div>
+                <div class="col-md-9">
+                  <p>
+                    <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </p>
+                </div>
+              </div>
+              <div class="comment">
+                <div class="row">
+                  <div class="col-md-3">
+                    <img src="user.png"  class="img-prueba">
+                  </div>
+                  <div class="col-md-9">
+                    <p>
+                      <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                  </div>
+                </div>
+                <div class="comment">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <img src="user.png"  class="img-prueba">
+                    </div>
+                    <div class="col-md-9">
+                      <p>
+                        <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="comment">
+              <div class="row">
+                <div class="col-md-3">
+                  <img src="user.png"  class="img-prueba">
+                </div>
+                <div class="col-md-9">
+                  <p>
+                    <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <?php
+
+  } else {
+    header("Location: login.php");
+  }
+ ?>

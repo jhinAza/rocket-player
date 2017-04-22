@@ -1,3 +1,11 @@
+.glyphicon-warning:hover {
+  color: #e74c3c;
+}
+
+.check-list {
+  background-color: #375a7f;
+}
+
 .info {
   max-height: 20em;
   float: right;
@@ -45,7 +53,7 @@
   margin-left: 5%;
 }
 
-.video {
+.video_ {
   width: 100%;
 }
 
@@ -133,10 +141,113 @@
   }
 }
 
-.glyphicon-warning:hover {
-  color: #e74c3c;
+.controls {
+  min-height: 2.5em;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  background-color: #375a7f;
 }
 
-.check-list {
-  background-color: #375a7f;
+.controls div {
+  float: left;
+  margin-right: 0.5em;
+}
+
+.controls div .glyphicon {
+  font-size: 120%;
+}
+
+.controls input[type=range] {
+  -webkit-appearance: none;
+  vertical-align: middle;
+  display: inline;
+}
+
+.controls input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 13px;
+  width: 13px;
+  border-radius: 15px;
+  background: white;
+  cursor: pointer;
+  margin-top: -5px;
+}
+
+.controls input[type=range]::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  height: 6px;
+  border: 1px solid #6a6a6a;
+  color: #6a6a6a;
+}
+
+.controls input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 13px;
+  width: 13px;
+  border-radius: 15px;
+  background: white;
+  cursor: pointer;
+}
+
+.controls input[type=range]::-moz-range-progress {
+  background-color: #00baff;
+}
+
+.controls #playThrough {
+  width: 42% !important;
+}
+
+.controls #playThrough input {
+  width: 100%;
+}
+
+.controls #volume {
+  width: 25%;
+}
+
+.controls #volume input {
+  width: 75% !important;
+  margin-right: 0.5em;
+}
+
+.controls #volume .glyphicon-volume-down {
+  float: left;
+}
+
+.controls #volume .glyphicon-volume-up {
+  float: right;
+}
+
+.controls #fullscreen {
+  float: right;
+}
+
+.controls .pause {
+  display: none;
+}
+
+.fullscreen {
+  width: 100%;
+  background-color: black;
+}
+
+.fullscreen video,
+.fullscreen .controls {
+  width: 96% !important;
+  margin: 0% 2% !important;
+}
+
+.fullscreen video #playThrough,
+.fullscreen .controls #playThrough {
+  width: 65% !important;
+}
+
+.fullscreen video #volume,
+.fullscreen .controls #volume {
+  width: 18% !important;
+}
+
+#mainVideo {
+  width: 100%;
 }
