@@ -4,6 +4,7 @@
     writeHeader("Reproductor", "player");
     writeNavbar();
     $video = $_GET["video"];
+    setcookie("video", $_GET["video"]);
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
     $videoInfo = $db->getVideoInfo($video);
@@ -154,64 +155,51 @@
         </div>
       </div>
       <div class="comments col-md-8 col-xs-12 ">
+        <div class="comment-form">
+          <div class="row">
+            <div class="col-md-4 buttons">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="btn btn-success col-xs-12">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="btn btn-danger col-xs-12">
+                    <span class="glyphicon glyphicon-minus-sign"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8 col-md-push-2">
+                  <div class="btn btn-info col-xs-12">
+                    <span>Subscribe!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="row">
+                <textarea name="comment" id="comment" rows="3" class="form-control"></textarea>
+              </div>
+              <div class="row">
+                <button type="button" name="send-comment" id="send-comment" class="btn btn-info col-md-4 col-md-push-4">Enviar comentario
+                </button>
+                <div class="col-md-2 btn btn-success col-md-push-6" id="length-btn">
+                  <span class="badge" id="length"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="panel panel-info">
           <div class="panel-heading">
             <h4 class="panel-title">Comentarios</h4>
           </div>
           <div class="panel-body">
-            <div class="comment">
-              <div class="row">
-                <div class="col-md-3">
-                  <img src="user.png"  class="img-prueba">
-                </div>
-                <div class="col-md-9">
-                  <p>
-                    <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  </p>
-                </div>
-              </div>
-              <div class="comment">
-                <div class="row">
-                  <div class="col-md-3">
-                    <img src="user.png"  class="img-prueba">
-                  </div>
-                  <div class="col-md-9">
-                    <p>
-                      <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                  </div>
-                </div>
-                <div class="comment">
-                  <div class="row">
-                    <div class="col-md-3">
-                      <img src="user.png"  class="img-prueba">
-                    </div>
-                    <div class="col-md-9">
-                      <p>
-                        <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                      </p>
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="comment">
-              <div class="row">
-                <div class="col-md-3">
-                  <img src="user.png"  class="img-prueba">
-                </div>
-                <div class="col-md-9">
-                  <p>
-                    <h4>UsuarioPatata</h4> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <?php
+              require_once("inc/commentsParser.php");
+            ?>
           </div>
         </div>
       </div>
