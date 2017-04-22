@@ -209,10 +209,17 @@
 
 .fullscreen {
   width: 100%;
+  background-color: black;
   video,
   .controls {
     width: 96% !important;
     margin: 0% 2% !important;
+    #playThrough {
+      width: 65% !important;
+    }
+    #volume {
+      width: 18% !important;
+    }
   }
 }
 #mainVideo {

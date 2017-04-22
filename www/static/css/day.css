@@ -245,12 +245,23 @@ body {
 
 .fullscreen {
   width: 100%;
+  background-color: black;
 }
 
 .fullscreen video,
 .fullscreen .controls {
   width: 96% !important;
   margin: 0% 2% !important;
+}
+
+.fullscreen video #playThrough,
+.fullscreen .controls #playThrough {
+  width: 65% !important;
+}
+
+.fullscreen video #volume,
+.fullscreen .controls #volume {
+  width: 18% !important;
 }
 
 #mainVideo {

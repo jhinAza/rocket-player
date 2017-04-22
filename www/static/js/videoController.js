@@ -211,6 +211,8 @@ GenericMediaController.prototype.setContainer = function(element) {
 GenericMediaController.prototype.setFullScreen = function() {
   if (document.fullscreenEnabled) {
     this.container.requestFullscreen();
+    this.$container.css("background-color", "black");
+    this.$container.addClass("fullscreen");
   } else {
     this.$media.addClass("fullscreen");
   }
@@ -316,11 +318,11 @@ function WebkitMediaController(id) {
 WebkitMediaController.prototype = Object.create(GenericMediaController.prototype);
 WebkitMediaController.prototype.setFullScreen = function () {
   this.container.webkitRequestFullScreen();
-  this.$container.css("background-color", "black");
   this.$container.addClass("fullscreen");
 };
 WebkitMediaController.prototype.exitFullScreen = function () {
   document.webkitExitFullscreen();
+  this.$container.removeClass("fullscreen");
 };
 WebkitMediaController.prototype.isFullscreen = function () {
   return this.container === document.webkitFullscreenElement
@@ -332,14 +334,13 @@ function GeckoMediaController(id) {
 }
 GeckoMediaController.prototype = Object.create(GenericMediaController.prototype);
 GeckoMediaController.prototype.setFullScreen = function () {
-  // this.media.mozRequestFullScreen();
   this.container.mozRequestFullScreen();
   this.$container.addClass("fullscreen");
 }
 GeckoMediaController.prototype.exitFullScreen = function () {
   document.mozCancelFullScreen();
   this.$container.removeClass("fullscreen");
-};
+}
 GeckoMediaController.prototype.isFullscreen = function () {
   return this.container === document.mozFullScreenElement
 };
@@ -351,9 +352,11 @@ function IEMediaController(id) {
 IEMediaController.prototype = Object.create(GenericMediaController.prototype);
 IEMediaController.prototype.setFullScreen = function () {
   this.container.msRequestFullscreen();
+  this.$container.addClass("fullscreen");
 }
 IEMediaController.prototype.exitFullScreen = function () {
   document.msExitFullscreen();
+  this.$container.css("background-color", "black");
 };
 IEMediaController.prototype.isFullscreen = function () {
   return this.container === document.msFullscreenElement;
