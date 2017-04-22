@@ -8,7 +8,7 @@
     <div class="comment">
           <div class="row">
             <div class="col-md-3">
-              <img src="user.png"  class="img-prueba">
+              <img src="/static/img/user.png"  class="img-prueba">
             </div>
             <div class="col-md-9">
               <p>
@@ -20,8 +20,10 @@
         </div>
     <?php
   }
-  $comments = $db->getComments($_COOKIE["video"]);
-  foreach ($comments as $comment) {
-    createComment($comment);
+  $comments = $db->getComments($_GET["video"]);
+  if ($comments) {
+    foreach ($comments as $comment) {
+      createComment($comment);
+    }
   }
 ?>

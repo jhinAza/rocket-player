@@ -106,7 +106,7 @@
                 <div class="panel-body">
                   <div class='row'>
                     <div class="col-xs-4 video-thumb">
-                      <img src="video.jpg">
+                      <img src="/static/img/video.jpg">
                     </div>
                     <div class="col-md-8">
                       Titulo del video <br> Autor del video
@@ -118,7 +118,7 @@
                 <div class="panel-body">
                   <div class='row'>
                     <div class="col-xs-4 video-thumb">
-                      <img src="video.jpg" >
+                      <img src="/static/img/video.jpg" >
                     </div>
                     <div class="col-md-8">
                       Titulo del video <br> Autor del video
@@ -130,7 +130,7 @@
                 <div class="panel-body">
                   <div class='row'>
                     <div class="col-xs-4 video-thumb">
-                      <img src="video.jpg" >
+                      <img src="/static/img/video.jpg" >
                     </div>
                     <div class="col-md-8">
                       Titulo del video <br> Autor del video
@@ -142,7 +142,7 @@
                 <div class="panel-body">
                   <div class='row'>
                     <div class="col-xs-4 video-thumb">
-                      <img src="video.jpg" >
+                      <img src="/static/img/video.jpg" >
                     </div>
                     <div class="col-md-8">
                       Titulo del video <br> Autor del video
