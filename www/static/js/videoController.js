@@ -61,7 +61,6 @@ GenericMediaController.prototype.pause = function () {
   //Just like the play() function I need to update it when I add support for multiple media objects.
   if (this.isPlaying()) {
     this.media.pause();
-
   }
 };
 GenericMediaController.prototype.toString = function() {
@@ -200,6 +199,36 @@ GenericMediaController.prototype.setEvents = function () {
       $(THIS.controls.timer).text(THIS.getStringTime());
     }
   });
+  this.$media.on("keypress", function(e) {
+    if (e.which === 32) {
+      if (THIS.isPlaying()) {
+        THIS.pause();
+      } else {
+        THIS.play();
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    } else if (e.keyCode === 39) {
+      var time = THIS.getCurrentTime();
+      THIS.setTime(time+5);
+    } else if (e.keyCode === 37) {
+      var time = THIS.getCurrentTime();
+      THIS.setTime(time-5);
+    }
+  });
+  this.$media.click(function (e) {
+    if (e.which === 1) {
+      if (THIS.isPlaying()) {
+        THIS.pause();
+      } else {
+        THIS.play();
+      }
+      e.preventDefault();
+      return false;
+    }
+  });
+
 };
 GenericMediaController.prototype.setVolume = function (value) {
   this.media.volume = value;
