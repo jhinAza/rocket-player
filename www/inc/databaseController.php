@@ -280,5 +280,37 @@
       return false;
     }
 
+    function saveComment($videoID, $user, $comment, $parent=null) {
+      $uid = $this->getUserID($user);
+      $timestamp = time();
+      $date = date('Y-m-d H:i:s',$timestamp);
+      $stm = $this->connect->prepare("insert into comments (creationdate, parentcomment, userID, video, comments) values (:date, :parent, :uid, :video, :text)");
+      $stm->bindParam(":date", $date);
+      $stm->bindParam(":parent", $parent);
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $videoID);
+      $stm->bindParam(":text", $comment);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getComments($videoID) {
+      $stm = $this->connect->prepare("select * from comments where video = :id");
+      $stm->bindParam(":id", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
   }
 ?>

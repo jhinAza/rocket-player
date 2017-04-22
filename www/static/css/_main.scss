@@ -34,6 +34,18 @@
   padding-right: 1em;
   margin-top: 1em;
   align-items: center;
+  .comment-form {
+    padding: 0em 1em;
+    margin-bottom: 2em;
+    textarea {
+      margin-bottom: 0.5em;
+    }
+    .buttons {
+      .row {
+        margin: 0.5em 0em !important;
+      }
+    }
+  }
 }
 
 .comment {
