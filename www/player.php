@@ -77,7 +77,9 @@
                   <a href="/profile.php?uid=<?php print($videoInfo["userID"]); ?>">
                     <?php print($db->getUserName($videoInfo["userID"])); ?>
                   </a><br>
-                  <?php print($videoInfo["description"]); ?>
+                  <p>
+                    <?php print($videoInfo["description"]); ?>
+                  </p>
                 </div>
               </div>
             </div>
