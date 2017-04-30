@@ -301,8 +301,21 @@
     }
 
     function getComments($videoID) {
-      $stm = $this->connect->prepare("select * from comments where video = :id");
+      $stm = $this->connect->prepare("select * from comments where video = :id and parentcomment is NULL");
       $stm->bindParam(":id", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
+
+    function getChildComments($parentID) {
+      $stm = $this->connect->prepare("select * from comments where parentcomment = :id");
+      $stm->bindParam(":id", $parentID);
       $result = $stm->execute();
       if ($result) {
         $data = $stm->fetchAll();

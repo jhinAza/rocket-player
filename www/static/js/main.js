@@ -78,6 +78,12 @@ $(function() {
     }
   });
 
+  $(".comment-response").click(function(e) {
+    console.log($(this).data("comment-id"));
+    var commentID = "#" + $(this).data("comment-id") + " ";
+    $("#comment").val(commentID).focus();
+  })
+
   $("#comment").on("keyup", function(e) {
     var length = this.value.length;
     $("#length").html(length);

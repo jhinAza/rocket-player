@@ -32,6 +32,8 @@ body {
   max-height: 10em;
   overflow-y: scroll;
   word-break: break-all;
+  overflow-y: auto !important;
+  text-align: justify;
 }
 
 .info .panel,
@@ -78,7 +80,13 @@ body {
   margin-bottom: 1em;
 }
 
+.comment .comments-btn {
+  margin: 0.2em 0em;
+  float: right;
+}
+
 .comment > .comment {
+  margin-top: 0.5em;
   width: 95%;
   margin-left: 5%;
 }
