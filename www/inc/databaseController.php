@@ -325,5 +325,11 @@
       }
       return false;
     }
+
+    function executeQuery($str) {
+      $stm = $this->connect->prepare($str);
+      $result = $stm->execute();
+      return $result;
+    }
   }
 ?>

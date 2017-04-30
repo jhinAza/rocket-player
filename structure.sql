@@ -1,8 +1,8 @@
-DROP DATABASE IF EXISTS webplayer;
+DROP DATABASE IF EXISTS {{dabatase}};
 
-CREATE DATABASE webplayer CHARACTER SET utf16 COLLATE utf16_general_ci;
+CREATE DATABASE {{dabatase}} CHARACTER SET utf16 COLLATE utf16_general_ci;
 
-USE webplayer;
+USE {{dabatase}};
 
 CREATE TABLE IF NOT EXISTS users
   (
