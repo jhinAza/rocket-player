@@ -3,17 +3,23 @@ DROP DATABASE IF EXISTS {{dabatase}};
 CREATE DATABASE {{dabatase}} CHARACTER SET utf16 COLLATE utf16_general_ci;
 
 USE {{dabatase}};
-
 CREATE TABLE IF NOT EXISTS users
   (
      id           INT auto_increment,
      username     VARCHAR(20) NOT NULL,
-     userEmail    VARCHAR(100) NOT NULL,
-     userPassword VARCHAR(256),
+     useremail    VARCHAR(100) NOT NULL,
+     userpassword VARCHAR(256),
      creationdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-     active       BOOLEAN NOT NULL DEFAULT TRUE,
-     userRole     ENUM('user', 'admin') DEFAULT 'user',
+     active       BOOLEAN NOT NULL DEFAULT true,
+     userrole     ENUM('user', 'admin') DEFAULT 'user',
      CONSTRAINT badusersprimarykey PRIMARY KEY (id)
+  );
+
+CREATE TABLE IF NOT EXISTS categories
+  (
+     id     INT auto_increment,
+     nombre VARCHAR(50),
+     CONSTRAINT badcategoriesprimarykey PRIMARY KEY (id)
   );
 
 CREATE TABLE IF NOT EXISTS videos
@@ -23,13 +29,15 @@ CREATE TABLE IF NOT EXISTS videos
      videoname    VARCHAR(100) NOT NULL,
      description  VARCHAR(2000) NOT NULL,
      creationdate DATE NOT NULL,
-     userID       INT,
+     userid       INT,
      cat          INT,
      public       BOOLEAN,
      active       BOOLEAN,
      CONSTRAINT badvideosprimarykey PRIMARY KEY (id),
-     CONSTRAINT badvideosusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badvideoscatforeignkey  FOREIGN KEY (cat) REFERENCES categories (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badvideosusersforeignkey FOREIGN KEY (userid) REFERENCES users (
+     id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badvideoscatforeignkey FOREIGN KEY (cat) REFERENCES categories (
+     id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS resources
@@ -37,10 +45,12 @@ CREATE TABLE IF NOT EXISTS resources
      id           INT auto_increment,
      file         VARCHAR(100),
      creationdate DATE,
-     userID       INT,
-     type         ENUM('subtitles', "transcription", "signal-language", "additional-audio"),
+     userid       INT,
+     type         ENUM('subtitles', "transcription", "signal-language",
+     "additional-audio"),
      CONSTRAINT badresourcesprimarykey PRIMARY KEY (id),
-     CONSTRAINT badresourcesusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badresourcesusersforeignkey FOREIGN KEY (userid) REFERENCES
+     users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS comments
@@ -48,20 +58,16 @@ CREATE TABLE IF NOT EXISTS comments
      id            INT auto_increment,
      creationdate  DATE,
      parentcomment INT,
-     userID        INT,
+     userid        INT,
      video         INT,
-     comments       VARCHAR(300),
+     comments      VARCHAR(300),
      CONSTRAINT badcommentprimarykey PRIMARY KEY (id),
-     CONSTRAINT badcommentsusersforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badcommentscommentsforeignkey FOREIGN KEY (userID) REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badcommentsvideosforeignkey FOREIGN KEY (userID) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS CATEGORIES
-  (
-     id     INT auto_increment,
-     nombre VARCHAR(50),
-     CONSTRAINT badcategoriesprimarykey PRIMARY KEY (id)
+     CONSTRAINT badcommentsusersforeignkey FOREIGN KEY (userid) REFERENCES users
+     (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badcommentscommentsforeignkey FOREIGN KEY (userid) REFERENCES
+     comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badcommentsvideosforeignkey FOREIGN KEY (userid) REFERENCES
+     videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS video_tags
@@ -69,27 +75,32 @@ CREATE TABLE IF NOT EXISTS video_tags
      video INT,
      tags  VARCHAR(20),
      CONSTRAINT badvideo_tagsprimarykey PRIMARY KEY (video, tags),
-     CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES
+     videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS votos_video
   (
-     video INT,
-     userID INT,
-     voto  ENUM("1", "-1"),
-     CONSTRAINT badvotos_videoprimarykey PRIMARY KEY (video, userID),
-     CONSTRAINT badvotos_videovideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badvotos_videouserforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     video  INT,
+     userid INT,
+     voto   ENUM("1", "-1"),
+     CONSTRAINT badvotos_videoprimarykey PRIMARY KEY (video, userid),
+     CONSTRAINT badvotos_videovideoforeignkey FOREIGN KEY (video) REFERENCES
+     videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badvotos_videouserforeignkey FOREIGN KEY (userid) REFERENCES
+     users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS votos_comentario
   (
      comments INT,
-     userID    INT,
+     userid   INT,
      voto     ENUM("1", "-1"),
-     CONSTRAINT badvotos_comentarioprimarykey PRIMARY KEY (comments, userID),
-     CONSTRAINT badvotos_comentariovideoforeignkey FOREIGN KEY (comments) REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badvotos_comentariouserforeignkey FOREIGN KEY (userID) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badvotos_comentarioprimarykey PRIMARY KEY (comments, userid),
+     CONSTRAINT badvotos_comentariovideoforeignkey FOREIGN KEY (comments)
+     REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badvotos_comentariouserforeignkey FOREIGN KEY (userid)
+     REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS resources_video
@@ -97,15 +108,41 @@ CREATE TABLE IF NOT EXISTS resources_video
      video    INT,
      resource INT,
      CONSTRAINT badresources_videoprimarykey PRIMARY KEY (video, resource),
-     CONSTRAINT badresources_videovideoforeignkey FOREIGN KEY (video) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource) REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT badresources_videovideoforeignkey FOREIGN KEY (video) REFERENCES
+     videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource)
+     REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS uuid
   (
      token CHAR(64),
-     uid   INT ,
-     date DATETIME DEFAULT CURRENT_TIMESTAMP,
+     uid   INT,
+     date  DATETIME DEFAULT CURRENT_TIMESTAMP,
      CONSTRAINT baduuidprimarykey PRIMARY KEY (uid),
-     CONSTRAINT baduuiduidforeignkey FOREIGN KEY (uid) REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     CONSTRAINT baduuiduidforeignkey FOREIGN KEY (uid) REFERENCES users (id) ON
+     UPDATE CASCADE ON DELETE CASCADE
+  );
+
+CREATE TABLE IF NOT EXISTS following
+  (
+     follower INT,
+     followed INT,
+     CONSTRAINT badfollowingprimarykey PRIMARY KEY (follower, followed),
+     CONSTRAINT badfollowingfollowerforeignkey FOREIGN KEY (follower) REFERENCES
+     users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badfollowingfollowedforeignkey FOREIGN KEY (followed) REFERENCES
+     users (id) ON UPDATE CASCADE ON DELETE CASCADE
+  );
+
+CREATE TABLE IF NOT EXISTS history
+  (
+     user  INT,
+     video INT,
+     date  DATETIME DEFAULT CURRENT_TIMESTAMP,
+     CONSTRAINT badhistoryprimarykey PRIMARY KEY (user, video),
+     CONSTRAINT badhistoryuserforeignkey FOREIGN KEY (user) REFERENCES users (id
+     ),
+     CONSTRAINT badhistoryvideoforeignkey FOREIGN KEY (video) REFERENCES videos
+     (id)
   );
