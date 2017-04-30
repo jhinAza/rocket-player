@@ -6,7 +6,13 @@
         require_once("inc/databaseController.php");
         session_start();
         $db = new databaseController();
-        $db->saveComment($_COOKIE["video"], $_SESSION["user"], $_POST["comment"]);
+        if (preg_match("/^(#[0-9]{1,} )/", $_POST["comment"])) {
+          $id = preg_split("/ /", $_POST["comment"])[0];
+          $parent = substr($id, 1);
+          $db->saveComment($_COOKIE["video"], $_SESSION["user"], $_POST["comment"], $parent);
+        } else {
+          $db->saveComment($_COOKIE["video"], $_SESSION["user"], $_POST["comment"]);
+        }
         die();
       }
     }

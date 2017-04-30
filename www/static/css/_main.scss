@@ -56,8 +56,10 @@
   margin-bottom: 1em;
   .comments-btn {
     margin: 0.2em 0em;
+    float: right;
   }
   > .comment {
+    margin-top: 0.5em;
     width: 95%;
     margin-left: 5%;
   }

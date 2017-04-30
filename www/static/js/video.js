@@ -10,4 +10,5 @@ $(function() {
   video.addControl("#fullscreen", "fullscreen");
   video.addControl("#mute", "mute");
   video.addControl("#volumeBar", "volume");
+
 });
