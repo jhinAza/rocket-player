@@ -23,6 +23,7 @@
         $file = file_get_contents($_FILES["schema"]["tmp_name"]);
         $file = str_replace("{{dabatase}}", $db->name, $file);
         $db->executeQuery($file);
+        deleteDirectory("res");
         header("Location: /login.php");
       }
     }
