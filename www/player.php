@@ -5,12 +5,15 @@
     writeNavbar();
     $video = $_GET["video"];
     setcookie("video", $_GET["video"]);
+    session_start();
+    $user = $_SESSION["user"];
+    session_write_close();
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
+    $db->addVideoToHistory($video, $user);
     $videoInfo = $db->getVideoInfo($video);
     $videoURL = "/res/video/".$videoInfo["filename"];
     ?>
-    <!-- TODO:Tengo que planear como obtengo la url del video -->
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
         <ul class="nav nav-pills nav-stacked video-header">
@@ -74,8 +77,8 @@
               </div>
               <div class="panel-collapse collapse in" id="author">
                 <div class="panel-body">
-                  <a href="/profile.php?uid=<?php print($videoInfo["userID"]); ?>">
-                    <?php print($db->getUserName($videoInfo["userID"])); ?>
+                  <a href="/profile.php?uid=<?php print($videoInfo["userid"]); ?>">
+                    <?php print($db->getUserName($videoInfo["userid"])); ?>
                   </a><br>
                   <p>
                     <?php print($videoInfo["description"]); ?>

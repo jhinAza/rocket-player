@@ -331,5 +331,37 @@
       $result = $stm->execute();
       return $result;
     }
+
+    function addVideoToHistory($video, $user) {
+      $uid = $this->getUserID($user);
+      $timestamp = time();
+      $date = date('Y-m-d H:i:s',$timestamp);
+      $stm = $this->connect->prepare("select * from history where user = :user and video = :video");
+      $stm->bindParam(":user", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          $stm = $this->connect->prepare("update history set date = :date where user = :user and video = :video");
+        } else {
+          $stm = $this->connect->prepare("insert into history values (:user, :video, :date)");
+        }
+        $stm->bindParam(":user", $uid);
+        $stm->bindParam(":video", $video);
+        $stm->bindParam(":date", $date);
+        $result = $stm->execute();
+        if ($result) {
+          return true;
+        } else {
+          error_log($this->connect->errorInfo()[0]);
+          error_log($result);
+        }
+      } else {
+        error_log($this->connect->errorInfo()[0]);
+        error_log($result);
+      }
+      return false;
+    }
   }
 ?>
