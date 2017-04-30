@@ -15,13 +15,14 @@ $(function() {
     }
     return isValid;
   });
+
   /**
   * Makes a AJAX call against the server to retrieve the modal window
   */
   $("#settings").click(function(e) {
     $.get({
       "url": "/settings.php",
-      "success": success,
+      "success": getSettingsSuccess,
       "dataType": "html"
     });
   });
@@ -58,13 +59,44 @@ $(function() {
       });
     }
   });
+  /**
+  * Makes an AJAX call agains the server to store a comment in a video
+  */
+  $("#send-comment").click(function (e) {
+    comment = $("#comment").val();
+    var isValid = true
+    if (comment.length > 300) {
+      isValid = false;
+      alert("El comentario es demasiado largo");
+    }
+    if (isValid) {
+      $.post({
+        "url": "/sendComment.php",
+        "success": sendCommentSuccess,
+        "data": $("#comment").serialize()
+      });
+    }
+  });
+
+  $("#comment").on("keyup", function(e) {
+    var length = this.value.length;
+    $("#length").html(length);
+    if (length >= 300) {
+      this.value = this.value.substring(0,300);
+      $("#length-btn").removeClass("btn-success").removeClass("btn-warning").addClass("btn-danger");
+    } else if (length > 200) {
+      $("#length-btn").removeClass("btn-success").removeClass("btn-danger").addClass("btn-warning");
+    } else {
+      $("#length-btn").removeClass("btn-warning").removeClass("btn-danger").addClass("btn-success");
+    }
+  })
   // Functions
   /**
   * Appends the settings modal window to the body and sets the events
   *
   * @param {HTMLElement} data
   */
-  function success(data) {
+  function getSettingsSuccess(data) {
     $("body").append(data);
     $("#myModal").modal("toggle");
     $("#myModal").modal("show");
@@ -84,5 +116,11 @@ $(function() {
         "success": location.reload(true)
       });
     });
+  }
+
+  function sendCommentSuccess(data) {
+    $("#comment").val("");
+    $("#length").html("");
+    console.log(data);
   }
 });

@@ -1,9 +1,25 @@
-.glyphicon-warning:hover {
-  color: #e74c3c;
+body {
+  background-color: #fffdd3 !important;
+}
+
+.select-label {
+  padding: 0px !important;
+}
+
+.video-panel {
+  background-color: white !important;
 }
 
 .check-list {
-  background-color: #375a7f;
+  border-color: #222;
+  border-width: 1px;
+  border-style: dotted;
+  background-color: #2fa4e7;
+}
+
+.controls div #time,
+.controls div .glyphicon {
+  color: black !important;
 }
 
 .info {
@@ -16,8 +32,6 @@
   max-height: 10em;
   overflow-y: scroll;
   word-break: break-all;
-  overflow-y: auto !important;
-  text-align: justify;
 }
 
 .info .panel,
@@ -161,7 +175,7 @@
   min-height: 2.5em;
   padding: 0.5em 1em;
   border-radius: 5px;
-  background-color: #375a7f;
+  background-color: #2fa4e7;
 }
 
 .controls div {
@@ -185,7 +199,7 @@
   height: 13px;
   width: 13px;
   border-radius: 15px;
-  background: white;
+  background: #40e4ff;
   cursor: pointer;
   margin-top: -5px;
 }
@@ -202,12 +216,12 @@
   height: 13px;
   width: 13px;
   border-radius: 15px;
-  background: white;
+  background: #40e4ff;
   cursor: pointer;
 }
 
 .controls input[type=range]::-moz-range-progress {
-  background-color: #00baff;
+  background-color: #03435a;
 }
 
 .controls #playThrough {

@@ -1,0 +1,13 @@
+// Add the selectors needed to customize the theme
+$background-color: #375a7f;
+$thumb-color: white;
+$progress-bar-color: #00baff;
+.glyphicon-warning:hover {
+  color: #e74c3c;
+}
+
+.check-list {
+  background-color: $background-color;
+}
+
+@import "main.scss";

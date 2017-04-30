@@ -155,6 +155,23 @@
       return false;
     }
 
+    function getUserName($uid) {
+      $stm = $this->connect->prepare("select username from users where ID = :user");
+      $stm->bindParam(":user",$uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          $id = $data[0]['username'];
+          return $id;
+        }
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
     function selectUIDRow($user) {
       $id = $this->getUserID($user);
       if ($id) {
@@ -210,6 +227,90 @@
       $stm = $this->connect->prepare("truncate table $table");
       // $stm->bindParam(":table", $table);
       $res = $stm->execute();
+    }
+
+    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $public=true, $active=true) {
+      // We need to store all the data in the database
+      session_start();
+      $user = $_SESSION["user"];
+      session_write_close();
+      $uid = $this->getUserID($user);
+      $date = date('Y-m-d H:i:s',$time);
+      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active)");
+      $stm->bindParam(":filename", $videofile);
+      $stm->bindParam(":videoname",$videoname);
+      $stm->bindParam(":desc", $desc);
+      $stm->bindParam(":date",$date);
+      $stm->bindParam(":uid",$uid);
+      $stm->bindParam(":cat",$cat);
+      $stm->bindParam(":public",$public);
+      $stm->bindParam(":active",$active);
+      $result = $stm->execute();
+      if ($result) {
+        // Now that we have the video stored in the DB we need the ID
+        $videoID = $this->connect->lastInsertId();
+        print($videoID." video ID\n");
+        foreach ($tags as $tag) {
+          print($tag);
+          $stm = $this->connect->prepare("insert into video_tags values (:video, :tag)");
+          $stm->bindParam(":video", $videoID);
+          $stm->bindParam(":tag", $tag);
+          $result = $stm->execute();
+          print($result);
+          print_r($this->connect->errorInfo());
+          print($this->connect->errorCode());
+        }
+        return true;
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+    }
+
+    function getVideoInfo($videoID) {
+      $stm = $this->connect->prepare("select * from videos where id = :vid");
+      $stm->bindParam(":vid", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0];
+        }
+      }
+      return false;
+    }
+
+    function saveComment($videoID, $user, $comment, $parent=null) {
+      $uid = $this->getUserID($user);
+      $timestamp = time();
+      $date = date('Y-m-d H:i:s',$timestamp);
+      $stm = $this->connect->prepare("insert into comments (creationdate, parentcomment, userID, video, comments) values (:date, :parent, :uid, :video, :text)");
+      $stm->bindParam(":date", $date);
+      $stm->bindParam(":parent", $parent);
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $videoID);
+      $stm->bindParam(":text", $comment);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      } else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getComments($videoID) {
+      $stm = $this->connect->prepare("select * from comments where video = :id");
+      $stm->bindParam(":id", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
     }
   }
 ?>
