@@ -78,6 +78,12 @@ $(function() {
     }
   });
 
+  $(".comment-response").click(function(e) {
+    console.log($(this).data("comment-id"));
+    var commentID = "#" + $(this).data("comment-id") + " ";
+    $("#comment").val(commentID).focus();
+  })
+
   $("#comment").on("keyup", function(e) {
     var length = this.value.length;
     $("#length").html(length);
@@ -90,6 +96,26 @@ $(function() {
       $("#length-btn").removeClass("btn-warning").removeClass("btn-danger").addClass("btn-success");
     }
   })
+
+  $("#follow").on("click", function(e) {
+    console.log($(this).data("following"));
+    if ($(this).data("following") == true) {
+      console.log("true~");
+      var type = "unfollow";
+      var success = unfollowSuccess;
+    } else {
+      var type = "follow";
+      var success = followSuccess;
+    }
+    $.post({
+      "url": "/requests.php",
+      "success": success,
+      "data": {
+        "type": type,
+        "followed": url("?uid")
+      }
+    })
+  });
   // Functions
   /**
   * Appends the settings modal window to the body and sets the events
@@ -121,6 +147,16 @@ $(function() {
   function sendCommentSuccess(data) {
     $("#comment").val("");
     $("#length").html("");
+    console.log(data);
+  }
+
+  function followSuccess(data) {
+    $("#follow").removeClass("btn-info").addClass("btn-warning").html("Dejar de seguir!").data("following", "true");
+    console.log(data);
+  }
+  function unfollowSuccess(data) {
+    console.log("Unfollowed!!");
+    $("#follow").removeClass("btn-warning").addClass("btn-info").html("Seguir!").data("following", "false");
     console.log(data);
   }
 });

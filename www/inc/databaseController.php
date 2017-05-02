@@ -301,8 +301,138 @@
     }
 
     function getComments($videoID) {
-      $stm = $this->connect->prepare("select * from comments where video = :id");
+      $stm = $this->connect->prepare("select * from comments where video = :id and parentcomment is NULL");
       $stm->bindParam(":id", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
+
+    function getChildComments($parentID) {
+      $stm = $this->connect->prepare("select * from comments where parentcomment = :id");
+      $stm->bindParam(":id", $parentID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
+
+    function executeQuery($str) {
+      $stm = $this->connect->prepare($str);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function addVideoToHistory($video, $user) {
+      $uid = $this->getUserID($user);
+      $timestamp = time();
+      $date = date('Y-m-d H:i:s',$timestamp);
+      $stm = $this->connect->prepare("select * from history where user = :user and video = :video");
+      $stm->bindParam(":user", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          $stm = $this->connect->prepare("update history set date = :date where user = :user and video = :video");
+        } else {
+          $stm = $this->connect->prepare("insert into history values (:user, :video, :date)");
+        }
+        $stm->bindParam(":user", $uid);
+        $stm->bindParam(":video", $video);
+        $stm->bindParam(":date", $date);
+        $result = $stm->execute();
+        if ($result) {
+          return true;
+        } else {
+          error_log($this->connect->errorInfo()[0]);
+          error_log($result);
+        }
+      } else {
+        error_log($this->connect->errorInfo()[0]);
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getHistory($user, $start, $limit) {
+      $stm = $this->connect->prepare("select u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id limit :offset,:limit");
+      $stm->bindParam(":user", $user);
+      $stm->bindValue(":offset", $start, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
+        error_log("Prueba!!");
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
+    function followUser($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT into following values (:follower, :followed)");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function unfollowUser($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE from following where follower = :follower and followed = :followed");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function isFollowing($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * from following where follower = :follower and followed = :followed");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        error_log(count($data) > 0 ? "true" : "false");
+        return count($data) > 0 ? "true" : "false";
+      } else {
+        return "false";
+      }
+    }
+
+    function getFollowers($uid) {
+      $stm = $this->connect->prepare("SELECT u.username, u.id FROM `following` as f, `users` as u WHERE f.followed = :followed and f.follower = u.id");
+      $stm->bindParam(":followed", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
+
+    function getFollows($uid) {
+      $stm = $this->connect->prepare("SELECT u.username, u.id FROM `following` as f, `users` as u WHERE f.follower = :follower and f.followed = u.id");
+      $stm->bindParam(":follower", $uid);
       $result = $stm->execute();
       if ($result) {
         $data = $stm->fetchAll();

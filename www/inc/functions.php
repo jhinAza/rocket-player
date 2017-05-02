@@ -21,6 +21,10 @@
           <script src="/static/js/videoController.js" charset="utf-8"></script>
           <script src="/static/js/video.min.js" charset="utf-8"></script>
           <?php
+        } elseif ($type == "profile") {
+          ?>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
+          <?php
         }
       ?>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
@@ -84,5 +88,56 @@
     // debug(__FILE__,__FUNCTION__,__LINE__);
     print("<H1>$file-$function-$line</H1>");
     error_log("<H1>$file-$function-$line</H1>");
+  }
+
+  function deleteDirectory($dir){
+    if (!file_exists($dir)) {
+        return true;
+    }
+    if (!is_dir($dir)) {
+        return unlink($dir);
+    }
+    foreach (scandir($dir) as $item) {
+        if ($item == '.' || $item == '..') {
+            continue;
+        }
+        if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+            return false;
+        }
+    }
+    return rmdir($dir);
+  }
+
+  function getRowOfHistory($uid, $start=0) {
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $row = $db->getHistory($uid, $start, 3);
+    if ($row) {
+      print('<div class="row">');
+      foreach ($row as $video) {
+        ?>
+        <div class="col-md-4 item">
+          <div class="row">
+            <div class="col-md-6 video-data">
+              <div class="row">
+                <h4>
+                  <a href=<?php print("/player?video=".$video["videoID"]) ?>>
+                    <?php print($video["videoname"]) ?>
+                  </a>
+                </h4>
+              </div>
+              <div class="row">
+                <h5><?php print($video["creator"]) ?></h5>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <img src="/static/img/video.jpg" alt="" style="width:100%">
+            </div>
+          </div>
+        </div>
+        <?php
+      }
+      print("</div>");
+    }
   }
 ?>
