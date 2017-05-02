@@ -293,3 +293,7 @@ body {
 .video-data > .row {
   padding: 0em 1em;
 }
+
+.resp-img {
+  width: 100%;
+}
