@@ -21,6 +21,10 @@
           <script src="/static/js/videoController.js" charset="utf-8"></script>
           <script src="/static/js/video.min.js" charset="utf-8"></script>
           <?php
+        } elseif ($type == "profile") {
+          ?>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
+          <?php
         }
       ?>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
