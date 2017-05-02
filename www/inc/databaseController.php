@@ -383,5 +383,64 @@
       }
       return false;
     }
+
+    function followUser($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT into following values (:follower, :followed)");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function unfollowUser($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE from following where follower = :follower and followed = :followed");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function isFollowing($user, $followed) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * from following where follower = :follower and followed = :followed");
+      $stm->bindParam(":follower", $uid);
+      $stm->bindParam(":followed", $followed);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        error_log(count($data) > 0 ? "true" : "false");
+        return count($data) > 0 ? "true" : "false";
+      } else {
+        return "false";
+      }
+    }
+
+    function getFollowers($uid) {
+      $stm = $this->connect->prepare("SELECT u.username, u.id FROM `following` as f, `users` as u WHERE f.followed = :followed and f.follower = u.id");
+      $stm->bindParam(":followed", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
+
+    function getFollows($uid) {
+      $stm = $this->connect->prepare("SELECT u.username, u.id FROM `following` as f, `users` as u WHERE f.follower = :follower and f.followed = u.id");
+      $stm->bindParam(":follower", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
   }
 ?>
