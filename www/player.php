@@ -10,9 +10,12 @@
     session_write_close();
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
-    $db->addVideoToHistory($video, $user);
     $videoInfo = $db->getVideoInfo($video);
+    if (!$videoInfo) {
+      header("Location: http404.php");
+    }
     $videoURL = "/res/video/".$videoInfo["filename"];
+    $db->addVideoToHistory($video, $user);
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
