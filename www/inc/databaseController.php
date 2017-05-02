@@ -363,5 +363,25 @@
       }
       return false;
     }
+
+    function getHistory($user, $start, $limit) {
+      $stm = $this->connect->prepare("select u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id limit :offset,:limit");
+      $stm->bindParam(":user", $user);
+      $stm->bindValue(":offset", $start, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
+        error_log("Prueba!!");
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
   }
 ?>
