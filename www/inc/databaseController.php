@@ -365,13 +365,31 @@
     }
 
     function getHistory($user, $start, $limit) {
-      $stm = $this->connect->prepare("select u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id limit :offset,:limit");
+      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
       $result = $stm->execute();
       if ($result) {
-        error_log("Prueba!!");
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getUserVideos($user, $start, $limit) {
+      $stm = $this->connect->prepare("SELECT v.videoname, v.id FROM `videos` as v WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
+      $stm->bindParam(":user", $user);
+      $stm->bindValue(":offset", $start, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
         $data = $stm->fetchAll();
         if (count($data) > 0) {
           return $data;
@@ -439,6 +457,21 @@
         if (count($data) > 0) {
           return $data;
         }
+      }
+      return false;
+    }
+
+    function userHasVideos($uid) {
+      $stm = $this->connect->prepare("SELECT COUNT(*) as 'count' FROM videos where userid = :uid ");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return ((int) $data[0]["count"]) > 0;
+      }
+      else {
+        error_log($this->connect->errorInfo());
+        error_log($result);
       }
       return false;
     }
