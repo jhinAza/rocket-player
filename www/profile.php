@@ -64,7 +64,7 @@
             <div class="panel-body">
               <ul class="list-group">
                 <?php
-                  $followers = $db->getFollowers($_GET["uid"]);
+                  $followers = $db->getFollowers($uid);
                   if ($followers) {
                     foreach ($followers as $follower) {
                       ?>
@@ -87,7 +87,7 @@
             <div class="panel-body">
               <ul class="list-group">
                 <?php
-                  $follows = $db->getFollows($_GET["uid"]);
+                  $follows = $db->getFollows($uid);
                   if ($follows) {
                     foreach ($follows as $follow) {
                       ?>
