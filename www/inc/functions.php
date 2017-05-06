@@ -140,4 +140,34 @@
       print("</div>");
     }
   }
+
+  function getRowOfUploaded($uid, $start=0) {
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $row = $db->getUserVideos($uid, $start, 3);
+    if ($row) {
+      print('<div class="row">');
+      foreach ($row as $video) {
+        ?>
+        <div class="col-md-4 item">
+          <div class="row">
+            <div class="col-md-6 video-data">
+              <div class="row">
+                <h4>
+                  <a href=<?php print("/player?video=".$video["id"]) ?>>
+                    <?php print($video["videoname"]) ?>
+                  </a>
+                </h4>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <img src="/static/img/video.jpg" alt="" style="width:100%">
+            </div>
+          </div>
+        </div>
+        <?php
+      }
+      print("</div>");
+    }
+  }
 ?>
