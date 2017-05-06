@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS videos
      filename     VARCHAR(100) NOT NULL,
      videoname    VARCHAR(100) NOT NULL,
      description  VARCHAR(2000) NOT NULL,
-     creationdate DATE NOT NULL,
+     creationdate DATETIME NOT NULL,
      userid       INT,
      cat          INT,
      public       BOOLEAN,
