@@ -98,7 +98,7 @@
                   <ul class="list-group">
                     <li class="list-group-item"><a href=<?php print($videoURL); ?> download>Video</a></li>
                     <!-- Usar bucle para iterar por los recursos -->
-                    <li class="list-group-item"><a href=<?php print("resources.php?video=".$_GET["video"]); ?> download>Añadir recursos</a></li>
+                    <li class="list-group-item"><a href=<?php print("resources.php?video=".$_GET["video"]); ?>>Añadir recursos</a></li>
                   </ul>
                 </div>
               </div>
