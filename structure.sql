@@ -46,8 +46,7 @@ CREATE TABLE IF NOT EXISTS resources
      file         VARCHAR(100),
      creationdate DATE,
      userid       INT,
-     type         ENUM('subtitles', "transcription", "signal-language",
-     "additional-audio"),
+     type         ENUM('subtitles', "transcription", "signal-language"),
      CONSTRAINT badresourcesprimarykey PRIMARY KEY (id),
      CONSTRAINT badresourcesusersforeignkey FOREIGN KEY (userid) REFERENCES
      users (id) ON UPDATE CASCADE ON DELETE CASCADE
