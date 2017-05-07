@@ -22,7 +22,7 @@
           return password_verify($pass, $row[1]);
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -39,7 +39,7 @@
         if ($result) {
           return true;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -54,7 +54,7 @@
         $data = $stm->fetchAll();
         return count($data) == 0;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -68,7 +68,7 @@
         $data = $stm->fetchAll();
         return count($data) == 0;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -119,7 +119,7 @@
         if ($result) {
           return $hash;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       } else {
@@ -131,7 +131,7 @@
         if ($result) {
           return $hash;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -149,7 +149,7 @@
           return $id;
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -166,7 +166,7 @@
           return $id;
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -182,7 +182,7 @@
           $data = $stm->fetchAll();
           return $data;
         }else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -257,12 +257,12 @@
           $stm->bindParam(":tag", $tag);
           $result = $stm->execute();
           print($result);
-          print_r($this->connect->errorInfo());
+          print_r($this->connect->errorInfo()[2]);
           print($this->connect->errorCode());
         }
         return true;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
     }
@@ -294,7 +294,7 @@
       if ($result) {
         return true;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -377,7 +377,7 @@
         }
       }
       else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -396,7 +396,7 @@
         }
       }
       else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -470,7 +470,36 @@
         return ((int) $data[0]["count"]) > 0;
       }
       else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return false;
+    }
+
+    function saveResourceInfo($filename, $type, $lang, $video) {
+      // We need to store all the data in the database
+      session_start();
+      $user = $_SESSION["user"];
+      session_write_close();
+      $uid = $this->getUserID($user);
+      $time = time();
+      $date = date('Y-m-d H:i:s',$time);
+      $stm = $this->connect->prepare("insert into resources (filename, creationdate, userid, restype, lang, video) values (:filename, :date, :uid, :type, :lang, :video)");
+      $stm->bindParam(":filename", $filename);
+      $stm->bindParam(":date",$date);
+      $stm->bindParam(":uid",$uid);
+      $stm->bindParam(":type", $type);
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      print($type."\n");
+      print($lang."\n");
+      print($this->connect->errorCode()."\n");
+      print_r($this->connect->errorInfo());
+      if ($result) {
+        return true;
+      } else {
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
