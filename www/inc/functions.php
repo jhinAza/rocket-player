@@ -15,6 +15,7 @@
           ?>
           <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
           <script src="/static/js/upload.min.js" charset="utf-8"></script>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
         } elseif ($type == "player") {
           ?>
