@@ -171,4 +171,13 @@
       print("</div>");
     }
   }
+
+  function getUserPreferredSubtitlesFile ($user, $video) {
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $uid = $db->getUserID($user);
+    $file = $db->getSubtitlesFile($video);
+    error_log($file);
+    return "res/subs/".$file;
+  }
 ?>
