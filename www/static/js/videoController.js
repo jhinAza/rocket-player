@@ -30,7 +30,8 @@ function GenericMediaController(id){
   this.engine = "unknown"; //This will be overrided in the specialized constructors
   this.controls = {}; //For storing the custom controls when it's needed.
   this.controls.override = {}; //If we want to use the standar behaviour of the library.
-  this.components = []; //For storing additional media we want to sync.
+  this.components = {}; //For storing additional media we want to sync.
+  this.currentSubIndex = 0;
   this.setEvents();
   if (debug) {
     console.log(this); //Debugging only.
@@ -191,12 +192,16 @@ GenericMediaController.prototype.setEvents = function () {
     });
   }
   this.$media.on("timeupdate", function(e){
+    // console.log(THIS.getCurrentTime());
     if (THIS.controls.seekBar) {
       $(THIS.controls.seekBar).val(THIS.getCurrentTime() / THIS.getDuration());
     }
     if (THIS.controls.timer) {
       THIS.getStringTime();
       $(THIS.controls.timer).text(THIS.getStringTime());
+    }
+    if (THIS.components.subs) {
+      THIS.updateSubs();
     }
   });
   this.$media.on("keypress", function(e) {
@@ -228,7 +233,6 @@ GenericMediaController.prototype.setEvents = function () {
       return false;
     }
   });
-
 };
 GenericMediaController.prototype.setVolume = function (value) {
   this.media.volume = value;
@@ -333,12 +337,50 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
         volume = document.querySelector(id).value;
         this.setVolume(parseFloat(volume));
         this.controls.volume = id;
+        break;
+      case "subs":
+        $(id).click(function() {
+          THIS.toggleSubs();
+        });
+        this.controls.subs = id;
     }
   }
 };
-GenericMediaController.prototype.addComponent = function (id) {
-  //TODO: Add some way to store references for other media objects.
+GenericMediaController.prototype.addComponent = function (id, type) {
+  if ($(id)) {
+    switch (type) {
+      case 'subs':
+        this.components.subs = id;
+        break;
+      default:
+
+    }
+  }
 };
+GenericMediaController.prototype.updateSubs = function () {
+  const THIS = this;
+  var currentTime = this.getCurrentTime();
+  $.each($(".sub"), function(idx, element) {
+    if (idx < this.currentSubIndex) {
+      return true;
+    } else {
+      var startTime = parseFloat($(this).data('init'));
+      var endTime = parseFloat($(this).data('end'));
+      if (startTime <= currentTime && endTime >= currentTime) {
+        $(".sub").hide();
+        $(this).show();
+        THIS.currentSubIndex = idx;
+      }
+    }
+  })
+}
+GenericMediaController.prototype.toggleSubs = function () {
+  if ($(this.components.subs).is(":visible")) {
+    $(this.components.subs).hide();
+  } else {
+    $(this.components.subs).show();
+  }
+}
 //Here are the custom objects for the engines.
 function WebkitMediaController(id) {
   GenericMediaController.call(this, id);
