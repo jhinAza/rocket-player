@@ -510,7 +510,6 @@
       $stm->bindParam(":lang", $lang);
       $stm->bindParam(":video", $video);
       $result = $stm->execute();
-      error_log("WWWWWWWWWWWWWWWWWWWWWW");
       if ($result) {
         $data = $stm->fetchAll();
         if (count($data) > 0) {
