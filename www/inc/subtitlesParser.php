@@ -6,6 +6,9 @@
   }
 
   function parse_file($file) {
+    if (! $file) {
+      return false;
+    }
     $file_content = file($file);
     $list = [];
     $orig = "<span class='sub' data-init='%s' data-end='%s'>%s</span>";
