@@ -16,6 +16,8 @@
     }
     $videoURL = "/res/video/".$videoInfo["filename"];
     $db->addVideoToHistory($video, $user);
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
@@ -29,18 +31,20 @@
             <video id="mainVideo">
               <source src="<?php print($videoURL); ?>" type="video/mp4"/>
             </video>
-            <div class="subtitles">
-              <p>
-                <?php
-                  require_once("inc/functions.php");
-                  require_once("inc/subtitlesParser.php");
-                  $list = parse_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
-                  foreach ($list as $item) {
-                    print($item);
-                  }
-               ?>
-              </p>
-            </div>
+            <?php if ($reader->isToggledSubtitles()): ?>
+              <div class="subtitles">
+                <p>
+                  <?php
+                    require_once("inc/functions.php");
+                    require_once("inc/subtitlesParser.php");
+                    $list = parse_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
+                    foreach ($list as $item) {
+                      print($item);
+                    }
+                  ?>
+                </p>
+              </div>
+            <?php endif; ?>
           </div>
           <div class="controls">
               <div id="play" class="clickable">
