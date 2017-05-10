@@ -241,6 +241,7 @@
   float: right;
 }
 
+.controls #subtitles,
 .controls #fullscreen {
   float: right;
 }
@@ -280,4 +281,23 @@
 
 .resp-img {
   width: 100%;
+}
+
+.subtitles {
+  position: absolute;
+  bottom: 12%;
+  background-color: rgba(168, 168, 168, 0.57);
+  width: 95%;
+  margin: 0px 4px;
+  height: 12%;
+}
+
+.subtitles > p {
+  font-size: 140%;
+  text-shadow: 2px  6px 4px #000;
+  text-align: center;
+}
+
+.subtitles .sub {
+  display: none;
 }
