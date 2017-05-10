@@ -54,7 +54,7 @@
 
     function getLang($order) {
       foreach ($this->settings->languages->language as $lang) {
-        if ($lang["order"] === $order) {
+        if ($lang["order"]->__toString() === $order) {
           return $lang["lang"];
         }
       }
