@@ -25,10 +25,24 @@
           </li>
         </ul>
         <div class="video-container">
-          <video id="mainVideo">
-            <source src="<?php print($videoURL); ?>" type="video/mp4">
+          <div class="fit-container">
+            <video id="mainVideo">
+              <source src="<?php print($videoURL); ?>" type="video/mp4"/>
             </video>
-            <div class="controls">
+            <div class="subtitles">
+              <p>
+                <?php
+                  require_once("inc/functions.php");
+                  require_once("inc/subtitlesParser.php");
+                  $list = parse_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
+                  foreach ($list as $item) {
+                    print($item);
+                  }
+               ?>
+              </p>
+            </div>
+          </div>
+          <div class="controls">
               <div id="play" class="clickable">
                 <div class="play">
                   <span class="glyphicon glyphicon-play"></span>
@@ -68,6 +82,9 @@
                 <span class="glyphicon glyphicon-volume-up volume"></span>
                 <span style="padding:8px;">
                 </span>
+              </div>
+              <div id="subs">
+                <span class="glyphicon glyphicon-subtitles"></span>
               </div>
             </div>
         </div>
