@@ -183,4 +183,15 @@
     }
     return false;
   }
+  function getUserPreferredTranscriptionFile ($user, $video) {
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $file = $db->getTranscriptionFile($video, $reader->getLang("1"));
+    if ($file) {
+      return "res/trans/".$file;
+    }
+    return false;
+  }
 ?>
