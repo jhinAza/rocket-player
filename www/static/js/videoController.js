@@ -31,7 +31,8 @@ function GenericMediaController(id){
   this.controls = {}; //For storing the custom controls when it's needed.
   this.controls.override = {}; //If we want to use the standar behaviour of the library.
   this.components = {}; //For storing additional media we want to sync.
-  this.currentSubIndex = 0;
+  this.components.intern = {};
+  this.currentSubIndex = -1;
   this.setEvents();
   if (debug) {
     console.log(this); //Debugging only.
@@ -200,6 +201,9 @@ GenericMediaController.prototype.setEvents = function () {
       THIS.getStringTime();
       $(THIS.controls.timer).text(THIS.getStringTime());
     }
+    if (THIS.components.trans) {
+      THIS.updateTrans();
+    }
     if (THIS.components.subs) {
       THIS.updateSubs();
     }
@@ -347,13 +351,22 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
     }
   }
 };
-GenericMediaController.prototype.addComponent = function (id, type) {
+GenericMediaController.prototype.addComponent = function (id, type, intern) {
   if ($(id)) {
+    const THIS = this;
     switch (type) {
       case 'subs':
         this.components.subs = id;
+        this.components.intern.subs = $(intern);
         break;
-      default:
+      case 'trans':
+        this.components.trans = id;
+        this.components.intern.trans = $(intern);
+        $(intern).click(function () {
+          var time = $(this).data("init");
+          THIS.setTime(time);
+        });
+        break;
 
     }
   }
@@ -361,16 +374,37 @@ GenericMediaController.prototype.addComponent = function (id, type) {
 GenericMediaController.prototype.updateSubs = function () {
   const THIS = this;
   var currentTime = this.getCurrentTime();
-  $.each($(".sub"), function(idx, element) {
+  $.each($(this.components.intern.subs), function(idx, element) {
     if (idx < this.currentSubIndex) {
       return true;
     } else {
       var startTime = parseFloat($(this).data('init'));
       var endTime = parseFloat($(this).data('end'));
       if (startTime <= currentTime && endTime >= currentTime) {
-        $(".sub").hide();
+        $(THIS.components.intern.subs).hide();
         $(this).show();
         THIS.currentSubIndex = idx;
+        return false;
+      }
+    }
+  })
+}
+GenericMediaController.prototype.updateTrans = function () {
+  const THIS = this;
+  var currentTime = this.getCurrentTime();
+  $.each($(this.components.intern.trans), function(idx, element) {
+    if (idx < this.currentSubIndex) {
+      return true;
+    } else {
+      var startTime = parseFloat($(this).data('init'));
+      var endTime = parseFloat($(this).data('end'));
+      if (startTime <= currentTime && endTime >= currentTime && idx != THIS.currentSubIndex) {
+        $(THIS.components.intern.trans).removeClass("active");
+        $(this).addClass("active");
+        var position = $(this).position().top;
+        var mod = $(THIS.components.trans).height() * 0.25;
+        $(THIS.components.trans)[0].scrollTop += position;
+        $(THIS.components.trans)[0].scrollTop -= mod;
         return false;
       }
     }

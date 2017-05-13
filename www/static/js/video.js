@@ -11,5 +11,6 @@ $(function() {
   video.addControl("#mute", "mute");
   video.addControl("#volumeBar", "volume");
   video.addControl("#subs", "subs");
-  video.addComponent(".subtitles", "subs");
+  video.addComponent(".subtitles", "subs", ".sub");
+  video.addComponent(".transcription", "trans", ".trans");
 });
