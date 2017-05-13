@@ -7,7 +7,7 @@
     return $sec;
   }
 
-  function parse_file($file) {
+  function parse_subtitles_file($file) {
     if (! $file) {
       return false;
     }

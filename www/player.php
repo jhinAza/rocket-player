@@ -37,7 +37,7 @@
                   <?php
                     require_once("inc/functions.php");
                     require_once("inc/subtitlesParser.php");
-                    $list = parse_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
+                    $list = parse_subtitles_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
                     if ($list) {
                       foreach ($list as $item) {
                         print($item);
