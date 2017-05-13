@@ -291,6 +291,7 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
       case "seekBar":
         $(id).on("mousedown", function(e) {
           if (THIS.isPlaying()) {
+            // THIS.currentSubIndex = 0;
             $(this).data("replay", true);
           }
           THIS.pause();
@@ -370,6 +371,7 @@ GenericMediaController.prototype.updateSubs = function () {
         $(".sub").hide();
         $(this).show();
         THIS.currentSubIndex = idx;
+        return false;
       }
     }
   })

@@ -1,8 +1,10 @@
 <?php
   function parse_time($time_str) {
-    $time_str = preg_replace('/:/', '', $time_str);
-    $time_str = preg_replace('/,/', '.', $time_str);
-    return (float) $time_str;
+    $data = preg_split("/:/", $time_str);
+    $hours = (float) $data[0];
+    $min = ((float) $data[1]) + ($hours * 60);
+    $sec = ((float) $data[2]) + ($min * 60);
+    return $sec;
   }
 
   function parse_file($file) {
