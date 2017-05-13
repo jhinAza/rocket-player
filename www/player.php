@@ -18,6 +18,8 @@
     $db->addVideoToHistory($video, $user);
     require_once("inc/userSettingsReader.php");
     $reader = new UserSettingsReader($user);
+    require_once("inc/resourcesParser.php");
+    require_once("inc/functions.php");
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
@@ -35,8 +37,6 @@
               <div class="subtitles">
                 <p>
                   <?php
-                    require_once("inc/functions.php");
-                    require_once("inc/subtitlesParser.php");
                     $list = parse_subtitles_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
                     if ($list) {
                       foreach ($list as $item) {
@@ -128,6 +128,27 @@
                 </div>
               </div>
             </div>
+            <?php if ($reader->isToggledTranscription()): ?>
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a href="#transcription-pane" data-toggle="collapse" data-parent="#info">Transcripcion <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+                </div>
+                <div class="panel-collapse collapse" id="transcription-pane">
+                  <div class="panel-body transcription">
+                    <?php
+                      $list = parse_transcription_file(getUserPreferredTranscriptionFile($user, $_GET["video"]));
+                      if ($list) {
+                        foreach ($list as $item) {
+                          print($item);
+                        }
+                      } else {
+                        print("No hay ningun fichero de transcripcion para tus lenguajes");
+                      }
+                    ?>
+                  </div>
+                </div>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
       <div class="recomendations col-md-4 col-xs-12">
