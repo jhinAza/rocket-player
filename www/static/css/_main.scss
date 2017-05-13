@@ -256,6 +256,7 @@
 }
 
 .subtitles {
+  display: none;
   position: absolute;
   bottom: 12%;
   background-color: rgba(168, 168, 168, 0.57);
@@ -270,4 +271,23 @@
   .sub {
     display: none;
   }
+}
+
+#transcription-pane {
+  div {
+    text-align: center;
+  }
+  .transcription {
+    position: relative;
+  }
+  .trans {
+    position: relative;
+    cursor: pointer;
+  }
+  .trans.active {
+    font-size: 130%;
+    color: rgb(0, 197, 250);
+    text-shadow: 2px  6px 4px #000;
+  }
+
 }
