@@ -162,7 +162,7 @@
                       $video = getUserPreferredSignLanguageVideo($user, $_GET["video"]);
                     ?>
                     <video class="video-sign-lang">
-                      <source src=<?php print($video); ?> type="video/mp4">
+                      <source src=<?php print('"'.$video.'"'); ?> type="video/mp4">
                     </video>
                   </div>
                 </div>
