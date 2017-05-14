@@ -113,6 +113,23 @@
                   <p>
                     <?php print($videoInfo["description"]); ?>
                   </p>
+                  <p>
+                    Categoria: <b>
+                      <?php print($db->getCatName($videoInfo["cat"])); ?>
+                    </b>
+                  </p>
+                  <p>
+                    Generos:
+                    <ul>
+                      <?php
+                        $list = $db->getGenresName($videoInfo["id"]);
+                        foreach ($list as $row) {
+                          print("<li>".$row["nombre"]."</li>");
+                        }
+                      ?>
+                    </ul>
+
+                  </p>
                 </div>
               </div>
             </div>
