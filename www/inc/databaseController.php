@@ -552,5 +552,39 @@
         error_log($result);
       }
     }
+
+    function getVideosByQuery($query) {
+      $query = "%".$query."%";
+      $stm = $this->connect->prepare("SELECT videoname, id, userid from videos where videoname like :query");
+      $stm->bindParam(":query", $query);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getUsersByQuery($query) {
+      $query = "%".$query."%";
+      $stm = $this->connect->prepare("SELECT username, id from users where username like :query");
+      $stm->bindParam(":query", $query);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
   }
 ?>
