@@ -537,5 +537,20 @@
       }
     }
 
+    function getSignLangVideo($video, $lang="english") {
+      $stm = $this->connect->prepare("select * from resources where restype = 'signal-language' and lang = :lang and video = :video limit 1");
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["filename"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+    }
   }
 ?>
