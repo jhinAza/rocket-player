@@ -116,6 +116,17 @@ $(function() {
       }
     })
   });
+
+  $("#send-search").click(function(e) {
+    var query = $("#search").val();
+    console.log(query);
+    if (query.length > 3) {
+      var url = "/search.php?query=" + query;
+      window.location = url;
+    } else {
+      alert("El contenido del campo de busqueda debe ser mayor de 3 caracteres")
+    }
+  });
   // Functions
   /**
   * Appends the settings modal window to the body and sets the events
