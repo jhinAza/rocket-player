@@ -43,14 +43,17 @@ CREATE TABLE IF NOT EXISTS videos
 CREATE TABLE IF NOT EXISTS resources
   (
      id           INT auto_increment,
-     file         VARCHAR(100),
+     filename         VARCHAR(100),
      creationdate DATE,
      userid       INT,
-     type         ENUM('subtitles', "transcription", "signal-language",
-     "additional-audio"),
+     restype      ENUM('subtitles', "transcription", "signal-language"),
+     lang         ENUM('spanish', 'english'),
+     video        INT,
      CONSTRAINT badresourcesprimarykey PRIMARY KEY (id),
      CONSTRAINT badresourcesusersforeignkey FOREIGN KEY (userid) REFERENCES
-     users (id) ON UPDATE CASCADE ON DELETE CASCADE
+     users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+     CONSTRAINT badresourcesvideoforeignkey FOREIGN KEY (video) REFERENCES
+     videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS comments
@@ -101,17 +104,6 @@ CREATE TABLE IF NOT EXISTS votos_comentario
      REFERENCES comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
      CONSTRAINT badvotos_comentariouserforeignkey FOREIGN KEY (userid)
      REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE
-  );
-
-CREATE TABLE IF NOT EXISTS resources_video
-  (
-     video    INT,
-     resource INT,
-     CONSTRAINT badresources_videoprimarykey PRIMARY KEY (video, resource),
-     CONSTRAINT badresources_videovideoforeignkey FOREIGN KEY (video) REFERENCES
-     videos (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badresources_videoresourcesforeignkey FOREIGN KEY (resource)
-     REFERENCES resources (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
 CREATE TABLE IF NOT EXISTS uuid

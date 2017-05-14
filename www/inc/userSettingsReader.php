@@ -21,7 +21,7 @@
     }
 
     function isToggledSignLanguage() {
-      return $this->settings->resources->sign_language["toggle"]->__toString();
+      return $this->settings->resources->sign_language["toggle"]->__toString() === 'true';
     }
 
     function toggleSignLanguage($bool) {
@@ -29,7 +29,7 @@
     }
 
     function isToggledSubtitles() {
-      return $this->settings->resources->subtitles["toggle"]->__toString();
+      return $this->settings->resources->subtitles["toggle"]->__toString() === 'true';
     }
 
     function toggleSubtitles($bool) {
@@ -37,7 +37,7 @@
     }
 
     function isToggledTranscription() {
-      return $this->settings->resources->transcription["toggle"]->__toString();
+      return $this->settings->resources->transcription["toggle"]->__toString() === 'true';
     }
 
     function toggleTranscription($bool) {
@@ -45,7 +45,7 @@
     }
 
     function isToggledDubbing() {
-      return $this->settings->resources->dubbing["toggle"]->__toString();
+      return $this->settings->resources->dubbing["toggle"]->__toString() === 'true';
     }
 
     function toggleDubbing($bool) {
@@ -54,7 +54,7 @@
 
     function getLang($order) {
       foreach ($this->settings->languages->language as $lang) {
-        if ($lang["order"] === $order) {
+        if ($lang["order"]->__toString() === $order) {
           return $lang["lang"];
         }
       }

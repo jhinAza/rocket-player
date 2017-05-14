@@ -50,26 +50,101 @@ $(function() {
     return false;
     // Always return false to avoid needless redirects
   });
+
+  $("#upload-res").submit(function(e) {
+    var isValid = true;
+    if ($("#resource-lang")[0].selectedIndex === -1 &&
+        $("#resource-type").val() != "signal-language") {
+      isValid = false;
+      alert("Debe seleccionar un lenguaje para el recurso a menos que el recurso\
+             sea de tipo lenguaje de señas");
+    }
+    if ($("#resource-type")[0].selectedIndex === -1) {
+      isValid = false;
+      alert("Debe señeccionar un tipo de recurso");
+    }
+    if ($("#res-input")[0].files.length === 0) {
+      isValid = false;
+      alert("Debe seleccionar un fichero para subir");
+    } else {
+      switch ($("#resource-type").val()) {
+        case "subtitles":
+          if (!$("#res-input")[0].files[0].name.endsWith(".srt")) {
+            alert("Ha seleccionado subtitulos pero no un formato de subtitulos adecuado.\
+            Por favor seleccione un fichero de tipo .srt");
+            isValid = false;
+          }
+          break;
+        case "transcription":
+          if (!$("#res-input")[0].files[0].name.endsWith(".srt")) {
+            alert("Ha seleccionado trancripcion pero no un formato de transcripcion adecuado.\
+            Por favor seleccione un fichero de tipo .srt");
+            isValid = false;
+          }
+          break;
+        case "signal-language":
+          if (!$("#res-input")[0].files[0].name.endsWith(".mp4")) {
+            alert("Ha seleccionado lenguaje de señas pero no un formato de lenguaje de señas adecuado.\
+            Por favor seleccione un fichero de tipo .mp4");
+            isValid = false;
+          }
+          break;
+      }
+    }
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+      var fileSize = $("#res-input")[0].files[0].size;
+      if (fileSize > 524288000) {
+        alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
+        isValid =  false;
+      }
+    } else {
+      alert("Tu navegador no soporta nuestro sistema de subida de ficheros\
+      Por favor, descarga la ultima version de Google Chrome o Firefox");
+      isValid = false;
+    }
+    if (isValid) {
+      options = {
+        target: "resources.php",
+        // beforeSubmit: prepareUpload,
+        success: uploadSuccess,
+        error: uploadError,
+        uploadProgress: updateProgressBar,
+        resetForm: false,
+        method: "post",
+        data: {"video":url("?video")},
+        dataType: "html"
+      };
+      $(this).ajaxSubmit(options);
+      console.log("YA?");
+    }
+    return false;
+    // Always return false to avoid needless redirects
+  });
   /**
   * Update the input of the file showing the file name
   */
   $("#video-input").change(function(e) {
     $("#file-name").val(this.files[0].name);
   });
+  $("#res-input").change(function(e) {
+    $("#file-name").val(this.files[0].name);
+  });
   /**
   * After the upload will clean the GUI and give feedback
   */
   function uploadSuccess(data) {
-    $(".container").html("");
-    alert("Se ha subido el video correctamente, ahora seras redireccionado al inicio");
-    setTimeout(function() {window.location.href="home.php", 5000});
+    console.log(data);
+    // $(".container").html("");
+    alert("Se ha subido el fichero correctamente, ahora seras redireccionado al inicio");
+    // setTimeout(function() {window.location.href="home.php", 5000});
+
   }
   /**
   * Before the upload will prepare a modal window and show a progress bar
   */
   function prepareUpload() {
     $("#main").children("form").hide();
-    $content = '<h1>Se esta subiendo el video</h1>\
+    $content = '<h1>Se esta subiendo el fichero</h1>\
     <div class="progress">\
       <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="min-width: 10%;">\
         0%\
@@ -91,7 +166,7 @@ $(function() {
   }
 
   function uploadError(xhr, ajaxOptions, thrownError) {
-    alert("Ha ocurrido un error subiendo el video, por favor recarga la pagina\
+    alert("Ha ocurrido un error subiendo el archivo, por favor recarga la pagina\
     y vuelve a intentarlo en unos minutos.");
   }
 

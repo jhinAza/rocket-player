@@ -257,6 +257,7 @@ body {
   float: right;
 }
 
+.controls #subtitles,
 .controls #fullscreen {
   float: right;
 }
@@ -266,8 +267,16 @@ body {
 }
 
 .fullscreen {
-  width: 100%;
+  height: 96%;
   background-color: black;
+}
+
+.fullscreen .fit-container {
+  height: 96%;
+}
+
+.fullscreen video {
+  height: 96%;
 }
 
 .fullscreen video,
@@ -295,5 +304,53 @@ body {
 }
 
 .resp-img {
+  width: 100%;
+}
+
+.subtitles {
+  display: none;
+  position: absolute;
+  bottom: 12%;
+  background-color: rgba(168, 168, 168, 0.57);
+  width: 95%;
+  margin: 0px 4px;
+  height: 12%;
+}
+
+.subtitles > p {
+  font-size: 140%;
+  text-shadow: 2px  6px 4px #000;
+  text-align: center;
+}
+
+.subtitles .sub {
+  display: none;
+}
+
+#transcription-pane div {
+  text-align: center;
+}
+
+#transcription-pane .transcription {
+  position: relative;
+}
+
+#transcription-pane .trans {
+  position: relative;
+  cursor: pointer;
+}
+
+#transcription-pane .trans.active {
+  font-size: 130%;
+  color: #00c5fa;
+  text-shadow: 2px  6px 4px #000;
+}
+
+.sign-lang {
+  padding: 0px;
+}
+
+.sign-lang > video {
+  height: 100%;
   width: 100%;
 }

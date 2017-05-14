@@ -16,6 +16,10 @@
     }
     $videoURL = "/res/video/".$videoInfo["filename"];
     $db->addVideoToHistory($video, $user);
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
+    require_once("inc/resourcesParser.php");
+    require_once("inc/functions.php");
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
@@ -25,10 +29,28 @@
           </li>
         </ul>
         <div class="video-container">
-          <video id="mainVideo">
-            <source src="<?php print($videoURL); ?>" type="video/mp4">
+          <div class="fit-container">
+            <video id="mainVideo">
+              <source src="<?php print($videoURL); ?>" type="video/mp4"/>
             </video>
-            <div class="controls">
+            <?php if ($reader->isToggledSubtitles()): ?>
+              <div class="subtitles">
+                <p>
+                  <?php
+                    $list = parse_subtitles_file(getUserPreferredSubtitlesFile($user, $_GET["video"]));
+                    if ($list) {
+                      foreach ($list as $item) {
+                        print($item);
+                      }
+                    } else {
+                      print("No hay ningun fichero de subtitulos para tus lenguajes");
+                    }
+                  ?>
+                </p>
+              </div>
+            <?php endif; ?>
+          </div>
+          <div class="controls">
               <div id="play" class="clickable">
                 <div class="play">
                   <span class="glyphicon glyphicon-play"></span>
@@ -69,6 +91,11 @@
                 <span style="padding:8px;">
                 </span>
               </div>
+              <?php if ($reader->isToggledSubtitles()): ?>
+              <div id="subs">
+                <span class="glyphicon glyphicon-subtitles"></span>
+              </div>
+              <?php endif; ?>
             </div>
         </div>
       </div>
@@ -97,10 +124,50 @@
                 <div class="panel-body">
                   <ul class="list-group">
                     <li class="list-group-item"><a href=<?php print($videoURL); ?> download>Video</a></li>
+                    <!-- Usar bucle para iterar por los recursos -->
+                    <li class="list-group-item"><a href=<?php print("resources.php?video=".$_GET["video"]); ?>>Añadir recursos</a></li>
                   </ul>
                 </div>
               </div>
             </div>
+            <?php if ($reader->isToggledTranscription()): ?>
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a href="#transcription-pane" data-toggle="collapse" data-parent="#info">Transcripcion <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+                </div>
+                <div class="panel-collapse collapse" id="transcription-pane">
+                  <div class="panel-body transcription">
+                    <?php
+                      $list = parse_transcription_file(getUserPreferredTranscriptionFile($user, $_GET["video"]));
+                      if ($list) {
+                        foreach ($list as $item) {
+                          print($item);
+                        }
+                      } else {
+                        print("No hay ningun fichero de transcripcion para tus lenguajes");
+                      }
+                    ?>
+                  </div>
+                </div>
+              </div>
+            <?php endif; ?>
+            <?php if ($reader->isToggledSignLanguage()): ?>
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a href="#sign-pane" data-toggle="collapse" data-parent="#info">Lenguaje de señas <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+                </div>
+                <div class="panel-collapse collapse" id="sign-pane">
+                  <div class="panel-body sign-lang">
+                    <?php
+                      $video = getUserPreferredSignLanguageVideo($user, $_GET["video"]);
+                    ?>
+                    <video class="video-sign-lang">
+                      <source src=<?php print('"'.$video.'"'); ?> type="video/mp4">
+                    </video>
+                  </div>
+                </div>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
       <div class="recomendations col-md-4 col-xs-12">
