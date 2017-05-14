@@ -13,7 +13,6 @@
     $signLang = $reader->isToggledSignLanguage();
     $subs = $reader->isToggledSubtitles();
     $trans = $reader->isToggledTranscription();
-    $dub = $reader->isToggledDubbing();
     require_once("inc/settingsParser.php");
   } elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Then we will set the settings

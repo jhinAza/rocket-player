@@ -141,7 +141,25 @@
                 <div class="panel-body">
                   <ul class="list-group">
                     <li class="list-group-item"><a href=<?php print($videoURL); ?> download>Video</a></li>
-                    <!-- Usar bucle para iterar por los recursos -->
+                    <?php
+                      $list = $db->getResourcesInfoFromVideo($_GET["video"]);
+                      foreach ($list as $row) {
+                        if ($row["restype"] === "subtitles") {
+                          $folder = "/res/subs/";
+                        } elseif ($row["restype"] === "transcription") {
+                          $folder = "/res/trans/";
+                        } else {
+                          $folder = "/res/signal/";
+                        }
+                        ?>
+                        <li class="list-group-item">
+                          <a href=<?php print($folder.$row["filename"]); ?> download>
+                            <?php print($row["restype"]." (".$row['lang'].")") ?>
+                          </a>
+                        </li>
+                        <?php
+                      }
+                    ?>
                     <li class="list-group-item"><a href=<?php print("resources.php?video=".$_GET["video"]); ?>>Añadir recursos</a></li>
                   </ul>
                 </div>

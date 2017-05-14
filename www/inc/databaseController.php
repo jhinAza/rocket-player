@@ -648,6 +648,22 @@
       }
       return [];
     }
+
+    function getResourcesInfoFromVideo($videoID) {
+      $stm = $this->connect->prepare("SELECT * FROM resources WHERE video = :videoID");
+      $stm->bindParam(":videoID", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
   }
 
 ?>
