@@ -22,6 +22,10 @@ CREATE TABLE IF NOT EXISTS categories
      CONSTRAINT badcategoriesprimarykey PRIMARY KEY (id)
   );
 
+INSERT INTO categories (nombre) values
+  ("Documental"), ("Series"), ("Peliculas"), ("Gameplay"), ("Otros")
+;
+
 CREATE TABLE IF NOT EXISTS videos
   (
      id           INT auto_increment,
@@ -73,11 +77,22 @@ CREATE TABLE IF NOT EXISTS comments
      videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
-CREATE TABLE IF NOT EXISTS video_tags
+CREATE TABLE IF NOT EXISTS genres
+  (
+     id     INT auto_increment,
+     nombre VARCHAR(50),
+     CONSTRAINT badcategoriesprimarykey PRIMARY KEY (id)
+  );
+
+INSERT INTO genres (nombre) values
+  ("Accion"), ("Shooter"), ("Rol"), ("Comedia"), ("Miedo"), ("Suspense"), ("Sci-fy")
+;
+
+CREATE TABLE IF NOT EXISTS video_genres
   (
      video INT,
-     tags  VARCHAR(20),
-     CONSTRAINT badvideo_tagsprimarykey PRIMARY KEY (video, tags),
+     genres  INT,
+     CONSTRAINT badvideo_tagsprimarykey PRIMARY KEY (video, genres),
      CONSTRAINT badvideo_tagsvideoforeignkey FOREIGN KEY (video) REFERENCES
      videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
