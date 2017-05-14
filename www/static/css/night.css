@@ -321,3 +321,12 @@
   color: #00c5fa;
   text-shadow: 2px  6px 4px #000;
 }
+
+.sign-lang {
+  padding: 0px;
+}
+
+.sign-lang > video {
+  height: 100%;
+  width: 100%;
+}
