@@ -91,9 +91,11 @@
                 <span style="padding:8px;">
                 </span>
               </div>
+              <?php if ($reader->isToggledSubtitles()): ?>
               <div id="subs">
                 <span class="glyphicon glyphicon-subtitles"></span>
               </div>
+              <?php endif; ?>
             </div>
         </div>
       </div>
@@ -145,6 +147,23 @@
                         print("No hay ningun fichero de transcripcion para tus lenguajes");
                       }
                     ?>
+                  </div>
+                </div>
+              </div>
+            <?php endif; ?>
+            <?php if ($reader->isToggledSignLanguage()): ?>
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a href="#sign-pane" data-toggle="collapse" data-parent="#info">Lenguaje de señas <span class="glyphicon glyphicon glyphicon-chevron-down"></span></a></h4>
+                </div>
+                <div class="panel-collapse collapse" id="sign-pane">
+                  <div class="panel-body sign-lang">
+                    <?php
+                      $video = getUserPreferredSignLanguageVideo($user, $_GET["video"]);
+                    ?>
+                    <video class="video-sign-lang">
+                      <source src=<?php print($video); ?> type="video/mp4">
+                    </video>
                   </div>
                 </div>
               </div>
