@@ -252,7 +252,7 @@
         print($videoID." video ID\n");
         foreach ($tags as $tag) {
           print($tag);
-          $stm = $this->connect->prepare("insert into video_tags values (:video, :tag)");
+          $stm = $this->connect->prepare("insert into video_genres values (:video, :tag)");
           $stm->bindParam(":video", $videoID);
           $stm->bindParam(":tag", $tag);
           $result = $stm->execute();
@@ -586,5 +586,68 @@
       }
       return [];
     }
+
+    function getCategories() {
+      $stm = $this->connect->prepare("SELECT * from categories");
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getGenres() {
+      $stm = $this->connect->prepare("SELECT * from genres");
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getCatName($catID) {
+      $stm = $this->connect->prepare("SELECT * from categories where id = :catID");
+      $stm->bindParam(":catID", $catID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["nombre"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getGenresName($videoID) {
+      $stm = $this->connect->prepare("  SELECT nombre from genres g, video_genres v where v.video = :videoID and v.genres = g.id");
+      $stm->bindParam(":videoID", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
   }
+
 ?>

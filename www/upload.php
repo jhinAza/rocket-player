@@ -36,8 +36,18 @@ require_once("inc/functions.php");
                     <label for="video-category">Selecciona una categoria</label>
                     <div class="form-group">
                       <select class="form-control" name="video-category" id="video-category">
-                        <option value="1">Musica</option>
-                        <option value="2">Videojuegos</option>
+                        <?php
+                          require_once("inc/databaseController.php");
+                          $db = new DatabaseController();
+                          $list = $db->getCategories();
+                          foreach ($list as $item) {
+                            ?>
+                              <option value=<?php print($item["id"]) ?>>
+                                <?php print($item["nombre"]) ?>
+                              </option>
+                            <?php
+                          }
+                        ?>
                       </select>
                     </div>
                   </div>
@@ -52,11 +62,21 @@ require_once("inc/functions.php");
                     </div>
                   </div>
                   <div class="col-md-4">
-                    <label for="video-tags">Selecciona los tags</label>
+                    <label for="video-tags">Selecciona los generos</label>
                     <div class="form-group">
                       <select class="form-control" name="video-tags[]" id="video-tags" multiple size="7">
-                        <option>Accion</option>
-                        <option>Rol</option>
+                        <?php
+                          require_once("inc/databaseController.php");
+                          $db = new DatabaseController();
+                          $list = $db->getGenres();
+                          foreach ($list as $item) {
+                            ?>
+                              <option value=<?php print($item["id"]) ?>>
+                                <?php print($item["nombre"]) ?>
+                              </option>
+                            <?php
+                          }
+                        ?>
                       </select>
                     </div>
                   </div>
