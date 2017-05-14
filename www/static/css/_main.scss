@@ -229,8 +229,14 @@
 }
 
 .fullscreen {
-  width: 100%;
+  height: 96%;
   background-color: black;
+  .fit-container {
+    height: 96%;
+  }
+  video {
+    height: 96%;
+  }
   video,
   .controls {
     width: 96% !important;
