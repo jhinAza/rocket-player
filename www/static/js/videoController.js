@@ -232,6 +232,12 @@ GenericMediaController.prototype.setEvents = function () {
       var time = THIS.getCurrentTime();
       THIS.setTime(time-5);
     }
+  $(document).on("keypress", function(e) {
+    if (e.keypress === 22) {
+      console.log(22);
+      THIS.exitFullScreen();
+    }
+  })
   });
   this.$media.click(function (e) {
     if (e.which === 1) {
@@ -346,7 +352,7 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
         $(id).on("change", function(e) {
           THIS.setVolume(this.value);
         });
-        volume = document.querySelector(id).value;
+        var volume = document.querySelector(id).value;
         this.setVolume(parseFloat(volume));
         this.controls.volume = id;
         break;
@@ -444,6 +450,15 @@ WebkitMediaController.prototype.exitFullScreen = function () {
 WebkitMediaController.prototype.isFullscreen = function () {
   return this.container === document.webkitFullscreenElement
 };
+WebkitMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("webkitfullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 function GeckoMediaController(id) {
   GenericMediaController.call(this, id);
@@ -461,6 +476,15 @@ GeckoMediaController.prototype.exitFullScreen = function () {
 GeckoMediaController.prototype.isFullscreen = function () {
   return this.container === document.mozFullScreenElement
 };
+GeckoMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("mozfullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 function IEMediaController(id) {
   GenericMediaController.call(this, id);
@@ -478,6 +502,15 @@ IEMediaController.prototype.exitFullScreen = function () {
 IEMediaController.prototype.isFullscreen = function () {
   return this.container === document.msFullscreenElement;
 };
+IEMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("iefullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 //TODO: Check Safari's behaviour
 //Factory global var.
