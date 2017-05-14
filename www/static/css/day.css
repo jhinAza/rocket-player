@@ -354,3 +354,16 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.item {
+  border-color: #2fa4e7;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 3px;
+  padding: 0.5em 1.5em;
+  min-height: 9em;
+}
+
+.item.user {
+  min-height: 3em;
+}
