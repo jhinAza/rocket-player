@@ -11,6 +11,15 @@ $(function() {
   video.addControl("#mute", "mute");
   video.addControl("#volumeBar", "volume");
   video.addControl("#subs", "subs");
-  video.addComponent(".subtitles", "subs", ".sub");
-  video.addComponent(".transcription", "trans", ".trans");
+  if ($(".subtitles").length > 0) {
+    video.addComponent(".subtitles", "subs", ".sub");
+  }
+  if ($(".transcription").length > 0) {
+    video.addComponent(".transcription", "trans", ".trans");
+  }
+  if ($(".video-sign-lang").length > 0) {
+    console.log("Porque?");
+    video.addComponent(".video-sign-lang", "sign");
+  }
+
 });

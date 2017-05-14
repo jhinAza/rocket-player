@@ -41,14 +41,17 @@ function GenericMediaController(id){
 GenericMediaController.prototype.constructor = GenericMediaController;
 GenericMediaController.prototype.stop = function () {
   //Pause the video and returns to the very beggining.
-  this.media.pause();
-  this.media.currentTime = 0;
+  this.pause();
+  this.setTime(0);
 };
 GenericMediaController.prototype.play = function() {
   //Pauses the media.
   //TODO: Update the function to pause others media object if any.
   if (!this.isPlaying()) {
     this.media.play();
+    if (this.components.sign) {
+      this.components.sign.play();
+    }
   }
 }
 GenericMediaController.prototype.mute = function () {
@@ -63,6 +66,9 @@ GenericMediaController.prototype.pause = function () {
   //Just like the play() function I need to update it when I add support for multiple media objects.
   if (this.isPlaying()) {
     this.media.pause();
+    if (this.components.sign) {
+      this.components.sign.pause()
+    }
   }
 };
 GenericMediaController.prototype.toString = function() {
@@ -161,6 +167,7 @@ GenericMediaController.prototype.setTime = function (value) {
   //TODO: Update when the support of multiple media elements is added.
   // Maybe I can use the event for this purpose?
   this.media.currentTime = value;
+  this.components.sign.currentTime = value;
 };
 GenericMediaController.prototype.setEvents = function () {
   //Seting the events for correct work.
@@ -351,7 +358,7 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
     }
   }
 };
-GenericMediaController.prototype.addComponent = function (id, type, intern) {
+GenericMediaController.prototype.addComponent = function (id, type, intern = false) {
   if ($(id)) {
     const THIS = this;
     switch (type) {
@@ -367,7 +374,10 @@ GenericMediaController.prototype.addComponent = function (id, type, intern) {
           THIS.setTime(time);
         });
         break;
-
+      case 'sign':
+        this.components.sign = document.querySelector(id);
+        this.components.intern.sign = $(intern);
+        $(id)[0].volume = 0;
     }
   }
 };
