@@ -122,7 +122,7 @@
             <div class="col-md-6 video-data">
               <div class="row">
                 <h4>
-                  <a href=<?php print("/player?video=".$video["videoID"]) ?>>
+                  <a href=<?php print("/player.php?video=".$video["videoID"]) ?>>
                     <?php print($video["videoname"]) ?>
                   </a>
                 </h4>
@@ -155,7 +155,7 @@
             <div class="col-md-6 video-data">
               <div class="row">
                 <h4>
-                  <a href=<?php print("/player?video=".$video["id"]) ?>>
+                  <a href=<?php print("/player.php?video=".$video["id"]) ?>>
                     <?php print($video["videoname"]) ?>
                   </a>
                 </h4>

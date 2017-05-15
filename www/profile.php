@@ -69,7 +69,7 @@
                     foreach ($followers as $follower) {
                       ?>
                       <li class="list-group-item">
-                        <a href=<?php print("/profile?uid=".$follower["id"]); ?>><?php print($follower["username"]); ?></a>
+                        <a href=<?php print("/profile.php?uid=".$follower["id"]); ?>><?php print($follower["username"]); ?></a>
                       </li>
                       <?php
                     }
@@ -92,7 +92,7 @@
                     foreach ($follows as $follow) {
                       ?>
                       <li class="list-group-item">
-                        <a href=<?php print("/profile?uid=".$follow["id"]); ?>><?php print($follow["username"]); ?></a>
+                        <a href=<?php print("/profile-php?uid=".$follow["id"]); ?>><?php print($follow["username"]); ?></a>
                       </li>
                       <?php
                     }

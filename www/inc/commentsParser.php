@@ -3,7 +3,7 @@
   $db = new databaseController();
   function createComment($comment) {
     $db = new databaseController();
-    $user = $db->getUserName($comment["userID"]);
+    $user = $db->getUserName($comment["userid"]);
     ?>
       <div class="comment">
         <div class="row">
@@ -30,7 +30,7 @@
               </div>
             </div>
             <p>
-              <?php print($comment["Comments"]); ?>
+              <?php print($comment["comments"]); ?>
             </p>
           </div>
         </div>

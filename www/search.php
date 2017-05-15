@@ -24,7 +24,7 @@
                       <div class="col-md-6">
                         <div class="row">
                           <h4>
-                            <a href=<?php print("/player?video=".$item["id"]) ?>>
+                            <a href=<?php print("/player.php?video=".$item["id"]) ?>>
                               <?php print($item["videoname"]) ?>
                             </a>
                           </h4>
@@ -59,7 +59,7 @@
                       <div class="col-md-6">
                         <div class="row">
                           <h4>
-                            <a href=<?php print("/profile?uid=".$item["id"]) ?>>
+                            <a href=<?php print("/profile.php?uid=".$item["id"]) ?>>
                               <?php print($item["username"]) ?>
                             </a>
                           </h4>

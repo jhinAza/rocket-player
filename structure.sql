@@ -71,9 +71,9 @@ CREATE TABLE IF NOT EXISTS comments
      CONSTRAINT badcommentprimarykey PRIMARY KEY (id),
      CONSTRAINT badcommentsusersforeignkey FOREIGN KEY (userid) REFERENCES users
      (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badcommentscommentsforeignkey FOREIGN KEY (userid) REFERENCES
+     CONSTRAINT badcommentscommentsforeignkey FOREIGN KEY (parentcomment) REFERENCES
      comments (id) ON UPDATE CASCADE ON DELETE CASCADE,
-     CONSTRAINT badcommentsvideosforeignkey FOREIGN KEY (userid) REFERENCES
+     CONSTRAINT badcommentsvideosforeignkey FOREIGN KEY (video) REFERENCES
      videos (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 
