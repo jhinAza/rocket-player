@@ -10,7 +10,7 @@ if [ $EUID -eq 0 ]; then
   echo "Deleting content of" $path
   mv $path/res /tmp/res
   mv $path/userSettings /tmp/userSettings
-  rm -rf $path/!(res|userSettings)
+  rm -rf $path/*
   mv /tmp/res $path/res
   mv /tmp/userSettings $path/userSettings
   echo "Copying www to " $path
