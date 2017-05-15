@@ -30,7 +30,9 @@ function GenericMediaController(id){
   this.engine = "unknown"; //This will be overrided in the specialized constructors
   this.controls = {}; //For storing the custom controls when it's needed.
   this.controls.override = {}; //If we want to use the standar behaviour of the library.
-  this.components = []; //For storing additional media we want to sync.
+  this.components = {}; //For storing additional media we want to sync.
+  this.components.intern = {};
+  this.currentSubIndex = -1;
   this.setEvents();
   if (debug) {
     console.log(this); //Debugging only.
@@ -39,14 +41,17 @@ function GenericMediaController(id){
 GenericMediaController.prototype.constructor = GenericMediaController;
 GenericMediaController.prototype.stop = function () {
   //Pause the video and returns to the very beggining.
-  this.media.pause();
-  this.media.currentTime = 0;
+  this.pause();
+  this.setTime(0);
 };
 GenericMediaController.prototype.play = function() {
   //Pauses the media.
   //TODO: Update the function to pause others media object if any.
   if (!this.isPlaying()) {
     this.media.play();
+    if (this.components.sign) {
+      this.components.sign.play();
+    }
   }
 }
 GenericMediaController.prototype.mute = function () {
@@ -61,6 +66,9 @@ GenericMediaController.prototype.pause = function () {
   //Just like the play() function I need to update it when I add support for multiple media objects.
   if (this.isPlaying()) {
     this.media.pause();
+    if (this.components.sign) {
+      this.components.sign.pause()
+    }
   }
 };
 GenericMediaController.prototype.toString = function() {
@@ -159,6 +167,7 @@ GenericMediaController.prototype.setTime = function (value) {
   //TODO: Update when the support of multiple media elements is added.
   // Maybe I can use the event for this purpose?
   this.media.currentTime = value;
+  this.components.sign.currentTime = value;
 };
 GenericMediaController.prototype.setEvents = function () {
   //Seting the events for correct work.
@@ -191,12 +200,19 @@ GenericMediaController.prototype.setEvents = function () {
     });
   }
   this.$media.on("timeupdate", function(e){
+    // console.log(THIS.getCurrentTime());
     if (THIS.controls.seekBar) {
       $(THIS.controls.seekBar).val(THIS.getCurrentTime() / THIS.getDuration());
     }
     if (THIS.controls.timer) {
       THIS.getStringTime();
       $(THIS.controls.timer).text(THIS.getStringTime());
+    }
+    if (THIS.components.trans) {
+      THIS.updateTrans();
+    }
+    if (THIS.components.subs) {
+      THIS.updateSubs();
     }
   });
   this.$media.on("keypress", function(e) {
@@ -216,6 +232,12 @@ GenericMediaController.prototype.setEvents = function () {
       var time = THIS.getCurrentTime();
       THIS.setTime(time-5);
     }
+  $(document).on("keypress", function(e) {
+    if (e.keypress === 22) {
+      console.log(22);
+      THIS.exitFullScreen();
+    }
+  })
   });
   this.$media.click(function (e) {
     if (e.which === 1) {
@@ -228,7 +250,6 @@ GenericMediaController.prototype.setEvents = function () {
       return false;
     }
   });
-
 };
 GenericMediaController.prototype.setVolume = function (value) {
   this.media.volume = value;
@@ -287,6 +308,7 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
       case "seekBar":
         $(id).on("mousedown", function(e) {
           if (THIS.isPlaying()) {
+            // THIS.currentSubIndex = 0;
             $(this).data("replay", true);
           }
           THIS.pause();
@@ -330,15 +352,87 @@ GenericMediaController.prototype.addControl = function (id, type, override = fal
         $(id).on("change", function(e) {
           THIS.setVolume(this.value);
         });
-        volume = document.querySelector(id).value;
+        var volume = document.querySelector(id).value;
         this.setVolume(parseFloat(volume));
         this.controls.volume = id;
+        break;
+      case "subs":
+        $(id).click(function() {
+          THIS.toggleSubs();
+        });
+        this.controls.subs = id;
     }
   }
 };
-GenericMediaController.prototype.addComponent = function (id) {
-  //TODO: Add some way to store references for other media objects.
+GenericMediaController.prototype.addComponent = function (id, type, intern = false) {
+  if ($(id)) {
+    const THIS = this;
+    switch (type) {
+      case 'subs':
+        this.components.subs = id;
+        this.components.intern.subs = $(intern);
+        break;
+      case 'trans':
+        this.components.trans = id;
+        this.components.intern.trans = $(intern);
+        $(intern).click(function () {
+          var time = $(this).data("init");
+          THIS.setTime(time);
+        });
+        break;
+      case 'sign':
+        this.components.sign = document.querySelector(id);
+        this.components.intern.sign = $(intern);
+        $(id)[0].volume = 0;
+    }
+  }
 };
+GenericMediaController.prototype.updateSubs = function () {
+  const THIS = this;
+  var currentTime = this.getCurrentTime();
+  $.each($(this.components.intern.subs), function(idx, element) {
+    if (idx < this.currentSubIndex) {
+      return true;
+    } else {
+      var startTime = parseFloat($(this).data('init'));
+      var endTime = parseFloat($(this).data('end'));
+      if (startTime <= currentTime && endTime >= currentTime) {
+        $(THIS.components.intern.subs).hide();
+        $(this).show();
+        THIS.currentSubIndex = idx;
+        return false;
+      }
+    }
+  })
+}
+GenericMediaController.prototype.updateTrans = function () {
+  const THIS = this;
+  var currentTime = this.getCurrentTime();
+  $.each($(this.components.intern.trans), function(idx, element) {
+    if (idx < this.currentSubIndex) {
+      return true;
+    } else {
+      var startTime = parseFloat($(this).data('init'));
+      var endTime = parseFloat($(this).data('end'));
+      if (startTime <= currentTime && endTime >= currentTime && idx != THIS.currentSubIndex) {
+        $(THIS.components.intern.trans).removeClass("active");
+        $(this).addClass("active");
+        var position = $(this).position().top;
+        var mod = $(THIS.components.trans).height() * 0.25;
+        $(THIS.components.trans)[0].scrollTop += position;
+        $(THIS.components.trans)[0].scrollTop -= mod;
+        return false;
+      }
+    }
+  })
+}
+GenericMediaController.prototype.toggleSubs = function () {
+  if ($(this.components.subs).is(":visible")) {
+    $(this.components.subs).hide();
+  } else {
+    $(this.components.subs).show();
+  }
+}
 //Here are the custom objects for the engines.
 function WebkitMediaController(id) {
   GenericMediaController.call(this, id);
@@ -356,6 +450,15 @@ WebkitMediaController.prototype.exitFullScreen = function () {
 WebkitMediaController.prototype.isFullscreen = function () {
   return this.container === document.webkitFullscreenElement
 };
+WebkitMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("webkitfullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 function GeckoMediaController(id) {
   GenericMediaController.call(this, id);
@@ -373,6 +476,15 @@ GeckoMediaController.prototype.exitFullScreen = function () {
 GeckoMediaController.prototype.isFullscreen = function () {
   return this.container === document.mozFullScreenElement
 };
+GeckoMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("mozfullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 function IEMediaController(id) {
   GenericMediaController.call(this, id);
@@ -390,6 +502,15 @@ IEMediaController.prototype.exitFullScreen = function () {
 IEMediaController.prototype.isFullscreen = function () {
   return this.container === document.msFullscreenElement;
 };
+IEMediaController.prototype.setEvents = function () {
+  GenericMediaController.prototype.setEvents.call(this);
+  const THIS = this;
+  $(document).on("iefullscreenchange", function(e) {
+    if (!THIS.isFullscreen()) {
+      THIS.exitFullScreen();
+    }
+  })
+}
 
 //TODO: Check Safari's behaviour
 //Factory global var.

@@ -35,7 +35,7 @@
 
                   <div class="btn-group col-md-6" data-toggle="buttons">
                     <?php
-                      if ($signLang === "true") {
+                      if ($signLang) {
                     ?>
                       <label class="btn btn-primary active">Si <input type="radio" name="sign" value="true" checked></label>
                       <label class="btn btn-primary">No <input type="radio" name="sign" value="false"></label>
@@ -54,7 +54,7 @@
                 <label for='name-id' class="control-label col-md-6 radio-label">Subtitulos</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
                   <?php
-                    if ($subs === "true") {
+                    if ($subs) {
                   ?>
                    <label class="btn btn-primary radio active ">Si <input type="radio" name="subs" value="true" checked></label>
                   <label class="btn btn-primary radio">No <input type="radio" name="subs" value="false"></label>
@@ -74,7 +74,7 @@
                 <label for='name-id' class="control-label col-md-6 radio-label">Transcripcion</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
                   <?php
-                    if ($subs === "true") {
+                    if ($subs) {
                   ?>
                   <label class="btn btn-primary radio active ">Si <input type="radio" name="trans" value="true" checked></label>
                   <label class="btn btn-primary radio">No <input type="radio" name="trans" value="false"></label>
@@ -83,24 +83,6 @@
                   ?>
                   <label class="btn btn-primary radio ">Si <input type="radio" name="trans" value="true"></label>
                   <label class="btn btn-primary radio active">No <input type="radio" name="trans" value="false" checked></label>
-                  <?php
-                    }
-                  ?>
-               </div>
-              </div>
-              <div class="col-md-6">
-                <label for='name-id' class="control-label col-md-6 radio-label">Doblaje</label>
-                <div class="btn-group col-md-6 " data-toggle="buttons">
-                  <?php
-                    if ($dub === "true") {
-                  ?>
-                  <label class="btn btn-primary radio active ">Si <input type="radio" name="dub" value="true" checked></label>
-                  <label class="btn btn-primary radio">No <input type="radio" name="dub" value="false"></label>
-                  <?php
-                    } else {
-                  ?>
-                  <label class="btn btn-primary radio">Si <input type="radio" name="dub" value="true"></label>
-                  <label class="btn btn-primary radio active">No <input type="radio" name="dub" value="false" checked></label>
                   <?php
                     }
                   ?>

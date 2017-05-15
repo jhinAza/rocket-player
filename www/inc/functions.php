@@ -15,6 +15,7 @@
           ?>
           <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
           <script src="/static/js/upload.min.js" charset="utf-8"></script>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
         } elseif ($type == "player") {
           ?>
@@ -121,7 +122,7 @@
             <div class="col-md-6 video-data">
               <div class="row">
                 <h4>
-                  <a href=<?php print("/player?video=".$video["videoID"]) ?>>
+                  <a href=<?php print("/player.php?video=".$video["videoID"]) ?>>
                     <?php print($video["videoname"]) ?>
                   </a>
                 </h4>
@@ -139,5 +140,71 @@
       }
       print("</div>");
     }
+  }
+
+  function getRowOfUploaded($uid, $start=0) {
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $row = $db->getUserVideos($uid, $start, 3);
+    if ($row) {
+      print('<div class="row">');
+      foreach ($row as $video) {
+        ?>
+        <div class="col-md-4 item">
+          <div class="row">
+            <div class="col-md-6 video-data">
+              <div class="row">
+                <h4>
+                  <a href=<?php print("/player.php?video=".$video["id"]) ?>>
+                    <?php print($video["videoname"]) ?>
+                  </a>
+                </h4>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <img src="/static/img/video.jpg" alt="" style="width:100%">
+            </div>
+          </div>
+        </div>
+        <?php
+      }
+      print("</div>");
+    }
+  }
+
+  function getUserPreferredSubtitlesFile ($user, $video) {
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $file = $db->getSubtitlesFile($video, $reader->getLang("1"));
+    if ($file) {
+      return "res/subs/".$file;
+    }
+    return false;
+  }
+
+  function getUserPreferredTranscriptionFile ($user, $video) {
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $file = $db->getTranscriptionFile($video, $reader->getLang("1"));
+    if ($file) {
+      return "res/trans/".$file;
+    }
+    return false;
+  }
+
+  function getUserPreferredSignLanguageVideo ($user, $video) {
+    require_once("inc/userSettingsReader.php");
+    $reader = new UserSettingsReader($user);
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $file = $db->getSignLangVideo($video, $reader->getLang("1"));
+    if ($file) {
+      return "res/signal/".$file;
+    }
+    return false;
   }
 ?>

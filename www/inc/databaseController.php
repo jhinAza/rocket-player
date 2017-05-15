@@ -22,7 +22,7 @@
           return password_verify($pass, $row[1]);
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -39,7 +39,7 @@
         if ($result) {
           return true;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -54,7 +54,7 @@
         $data = $stm->fetchAll();
         return count($data) == 0;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -68,7 +68,7 @@
         $data = $stm->fetchAll();
         return count($data) == 0;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -119,7 +119,7 @@
         if ($result) {
           return $hash;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       } else {
@@ -131,7 +131,7 @@
         if ($result) {
           return $hash;
         } else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -149,7 +149,7 @@
           return $id;
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -166,7 +166,7 @@
           return $id;
         }
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -182,7 +182,7 @@
           $data = $stm->fetchAll();
           return $data;
         }else {
-          error_log($this->connect->errorInfo());
+          error_log($this->connect->errorInfo()[2]);
           error_log($result);
         }
       }
@@ -252,17 +252,17 @@
         print($videoID." video ID\n");
         foreach ($tags as $tag) {
           print($tag);
-          $stm = $this->connect->prepare("insert into video_tags values (:video, :tag)");
+          $stm = $this->connect->prepare("insert into video_genres values (:video, :tag)");
           $stm->bindParam(":video", $videoID);
           $stm->bindParam(":tag", $tag);
           $result = $stm->execute();
           print($result);
-          print_r($this->connect->errorInfo());
+          print_r($this->connect->errorInfo()[2]);
           print($this->connect->errorCode());
         }
         return true;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
     }
@@ -294,7 +294,7 @@
       if ($result) {
         return true;
       } else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -365,20 +365,38 @@
     }
 
     function getHistory($user, $start, $limit) {
-      $stm = $this->connect->prepare("select u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id limit :offset,:limit");
+      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
       $result = $stm->execute();
       if ($result) {
-        error_log("Prueba!!");
         $data = $stm->fetchAll();
         if (count($data) > 0) {
           return $data;
         }
       }
       else {
-        error_log($this->connect->errorInfo());
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getUserVideos($user, $start, $limit) {
+      $stm = $this->connect->prepare("SELECT v.videoname, v.id FROM `videos` as v WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
+      $stm->bindParam(":user", $user);
+      $stm->bindValue(":offset", $start, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      else {
+        error_log($this->connect->errorInfo()[2]);
         error_log($result);
       }
       return false;
@@ -442,5 +460,210 @@
       }
       return false;
     }
+
+    function userHasVideos($uid) {
+      $stm = $this->connect->prepare("SELECT COUNT(*) as 'count' FROM videos where userid = :uid ");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return ((int) $data[0]["count"]) > 0;
+      }
+      else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return false;
+    }
+
+    function saveResourceInfo($filename, $type, $lang, $video) {
+      // We need to store all the data in the database
+      session_start();
+      $user = $_SESSION["user"];
+      session_write_close();
+      $uid = $this->getUserID($user);
+      $time = time();
+      $date = date('Y-m-d H:i:s',$time);
+      $stm = $this->connect->prepare("insert into resources (filename, creationdate, userid, restype, lang, video) values (:filename, :date, :uid, :type, :lang, :video)");
+      $stm->bindParam(":filename", $filename);
+      $stm->bindParam(":date",$date);
+      $stm->bindParam(":uid",$uid);
+      $stm->bindParam(":type", $type);
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      print($type."\n");
+      print($lang."\n");
+      print($this->connect->errorCode()."\n");
+      print_r($this->connect->errorInfo());
+      if ($result) {
+        return true;
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return false;
+    }
+
+    function getSubtitlesFile($video, $lang="english") {
+      $stm = $this->connect->prepare("select * from resources where restype = 'subtitles' and lang = :lang and video = :video limit 1");
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["filename"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+    }
+
+    function getTranscriptionFile($video, $lang="english") {
+      $stm = $this->connect->prepare("select * from resources where restype = 'transcription' and lang = :lang and video = :video limit 1");
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["filename"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+    }
+
+    function getSignLangVideo($video, $lang="english") {
+      $stm = $this->connect->prepare("select * from resources where restype = 'signal-language' and lang = :lang and video = :video limit 1");
+      $stm->bindParam(":lang", $lang);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["filename"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+    }
+
+    function getVideosByQuery($query) {
+      $query = "%".$query."%";
+      $stm = $this->connect->prepare("SELECT videoname, id, userid from videos where videoname like :query");
+      $stm->bindParam(":query", $query);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getUsersByQuery($query) {
+      $query = "%".$query."%";
+      $stm = $this->connect->prepare("SELECT username, id from users where username like :query");
+      $stm->bindParam(":query", $query);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getCategories() {
+      $stm = $this->connect->prepare("SELECT * from categories");
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getGenres() {
+      $stm = $this->connect->prepare("SELECT * from genres");
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getCatName($catID) {
+      $stm = $this->connect->prepare("SELECT * from categories where id = :catID");
+      $stm->bindParam(":catID", $catID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["nombre"];
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getGenresName($videoID) {
+      $stm = $this->connect->prepare("  SELECT nombre from genres g, video_genres v where v.video = :videoID and v.genres = g.id");
+      $stm->bindParam(":videoID", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
+
+    function getResourcesInfoFromVideo($videoID) {
+      $stm = $this->connect->prepare("SELECT * FROM resources WHERE video = :videoID");
+      $stm->bindParam(":videoID", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      } else {
+        error_log($this->connect->errorInfo()[2]);
+        error_log($result);
+      }
+      return [];
+    }
   }
+
 ?>
