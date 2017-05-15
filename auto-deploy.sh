@@ -8,7 +8,7 @@ if [ $EUID -eq 0 ]; then
     path=$1
   fi
   echo "Deleting content of" $path
-  rm -rf $path/*
+  rm -rf $path/!(res|userSettings)
   echo "Copying www to " $path
   cp -R www/* $path/
   echo "Changing the permission of" $path
