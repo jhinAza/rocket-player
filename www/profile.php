@@ -25,7 +25,16 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-2">
-                  <img src="/static/img/user.png" class="resp-img">
+                  <?php if ($isOwnProfile): ?>
+                    <form id="img-form" method="post">
+                      <input type="file" name="img-file" id="img-file">
+                    </form>
+                  <?php endif; ?>
+                  <?php if ($db->userHasProfileImage($uid)): ?>
+                    <img src=<?php print('"/res/img/users/'.$db->getUserProfileImage($uid).'"'); ?> class="resp-img user-img" alt="Cambiar imagen">
+                  <?php else: ?>
+                    <img src="/static/img/user.png" class="resp-img user-img" alt="Cambiar imagen">
+                  <?php endif; ?>
                 </div>
                 <div class="col-md-10">
                   <div class="row">

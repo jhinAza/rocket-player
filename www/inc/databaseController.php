@@ -664,6 +664,40 @@
       }
       return [];
     }
+
+    function userHasProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"] != null;
+        }
+      }
+      return false;
+    }
+    function getUserProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"];
+        }
+      }
+      return false;
+    }
+
+    function updateUserImage($user, $filename) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("update users set userimg = :filename where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":filename", $filename);
+      $result = $stm->execute();
+      return $result;
+    }
   }
 
 ?>
