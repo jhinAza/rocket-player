@@ -373,3 +373,14 @@ body {
 .item.user {
   min-height: 3em;
 }
+
+.user-img:hover {
+  background-color: #888888;
+  opacity: 0.5;
+  box-shadow: 5px 5px 5px #888888;
+  cursor: pointer;
+}
+
+#img-file {
+  display: none;
+}
