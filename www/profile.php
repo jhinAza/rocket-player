@@ -4,15 +4,17 @@
   if (isUserLoggedIn()) {
     writeHeader("profile", "profile");
     writeNavbar();
+    session_start();
     $db = new DatabaseController();
     if (isset($_GET["uid"])) {
       $uid = $_GET["uid"];
+      $isOwnProfile = ($uid == $db->getUserID($_SESSION["user"]));
     } else {
-      require_once("inc/databaseController.php");
-      session_start();
       $uid = $db->getUserID($_SESSION["user"]);
-      session_write_close();
+      $isOwnProfile = true;
+      require_once("inc/databaseController.php");
     }
+    session_write_close();
     require_once("inc/functions.php");
     ?>
     <div class="container" style="padding-top:76px;">
@@ -34,7 +36,7 @@
                     </h4>
                   </div>
                   <div class="row">
-                    <?php if (isset($_GET["uid"])): ?>
+                    <?php if (!$isOwnProfile): ?>
                       <?php if ($db->isFollowing($_SESSION["user"], $_GET["uid"]) == "false"): ?>
                         <button type="button" name="follow" id="follow" class="btn btn-info" data-following="false">Seguir!</button>
                       <?php else: ?>
