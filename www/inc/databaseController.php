@@ -229,14 +229,14 @@
       $res = $stm->execute();
     }
 
-    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $public=true, $active=true) {
+    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $img=false, $public=true, $active=true) {
       // We need to store all the data in the database
       session_start();
       $user = $_SESSION["user"];
       session_write_close();
       $uid = $this->getUserID($user);
       $date = date('Y-m-d H:i:s',$time);
-      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active)");
+      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active, videoimg) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active, :img)");
       $stm->bindParam(":filename", $videofile);
       $stm->bindParam(":videoname",$videoname);
       $stm->bindParam(":desc", $desc);
@@ -245,6 +245,7 @@
       $stm->bindParam(":cat",$cat);
       $stm->bindParam(":public",$public);
       $stm->bindParam(":active",$active);
+      $stm->bindParam(":img", $img);
       $result = $stm->execute();
       if ($result) {
         // Now that we have the video stored in the DB we need the ID
