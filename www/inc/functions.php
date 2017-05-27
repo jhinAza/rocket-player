@@ -133,7 +133,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src="/static/img/video.jpg" alt="" style="width:100%">
+              <img src=<?php print('"/res/img/videos/'.$video["img"].'"') ?> style="width:100%">
             </div>
           </div>
         </div>

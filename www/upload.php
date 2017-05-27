@@ -7,7 +7,7 @@ require_once("inc/functions.php");
     ?>
       <!-- Now we return a form -->
       <div class="container" style="padding-top:76px" id="main">
-        <form id="upload" method="multipart/form-data">
+        <form id="upload" enctype="multipart/form-data">
           <fieldset>
             <legend>Upload form</legend>
             <div class='row'>

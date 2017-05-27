@@ -366,7 +366,7 @@
     }
 
     function getHistory($user, $start, $limit) {
-      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
+      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID', v.videoimg as 'img' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
