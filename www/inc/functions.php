@@ -24,6 +24,7 @@
           <?php
         } elseif ($type == "profile") {
           ?>
+          <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
           <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
         }
@@ -132,7 +133,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src="/static/img/video.jpg" alt="" style="width:100%">
+              <img src=<?php print('"/res/img/videos/'.$video["img"].'"') ?> style="width:100%">
             </div>
           </div>
         </div>

@@ -229,14 +229,14 @@
       $res = $stm->execute();
     }
 
-    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $public=true, $active=true) {
+    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $img=false, $public=true, $active=true) {
       // We need to store all the data in the database
       session_start();
       $user = $_SESSION["user"];
       session_write_close();
       $uid = $this->getUserID($user);
       $date = date('Y-m-d H:i:s',$time);
-      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active)");
+      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active, videoimg) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active, :img)");
       $stm->bindParam(":filename", $videofile);
       $stm->bindParam(":videoname",$videoname);
       $stm->bindParam(":desc", $desc);
@@ -245,6 +245,7 @@
       $stm->bindParam(":cat",$cat);
       $stm->bindParam(":public",$public);
       $stm->bindParam(":active",$active);
+      $stm->bindParam(":img", $img);
       $result = $stm->execute();
       if ($result) {
         // Now that we have the video stored in the DB we need the ID
@@ -365,7 +366,7 @@
     }
 
     function getHistory($user, $start, $limit) {
-      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
+      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID', v.videoimg as 'img' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
@@ -663,6 +664,40 @@
         error_log($result);
       }
       return [];
+    }
+
+    function userHasProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"] != null;
+        }
+      }
+      return false;
+    }
+    function getUserProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"];
+        }
+      }
+      return false;
+    }
+
+    function updateUserImage($user, $filename) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("update users set userimg = :filename where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":filename", $filename);
+      $result = $stm->execute();
+      return $result;
     }
   }
 

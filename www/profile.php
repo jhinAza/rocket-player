@@ -4,15 +4,17 @@
   if (isUserLoggedIn()) {
     writeHeader("profile", "profile");
     writeNavbar();
+    session_start();
     $db = new DatabaseController();
     if (isset($_GET["uid"])) {
       $uid = $_GET["uid"];
+      $isOwnProfile = ($uid == $db->getUserID($_SESSION["user"]));
     } else {
-      require_once("inc/databaseController.php");
-      session_start();
       $uid = $db->getUserID($_SESSION["user"]);
-      session_write_close();
+      $isOwnProfile = true;
+      require_once("inc/databaseController.php");
     }
+    session_write_close();
     require_once("inc/functions.php");
     ?>
     <div class="container" style="padding-top:76px;">
@@ -23,7 +25,16 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-2">
-                  <img src="/static/img/user.png" class="resp-img">
+                  <?php if ($isOwnProfile): ?>
+                    <form id="img-form" method="post">
+                      <input type="file" name="img-file" id="img-file">
+                    </form>
+                  <?php endif; ?>
+                  <?php if ($db->userHasProfileImage($uid)): ?>
+                    <img src=<?php print('"/res/img/users/'.$db->getUserProfileImage($uid).'"'); ?> class="resp-img user-img" alt="Cambiar imagen">
+                  <?php else: ?>
+                    <img src="/static/img/user.png" class="resp-img user-img" alt="Cambiar imagen">
+                  <?php endif; ?>
                 </div>
                 <div class="col-md-10">
                   <div class="row">
@@ -34,7 +45,7 @@
                     </h4>
                   </div>
                   <div class="row">
-                    <?php if (isset($_GET["uid"])): ?>
+                    <?php if (!$isOwnProfile): ?>
                       <?php if ($db->isFollowing($_SESSION["user"], $_GET["uid"]) == "false"): ?>
                         <button type="button" name="follow" id="follow" class="btn btn-info" data-following="false">Seguir!</button>
                       <?php else: ?>

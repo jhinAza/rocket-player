@@ -22,18 +22,36 @@ $(function() {
       isValid = false;
       alert("Debe seleccionar un fichero para subir");
     }
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-      var fileSize = $("#video-input")[0].files[0].size;
-      if (fileSize > 524288000) {
-        alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
-        isValid =  false;
-      }
-    } else {
-      alert("Tu navegador no soporta nuestro sistema de subida de ficheros\
-      Por favor, descarga la ultima version de Google Chrome o Firefox");
+    if ($("#img-input")[0].files.length === 0) {
+      console.log("Hola!");
       isValid = false;
+      alert("Debe seleccionar una portada para el video");
+    } else if($("#img-input")[0].files[0].type.indexOf("image") == -1) {
+      isValid = false;
+      alert("El formato de la imagen no es soportado");
+    } else {
+      if (window.img.width > 0) {
+        if (window.img.width > 500 || window.img.height > 500) {
+          alert("La imagen debe ser como maximo de 500px de ancho y alto");
+          isValid = false;
+        }
+      } else {
+        alert("Por favor espere antes de volver a pulsar el boton de submit. Aun estamos preparando su formulario");
+        isValid = false;
+      }
     }
     if (isValid) {
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var fileSize = $("#video-input")[0].files[0].size;
+        if (fileSize > 524288000) {
+          alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
+          isValid =  false;
+        }
+      } else {
+        alert("Tu navegador no soporta nuestro sistema de subida de ficheros\
+        Por favor, descarga la ultima version de Google Chrome o Firefox");
+        isValid = false;
+      }
       options = {
         target: "upload.php",
         beforeSubmit: prepareUpload,
@@ -128,6 +146,20 @@ $(function() {
   });
   $("#res-input").change(function(e) {
     $("#file-name").val(this.files[0].name);
+  });
+  $("#img-input").change(function(e) {
+    var _URL = window.URL || window.webkitURL;
+    $("#img-name").val(this.files[0].name);
+    var file = $("#img-input")[0].files[0]
+    if (file) {
+      window.img = new Image();
+      window.loaded = false;
+      img.onload = function () {
+        window.loaded = true;
+      };
+      img.src = _URL.createObjectURL(file);
+      return false;
+    }
   });
   /**
   * After the upload will clean the GUI and give feedback

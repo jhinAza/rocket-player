@@ -351,9 +351,21 @@
   border-style: solid;
   border-width: 3px;
   padding: 0.5em 1.5em;
-  min-height: 9em;
+  height: 9em;
+  overflow-y: hidden;
 }
 
 .item.user {
   min-height: 3em;
+}
+
+.user-img:hover {
+  background-color: #888888;
+  opacity: 0.5;
+  box-shadow: 5px 5px 5px #888888;
+  cursor: pointer;
+}
+
+#img-file {
+  display: none;
 }

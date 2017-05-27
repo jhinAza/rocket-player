@@ -127,6 +127,22 @@ $(function() {
       alert("El contenido del campo de busqueda debe ser mayor de 3 caracteres")
     }
   });
+
+  $(".user-img").click(function(e) {
+    $("#img-file").trigger("click");
+  });
+
+  $("#img-file").on("change", function(e) {
+    var options = {
+      "data":   {"type":"updateUserImage"},
+      "url": "/requests.php",
+      "type": "post",
+      "resetForm": false,
+      "success": genericSuccess,
+      "beforeSubmit": test
+    }
+    $("#img-form").ajaxSubmit(options);
+  });
   // Functions
   /**
   * Appends the settings modal window to the body and sets the events
@@ -169,5 +185,13 @@ $(function() {
     console.log("Unfollowed!!");
     $("#follow").removeClass("btn-warning").addClass("btn-info").html("Seguir!").data("following", "false");
     console.log(data);
+  }
+
+  function genericSuccess(data) {
+    console.log(data);
+  }
+
+  function test() {
+    console.log("Hola!!");
   }
 });
