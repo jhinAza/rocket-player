@@ -280,13 +280,17 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-md-8 col-md-push-2">
-                  <div class="btn btn-info col-xs-12">
-                    <span>Subscribe!</span>
+              <?php if ($videoInfo["userid"] != $db->getUserID($user)): ?>
+                <div class="row">
+                  <div class="col-md-8 col-md-push-2">
+                      <?php if ($db->isFollowing($user, $videoInfo["userid"]) == 'false'): ?>
+                        <button type="button" name="follow" id="follow" class="btn btn-info" data-following="false" data-uid=<?php print('"'.$videoInfo["userid"].'"'); ?>>Seguir!</button>
+                      <?php else: ?>
+                        <button type="button" name="follow" id="follow" class="btn btn-warning" data-following="true" data-uid=<?php print('"'.$videoInfo["userid"].'"'); ?>>Dejar de seguir!</button>
+                      <?php endif; ?>
                   </div>
                 </div>
-              </div>
+              <?php endif; ?>
             </div>
             <div class="col-md-8">
               <div class="row">

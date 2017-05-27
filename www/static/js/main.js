@@ -98,9 +98,7 @@ $(function() {
   })
 
   $("#follow").on("click", function(e) {
-    console.log($(this).data("following"));
     if ($(this).data("following") == true) {
-      console.log("true~");
       var type = "unfollow";
       var success = unfollowSuccess;
     } else {
@@ -112,10 +110,12 @@ $(function() {
       "success": success,
       "data": {
         "type": type,
-        "followed": url("?uid")
+        "followed": url("?uid") || $(this).data("uid")
       }
     })
   });
+
+
 
   $("#send-search").click(function(e) {
     var query = $("#search").val();
