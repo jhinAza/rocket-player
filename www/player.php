@@ -270,12 +270,12 @@
             <div class="col-md-4 buttons">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="btn btn-success col-xs-12">
+                  <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
                     <span class="glyphicon glyphicon-plus-sign"></span>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="btn btn-danger col-xs-12">
+                  <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
                     <span class="glyphicon glyphicon-minus-sign"></span>
                   </div>
                 </div>
