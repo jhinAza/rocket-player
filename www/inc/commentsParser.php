@@ -20,12 +20,30 @@
                   <div class="btn btn-info comment-response">
                     <span>Responder</span>
                   </div>
-                  <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
-                    <span class="glyphicon glyphicon-plus"></span>
-                  </div>
-                  <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
-                    <span class="glyphicon glyphicon-minus"></span>
-                  </div>
+                  <?php if ($db->userHasVotedComment($user, $comment["id"])): ?>
+                    <?php if ($db->getUserCommentVote($user, $comment["id"]) == 1): ?>
+                      <div class="btn btn-success vote-comment active" data-vote="1" data-voted="true">
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </div>
+                      <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </div>
+                    <?php else: ?>
+                      <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
+                        <span class="glyphicon glyphicon-plus"></span>
+                      </div>
+                      <div class="btn btn-danger vote-comment active"  data-vote="-1" data-voted="true">
+                        <span class="glyphicon glyphicon-minus"></span>
+                      </div>
+                    <?php endif; ?>
+                  <?php else: ?>
+                    <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
+                      <span class="glyphicon glyphicon-plus"></span>
+                    </div>
+                    <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
+                      <span class="glyphicon glyphicon-minus"></span>
+                    </div>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
