@@ -678,6 +678,7 @@
       }
       return false;
     }
+
     function getUserProfileImage($uid) {
       $stm = $this->connect->prepare("select userimg from users where id = :uid");
       $stm->bindParam(":uid", $uid);
@@ -698,6 +699,142 @@
       $stm->bindParam(":filename", $filename);
       $result = $stm->execute();
       return $result;
+    }
+
+    function userHasVotedVideo($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_video WHERE userid = :uid AND video = :video");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return count($data) > 0;
+      }
+      return false;
+    }
+
+    function addUserVideoVote($user, $video, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT INTO votos_video VALUES (:uid, :video, :vote)");
+      $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
+      $stm->bindValue(":video", $video, PDO::PARAM_INT);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      error_log($result);
+      error_log("Insert!!");
+      if ($result) {
+        return true;
+      }
+      error_log($this->connect->errorCode());
+      return false;
+    }
+
+    function updateUserVideoVote($user, $video, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("UPDATE votos_video SET voto = :vote WHERE video = :video AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function deleteUserVote($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE FROM votos_video WHERE video = :video AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function getUserVideoVote($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_video WHERE userid = :uid AND video = :video");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["voto"];
+        }
+      }
+      return false;
+    }
+
+    function userHasVotedComment($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_comentario WHERE userid = :uid AND comments = :comments");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return count($data) > 0;
+      }
+      return false;
+    }
+
+    function addUserCommentVote($user, $comments, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT INTO votos_comentario VALUES (:uid, :comments, :vote)");
+      $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
+      $stm->bindValue(":comments", $comments, PDO::PARAM_INT);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      error_log($this->connect->errorCode());
+      return false;
+    }
+
+    function updateUserCommentVote($user, $comments, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("UPDATE votos_comentario SET voto = :vote WHERE comments = :comments AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function deleteUserCommentVote($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE FROM votos_comentario WHERE comments = :comments AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function getUserCommentVote($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_comentario WHERE userid = :uid AND comments = :comments");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["voto"];
+        }
+      }
+      return false;
     }
   }
 

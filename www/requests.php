@@ -34,6 +34,26 @@
           error_log($full_name);
           move_uploaded_file($_FILES["img-file"]["tmp_name"], $full_name);
           $db->updateUserImage($user, $new_name);
+        } elseif ($_POST["type"] == "update-vote") {
+          if ($_POST["vote"] == 0) {
+            $db->deleteUserVote($user, $_POST["video"]);
+          } else {
+            if ($db->userHasVotedVideo($user, $_POST["video"])) {
+              $db->updateUserVideoVote($user, $_POST["video"], $_POST["vote"]);
+            } else {
+              $db->addUserVideoVote($user, $_POST["video"], $_POST["vote"]);
+            }
+          }
+        } elseif ($_POST["type"] == "update-comment-vote") {
+          if ($_POST["vote"] == 0) {
+            $db->deleteUserCommentVote($user, $_POST["comment"]);
+          } else {
+            if ($db->userHasVotedComment($user, $_POST["comment"])) {
+              $db->updateUserCommentVote($user, $_POST["comment"], $_POST["vote"]);
+            } else {
+              $db->addUserCommentVote($user, $_POST["comment"], $_POST["vote"]);
+            }
+          }
         }
       }
     }

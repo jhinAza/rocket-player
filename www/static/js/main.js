@@ -80,7 +80,7 @@ $(function() {
 
   $(".comment-response").click(function(e) {
     console.log($(this).data("comment-id"));
-    var commentID = "#" + $(this).data("comment-id") + " ";
+    var commentID = "#" + $(this).parent().data("comment-id") + " ";
     $("#comment").val(commentID).focus();
   })
 
@@ -115,7 +115,37 @@ $(function() {
     })
   });
 
+  $("#vote-up").on("click", function(e) {
+    if ($(this).data("voted")) {
+      updateVideoVote(0);
+    } else {
+      updateVideoVote(1);
+    }
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+    $("#vote-down").removeClass("active").data("voted", false);
+  });
 
+  $("#vote-down").on("click", function(e) {
+    if ($(this).data("voted")) {
+      updateVideoVote(0);
+    } else {
+      updateVideoVote(-1);
+    }
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+    $("#vote-up").removeClass("active").data("voted", false);
+  });
+
+  $(".vote-comment").on("click", function(e) {
+    var comment = $(this).parent().data("comment-id");
+    if ($(this).data("voted")) {
+      updateCommentVote(0, comment);
+    } else {
+      var vote = $(this).data("vote");
+      updateCommentVote(vote, comment);
+    }
+    $(this).siblings(".vote-comment").removeClass("active").data("voted", false);
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+  })
 
   $("#send-search").click(function(e) {
     var query = $("#search").val();
@@ -181,6 +211,7 @@ $(function() {
     $("#follow").removeClass("btn-info").addClass("btn-warning").html("Dejar de seguir!").data("following", "true");
     console.log(data);
   }
+
   function unfollowSuccess(data) {
     console.log("Unfollowed!!");
     $("#follow").removeClass("btn-warning").addClass("btn-info").html("Seguir!").data("following", "false");
@@ -193,5 +224,31 @@ $(function() {
 
   function test() {
     console.log("Hola!!");
+  }
+
+  function updateVideoVote(vote) {
+    options = {
+      "url": "/requests.php",
+      "success": genericSuccess,
+      "data": {
+        "type": "update-vote",
+        "vote": vote,
+        "video": url("?video")
+      }
+    };
+    $.post(options);
+  }
+
+  function updateCommentVote(vote, comment) {
+    options = {
+      "url": "/requests.php",
+      "success": genericSuccess,
+      "data": {
+        "type": "update-comment-vote",
+        "vote": vote,
+        "comment": comment
+      }
+    };
+    $.post(options);
   }
 });

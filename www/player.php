@@ -269,16 +269,42 @@
           <div class="row">
             <div class="col-md-4 buttons">
               <div class="row">
-                <div class="col-md-6">
-                  <div class="btn btn-success col-xs-12">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
+                <?php if ($db->userHasVotedVideo($user, $video)): ?>
+                  <?php if ($db->getUserVideoVote($user, $video) == 1): ?>
+                    <div class="col-md-6">
+                      <div class="btn btn-success col-xs-12 active" id="vote-up" data-voted="true">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                      </div>
+                    </div>
+                  <?php else: ?>
+                    <div class="col-md-6">
+                      <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="btn btn-danger col-xs-12 active" id="vote-down" data-voted="true">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                      </div>
+                    </div>
+                  <?php endif; ?>
+                <?php else: ?>
+                  <div class="col-md-6">
+                    <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
+                      <span class="glyphicon glyphicon-plus-sign"></span>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="btn btn-danger col-xs-12">
-                    <span class="glyphicon glyphicon-minus-sign"></span>
+                  <div class="col-md-6">
+                    <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
+                      <span class="glyphicon glyphicon-minus-sign"></span>
+                    </div>
                   </div>
-                </div>
+                <?php endif; ?>
               </div>
               <?php if ($videoInfo["userid"] != $db->getUserID($user)): ?>
                 <div class="row">
