@@ -54,6 +54,10 @@
 .comment {
   text-align: justify;
   margin-bottom: 1em;
+  border-left-color: $border-color;
+  border-left-style: solid;
+  padding-left: 0.5em;
+  border-left-width: 1px;
   .comments-btn {
     margin: 0.2em 0em;
     float: right;

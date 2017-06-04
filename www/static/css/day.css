@@ -78,6 +78,10 @@ body {
 .comment {
   text-align: justify;
   margin-bottom: 1em;
+  border-left-color: black;
+  border-left-style: solid;
+  padding-left: 0.5em;
+  border-left-width: 1px;
 }
 
 .comment .comments-btn {
@@ -367,7 +371,8 @@ body {
   border-style: solid;
   border-width: 3px;
   padding: 0.5em 1.5em;
-  min-height: 9em;
+  height: 9em;
+  overflow-y: hidden;
 }
 
 .item.user {

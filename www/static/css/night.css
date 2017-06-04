@@ -62,6 +62,10 @@
 .comment {
   text-align: justify;
   margin-bottom: 1em;
+  border-left-color: #199cfb;
+  border-left-style: solid;
+  padding-left: 0.5em;
+  border-left-width: 1px;
 }
 
 .comment .comments-btn {
