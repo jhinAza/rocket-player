@@ -44,6 +44,16 @@
               $db->addUserVideoVote($user, $_POST["video"], $_POST["vote"]);
             }
           }
+        } elseif ($_POST["type"] == "update-comment-vote") {
+          if ($_POST["vote"] == 0) {
+            $db->deleteUserCommentVote($user, $_POST["comment"]);
+          } else {
+            if ($db->userHasVotedComment($user, $_POST["comment"])) {
+              $db->updateUserCommentVote($user, $_POST["comment"], $_POST["vote"]);
+            } else {
+              $db->addUserCommentVote($user, $_POST["comment"], $_POST["vote"]);
+            }
+          }
         }
       }
     }

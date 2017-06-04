@@ -16,14 +16,14 @@
                 <h4><?php print($user); ?></h4>
               </div>
               <div class="col-md-6">
-                <div class="btn-group btn-group-sm comments-btn">
-                  <div class="btn btn-info comment-response" data-comment-id=<?php print($comment["id"]); ?>>
+                <div class="btn-group btn-group-sm comments-btn"  data-comment-id=<?php print($comment["id"]); ?>>
+                  <div class="btn btn-info comment-response">
                     <span>Responder</span>
                   </div>
-                  <div class="btn btn-success">
+                  <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
                     <span class="glyphicon glyphicon-plus"></span>
                   </div>
-                  <div class="btn btn-danger">
+                  <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
                     <span class="glyphicon glyphicon-minus"></span>
                   </div>
                 </div>
