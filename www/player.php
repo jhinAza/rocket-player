@@ -326,7 +326,7 @@
                 <button type="button" name="send-comment" id="send-comment" class="btn btn-info col-md-4 col-md-push-4">Enviar comentario
                 </button>
                 <div class="col-md-2 btn btn-success col-md-push-6" id="length-btn">
-                  <span class="badge" id="length"></span>
+                  <span class="badge" id="length">0</span>
                 </div>
               </div>
             </div>

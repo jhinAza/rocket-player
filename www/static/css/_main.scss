@@ -54,6 +54,10 @@
 .comment {
   text-align: justify;
   margin-bottom: 1em;
+  border-left-color: $border-color;
+  border-left-style: solid;
+  padding-left: 0.5em;
+  border-left-width: 1px;
   .comments-btn {
     margin: 0.2em 0em;
     float: right;
@@ -297,7 +301,7 @@
   }
   .trans.active {
     font-size: 130%;
-    color: rgb(0, 197, 250);
+    color: $trans-color;
     text-shadow: 2px  6px 4px #000;
   }
 
@@ -317,6 +321,7 @@
   border-style: solid;
   border-width: 3px;
   padding: 0.5em 1.5em;
+  margin: 0em 0.5em;
   height: 9em;
   overflow-y: hidden;
 }
