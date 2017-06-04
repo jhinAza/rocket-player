@@ -168,6 +168,25 @@ body {
     width: 100%;
     margin-top: 25%;
   }
+  .controls #playThrough {
+    width: 42% !important;
+  }
+  .controls #playThrough input {
+    width: 100%;
+  }
+  .controls #volume {
+    width: 25%;
+  }
+  .controls #volume input {
+    width: 75% !important;
+    margin-right: 0.5em;
+  }
+  .controls #volume .glyphicon-volume-down {
+    float: left;
+  }
+  .controls #volume .glyphicon-volume-up {
+    float: right;
+  }
 }
 
 @media (max-width: 1199px) and (min-width: 992px) {
@@ -175,11 +194,49 @@ body {
     width: 100%;
     margin-top: 20%;
   }
+  .controls #playThrough {
+    width: 39% !important;
+  }
+  .controls #playThrough input {
+    width: 100%;
+  }
+  .controls #volume {
+    width: 27%;
+  }
+  .controls #volume input {
+    width: 70% !important;
+    margin-right: 0.5em;
+  }
+  .controls #volume .glyphicon-volume-down {
+    float: left;
+  }
+  .controls #volume .glyphicon-volume-up {
+    float: right;
+  }
 }
 
 @media (max-width: 991px) {
   .video-thumb img {
     width: 100%;
+  }
+  .controls #playThrough {
+    width: 42% !important;
+  }
+  .controls #playThrough input {
+    width: 100%;
+  }
+  .controls #volume {
+    width: 25%;
+  }
+  .controls #volume input {
+    width: 70% !important;
+    margin-right: 0.5em;
+  }
+  .controls #volume .glyphicon-volume-down {
+    float: left;
+  }
+  .controls #volume .glyphicon-volume-up {
+    float: right;
   }
 }
 
@@ -234,31 +291,6 @@ body {
 
 .controls input[type=range]::-moz-range-progress {
   background-color: #03435a;
-}
-
-.controls #playThrough {
-  width: 42% !important;
-}
-
-.controls #playThrough input {
-  width: 100%;
-}
-
-.controls #volume {
-  width: 25%;
-}
-
-.controls #volume input {
-  width: 75% !important;
-  margin-right: 0.5em;
-}
-
-.controls #volume .glyphicon-volume-down {
-  float: left;
-}
-
-.controls #volume .glyphicon-volume-up {
-  float: right;
 }
 
 .controls #subtitles,

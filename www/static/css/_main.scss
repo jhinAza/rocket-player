@@ -145,6 +145,27 @@
     width: 100%;
     margin-top: 25%;
   }
+  .controls {
+    #playThrough {
+      width: 42% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 25%;
+      input {
+        width: 75% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
+  }
 }
 
 @media (max-width: 1199px) and (min-width: 992px) {
@@ -152,11 +173,55 @@
     width: 100%;
     margin-top: 20%;
   }
+
+  .controls {
+    #playThrough {
+      width: 39% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 27%;
+      input {
+        width: 70% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
+  }
 }
 
 @media (max-width: 991px) {
   .video-thumb img {
     width: 100%;
+  }
+
+  .controls {
+    #playThrough {
+      width: 42% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 25%;
+      input {
+        width: 70% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
   }
 }
 
@@ -204,25 +269,7 @@
     	background-color: $progress-bar-color;
     }
   }
-  #playThrough {
-    width: 42% !important;
-    input {
-      width: 100%;
-    }
-  }
-  #volume {
-    width: 25%;
-    input {
-      width: 75% !important;
-      margin-right: 0.5em;
-    }
-    .glyphicon-volume-down {
-      float: left;
-    }
-    .glyphicon-volume-up {
-      float: right;
-    }
-  }
+
   #subtitles,
   #fullscreen {
     float: right;
@@ -259,6 +306,7 @@
     margin: 2%;
   }
 }
+
 #mainVideo {
   width: 100%;
 }
@@ -325,6 +373,7 @@
   height: 9em;
   overflow-y: hidden;
 }
+
 .item.user {
   min-height: 3em;
 }
