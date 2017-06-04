@@ -754,6 +754,21 @@
       }
       return false;
     }
+
+    function getUserVideoVote($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_video WHERE userid = :uid AND video = :video");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["voto"];
+        }
+      }
+      return false;
+    }
   }
 
 ?>
