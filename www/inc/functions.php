@@ -63,7 +63,7 @@
     </head>
     <body>
     <?php
-    if ($type != "login" or $type != "error") {
+    if ($type != "login" and $type != "error") {
       writeNavbar();
     }
     ?>
