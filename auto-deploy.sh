@@ -8,15 +8,15 @@ if [ $EUID -eq 0 ]; then
     path=$1
   fi
   echo "Deleting content of" $path
-  mv $path/res /tmp/res
   rm -rf /tmp/userSettings
+  rm -rf /tmp/res
+  mv $path/res /tmp/res
   mv $path/userSettings /tmp/userSettings
-  mv /tmp/userSettings $path/
   rm -rf $path/
   echo "Copying www to " $path
   cp -R www/ $path/
   mv /tmp/res $path/
-  rm -rf /tmp/res
+  mv /tmp/userSettings $path/
   echo "Changing the permission of" $path
   chmod -R a+w $path/*
   echo "Restarting Apache"
