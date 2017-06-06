@@ -18,7 +18,7 @@ if [ $EUID -eq 0 ]; then
   mv /tmp/res/* $path/res/
   mv /tmp/userSettings/* $path/userSettings
   echo "Changing the permission of" $path
-  chmod -R a+w $path/*
+  chmod -R a+w $path/
   echo "Restarting Apache"
   service apache2 restart
 else
