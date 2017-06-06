@@ -3,7 +3,6 @@
   require_once("inc/functions.php");
   if (isUserLoggedIn()) {
     writeHeader("profile", "profile");
-    writeNavbar();
     session_start();
     $db = new DatabaseController();
     if (isset($_GET["uid"])) {

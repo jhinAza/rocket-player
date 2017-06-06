@@ -59,6 +59,13 @@
     </head>
     <body>
     <?php
+    if ($type != "login" or $type != "error") {
+      writeNavbar();
+    }
+    ?>
+    <div class="container" style="padding-top:76px">
+      <div id="alert-pos"></div>
+    <?php
   }
 
   function writeNavbar(){

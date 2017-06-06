@@ -9,7 +9,6 @@
     $db = new DatabaseController();
     if (isUserLoggedIn() && $db->isUserAdmin($user)) {
       writeHeader("truncate");
-      writeNavbar();
       $rows = $db->getAllTables();
       ?>
         <div class="container" style="padding-top:76px">

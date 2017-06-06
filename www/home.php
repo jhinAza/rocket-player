@@ -4,9 +4,7 @@
   require_once("inc/databaseController.php");
   if (isUserLoggedIn()) {
     writeHeader("home");
-    writeNavbar();
     ?>
-      <div class="container" style="padding-top:76px;">
         <div class="panel-group">
           <?php
             $db = new DatabaseController();

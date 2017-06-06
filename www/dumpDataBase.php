@@ -8,7 +8,6 @@
   if (isUserLoggedIn() && $db->isUserAdmin($user)) {
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
       writeHeader("Dump");
-      writeNavbar();
       ?>
       <div class="container" style="padding-top: 76px;">
         <form action="dumpDataBase.php" method="post" enctype="multipart/form-data">

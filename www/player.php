@@ -2,7 +2,6 @@
   require_once("inc/functions.php");
   if (isUserLoggedIn()) {
     writeHeader("Reproductor", "player");
-    writeNavbar();
     $video = $_GET["video"];
     setcookie("video", $_GET["video"]);
     session_start();
