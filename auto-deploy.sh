@@ -9,10 +9,12 @@ if [ $EUID -eq 0 ]; then
   fi
   echo "Deleting content of" $path
   mv $path/res /tmp/res
+  rm -rf /tmp/userSettings
+  rm -rf /tmp/res
   mv $path/userSettings /tmp/userSettings
   rm -rf $path/
-  mv /tmp/res $path/res
-  mv /tmp/userSettings $path/userSettings
+  mv /tmp/res $path/
+  mv /tmp/userSettings $path/
   echo "Copying www to " $path
   cp -R www/ $path/
   echo "Changing the permission of" $path
