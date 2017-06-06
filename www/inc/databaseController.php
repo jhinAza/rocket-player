@@ -716,7 +716,7 @@
 
     function addUserVideoVote($user, $video, $vote) {
       $uid = $this->getUserID($user);
-      $stm = $this->connect->prepare("INSERT INTO votos_video VALUES (:uid, :video, :vote)");
+      $stm = $this->connect->prepare("INSERT INTO votos_video (userid, video, voto) VALUES (:uid, :video, :vote)");
       $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
       $stm->bindValue(":video", $video, PDO::PARAM_INT);
       $stm->bindParam(":vote", $vote);
@@ -785,7 +785,7 @@
 
     function addUserCommentVote($user, $comments, $vote) {
       $uid = $this->getUserID($user);
-      $stm = $this->connect->prepare("INSERT INTO votos_comentario VALUES (:uid, :comments, :vote)");
+      $stm = $this->connect->prepare("INSERT INTO votos_comentario  (userid, comments, voto) VALUES (:uid, :comments, :vote)");
       $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
       $stm->bindValue(":comments", $comments, PDO::PARAM_INT);
       $stm->bindParam(":vote", $vote);
