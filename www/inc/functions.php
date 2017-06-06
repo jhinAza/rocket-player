@@ -28,6 +28,10 @@
           <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
           <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
+        } elseif ($type == "login") {
+          ?>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
+          <?php
         }
       ?>
       <script src="/static/js/main.min.js" charset="utf-8"></script>
@@ -58,6 +62,13 @@
       ?>
     </head>
     <body>
+    <?php
+    if ($type != "login" or $type != "error") {
+      writeNavbar();
+    }
+    ?>
+    <div class="container" style="padding-top:76px">
+      <div id="alert-pos"></div>
     <?php
   }
 

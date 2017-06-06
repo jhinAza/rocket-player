@@ -3,7 +3,6 @@ require_once("inc/functions.php");
   if ($_SERVER["REQUEST_METHOD"] === "GET") {
     // Then we will show the page.
     writeHeader("Upload", "upload");
-    writeNavbar();
     ?>
       <!-- Now we return a form -->
       <div class="container" style="padding-top:76px" id="main">

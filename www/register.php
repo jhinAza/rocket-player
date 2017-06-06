@@ -6,7 +6,6 @@
       require_once("inc/databaseController.php");
       $db = new DatabaseController();
       $bool = $db->registerUser($_POST["userRegister"], $_POST["passRegister"], $_POST["mailRegister"]);
-      $bool = true;
       if ($bool) {
         $id = $db->getUserID($_POST["userRegister"]);
         if ($id) {
@@ -19,10 +18,10 @@
           $file = simplexml_load_file($folder.$default);
           $file->attributes()->user_id = $id;
           $file->asXML($folder.$filename);
-          header("Location:/login.php");
+          header("Location:/login.php?register=ok");
         }
       } else {
-        header("Location: http500.php");
+        header("Location: login.php?register=error");
       }
     }
   }

@@ -7,11 +7,11 @@ $(function() {
     var isValid = true;
     if (user.value.length == 0) {
       isValid = false;
-      alert("El campo de usuario no puede estar vacio");
+      bsAlert("El campo de usuario no puede estar vacio", "danger");
     }
     if (pass.value.length == 0) {
       isValid = false;
-      alert("El campo de la contraseña no puede estar vacio");
+      bsAlert("El campo de la contraseña no puede estar vacio", "danger");
     }
     return isValid;
   });
@@ -67,7 +67,7 @@ $(function() {
     var isValid = true
     if (comment.length > 300) {
       isValid = false;
-      alert("El comentario es demasiado largo");
+      bsAlert("El comentario es demasiado largo", "danger");
     }
     if (isValid) {
       $.post({
@@ -154,7 +154,7 @@ $(function() {
       var url = "/search.php?query=" + query;
       window.location = url;
     } else {
-      alert("El contenido del campo de busqueda debe ser mayor de 3 caracteres")
+      bsAlert("El contenido del campo de busqueda debe ser mayor de 3 caracteres", "warning")
     }
   });
 
@@ -251,4 +251,19 @@ $(function() {
     };
     $.post(options);
   }
+
+  if (url('?register')) {
+    if(url('?register') == 'error') {
+      bsAlert("El usuario o el correo ya existen", "danger")
+    } else if (url('?register') == 'ok') {
+      bsAlert("Se ha registrado correctamente", "success")
+    }
+  }
+
 });
+function bsAlert(message, alertType="warning") {
+  var bsAlert = "<div class=\"alert alert-" + alertType + "\">\n\
+  " + message + "\n\
+  </div>"
+  $("#alert-pos").append(bsAlert);
+}
