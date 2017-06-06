@@ -252,10 +252,18 @@ $(function() {
     $.post(options);
   }
 
+  if (url('?register')) {
+    if(url('?register') == 'error') {
+      bsAlert("El usuario o el correo ya existen", "danger")
+    } else if (url('?register') == 'ok') {
+      bsAlert("Se ha registrado correctamente", "success")
+    }
+  }
+
 });
 function bsAlert(message, alertType="warning") {
   var bsAlert = "<div class=\"alert alert-" + alertType + "\">\n\
   " + message + "\n\
   </div>"
-  $("#alert-pos").append(alert);
+  $("#alert-pos").append(bsAlert);
 }
