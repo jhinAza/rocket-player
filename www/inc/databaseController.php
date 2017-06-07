@@ -837,6 +837,20 @@
       return false;
     }
 
+    function getCountsOfVideoVotes($video, $vote) {
+      $stm = $this->connect->prepare("SELECT count(*) as count FROM `votos_video` where video = :video and voto = :vote group by video");
+      $stm->bindParam(":video", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data;
+        }
+      }
+      return 0;
+    }
+
     function getRecomendationFromVideo($video, $offset=0, $limit=10) {
       $stm = $this->connect->prepare("SELECT Count(*) AS count,
                  g.video,

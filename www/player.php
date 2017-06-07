@@ -19,6 +19,8 @@
     $reader = new UserSettingsReader($user);
     require_once("inc/resourcesParser.php");
     require_once("inc/functions.php");
+    $pos = $db->getCountsOfVideoVotes($video, 1)[0]["count"];
+    $neg = $db->getCountsOfVideoVotes($video, -1)[0]["count"];
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
@@ -226,22 +228,27 @@
                     <div class="col-md-6">
                       <div class="btn btn-success col-xs-12 active" id="vote-up" data-voted="true">
                         <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="badge"><?php print($pos) ?></span>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
                         <span class="glyphicon glyphicon-minus-sign"></span>
+                        <span class="badge"><?php print($neg) ?></span>
                       </div>
                     </div>
                   <?php else: ?>
                     <div class="col-md-6">
                       <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
                         <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="badge"><?php print($pos) ?></span>
+
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="btn btn-danger col-xs-12 active" id="vote-down" data-voted="true">
                         <span class="glyphicon glyphicon-minus-sign"></span>
+                        <span class="badge"><?php print($neg) ?></span>
                       </div>
                     </div>
                   <?php endif; ?>
@@ -249,11 +256,13 @@
                   <div class="col-md-6">
                     <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
                       <span class="glyphicon glyphicon-plus-sign"></span>
+                      <span class="badge"><?php print($pos) ?></span>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
                       <span class="glyphicon glyphicon-minus-sign"></span>
+                      <span class="badge"><?php print($neg) ?></span>
                     </div>
                   </div>
                 <?php endif; ?>
