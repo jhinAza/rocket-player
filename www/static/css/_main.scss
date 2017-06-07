@@ -58,6 +58,9 @@
   border-left-style: solid;
   padding-left: 0.5em;
   border-left-width: 1px;
+  .comment-response {
+    line-height: 1.6 !important
+  }
   .comments-btn {
     margin: 0.2em 0em;
     float: right;

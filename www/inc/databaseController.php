@@ -838,14 +838,28 @@
     }
 
     function getCountsOfVideoVotes($video, $vote) {
-      $stm = $this->connect->prepare("SELECT count(*) as count FROM `votos_video` where video = :video and voto = :vote group by video");
+      $stm = $this->connect->prepare("SELECT count(*) as count FROM votos_video where video = :video and voto = :vote group by video");
       $stm->bindParam(":video", $video);
       $stm->bindParam(":vote", $vote);
       $result = $stm->execute();
       if ($result) {
         $data = $stm->fetchAll();
         if (count($data) == 1) {
-          return $data;
+          return $data[0]["count"];
+        }
+      }
+      return 0;
+    }
+
+    function getCountsOfCommentVotes($comment, $vote) {
+      $stm = $this->connect->prepare("SELECT count(*) as count FROM votos_comentario where comments = :comment and voto = :vote group by video");
+      $stm->bindParam(":comment", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["count"];
         }
       }
       return 0;

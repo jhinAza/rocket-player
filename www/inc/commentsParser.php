@@ -4,6 +4,8 @@
   function createComment($comment) {
     $db = new databaseController();
     $user = $db->getUserName($comment["userid"]);
+    $pos = $db->getCountsOfCommentVotes($comment["id"], 1);
+    $neg = $db->getCountsOfCommentVotes($comment["id"], -1);
     ?>
       <div class="comment">
         <div class="row">
@@ -24,24 +26,30 @@
                     <?php if ($db->getUserCommentVote($user, $comment["id"]) == 1): ?>
                       <div class="btn btn-success vote-comment active" data-vote="1" data-voted="true">
                         <span class="glyphicon glyphicon-plus"></span>
+                        <span class="badge"><?php print($pos) ?></span>
                       </div>
                       <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
                         <span class="glyphicon glyphicon-minus"></span>
+                        <span class="badge"><?php print($neg) ?></span>
                       </div>
                     <?php else: ?>
                       <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
                         <span class="glyphicon glyphicon-plus"></span>
+                        <span class="badge"><?php print($pos) ?></span>
                       </div>
                       <div class="btn btn-danger vote-comment active"  data-vote="-1" data-voted="true">
                         <span class="glyphicon glyphicon-minus"></span>
+                        <span class="badge"><?php print($neg) ?></span>
                       </div>
                     <?php endif; ?>
                   <?php else: ?>
                     <div class="btn btn-success vote-comment" data-vote="1" data-voted="false">
                       <span class="glyphicon glyphicon-plus"></span>
+                      <span class="badge"><?php print($pos) ?></span>
                     </div>
                     <div class="btn btn-danger vote-comment"  data-vote="-1" data-voted="false">
                       <span class="glyphicon glyphicon-minus"></span>
+                      <span class="badge"><?php print($neg) ?></span>
                     </div>
                   <?php endif; ?>
                 </div>

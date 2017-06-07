@@ -19,8 +19,8 @@
     $reader = new UserSettingsReader($user);
     require_once("inc/resourcesParser.php");
     require_once("inc/functions.php");
-    $pos = $db->getCountsOfVideoVotes($video, 1)[0]["count"];
-    $neg = $db->getCountsOfVideoVotes($video, -1)[0]["count"];
+    $pos = $db->getCountsOfVideoVotes($video, 1);
+    $neg = $db->getCountsOfVideoVotes($video, -1);
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
