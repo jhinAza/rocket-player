@@ -211,54 +211,7 @@
           </div>
           <div class="panel-body">
             <div class="panel-group">
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg">
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <?php getColOfRecommendations($video); ?>
             </div>
           </div>
         </div>

@@ -836,6 +836,45 @@
       }
       return false;
     }
+
+    function getRecomendationFromVideo($video, $offset=0, $limit=10) {
+      $stm = $this->connect->prepare("SELECT Count(*) AS count,
+                 g.video,
+                 sum(vv.voto) as sum,
+                 v.id,
+                 v.videoname,
+                 v.userid,
+                 v.videoimg
+          FROM   video_genres g,
+                 videos v,
+                 votos_video vv
+          WHERE  g.genres IN (SELECT genres
+                            FROM   video_genres
+                            WHERE  video = :video)
+          AND g.video IN (SELECT id
+                       FROM   videos
+                       WHERE  cat = (SELECT cat
+                                     FROM   videos
+                                     WHERE  id = :video)
+                       AND NOT id = :video)
+          AND g.video = v.id
+          AND v.id = vv.video
+          GROUP  BY video
+          ORDER  BY count asc,
+                    sum desc
+          LIMIT :offset, :limit");
+      $stm->bindParam(":video", $video);
+      $stm->bindValue(":offset", $offset, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
+    }
   }
 
 ?>
