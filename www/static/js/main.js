@@ -148,13 +148,21 @@ $(function() {
   })
 
   $("#send-search").click(function(e) {
-    var query = $("#search").val();
+    var query = $("#searching").val();
     console.log(query);
     if (query.length > 3) {
       var url = "/search.php?query=" + query;
       window.location = url;
     } else {
       bsAlert("El contenido del campo de busqueda debe ser mayor de 3 caracteres", "warning")
+    }
+  });
+
+  $("#searching").keydown(function(e) {
+    if (e.which == 13) {
+      e.stopPropagation();
+      e.preventDefault();
+      $("#send-search").click();
     }
   });
 
