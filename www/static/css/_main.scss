@@ -397,3 +397,8 @@
 #img-file {
   display: none;
 }
+
+.profile-scroll {
+  max-height: 21em;
+  overflow-y: scroll;
+}
