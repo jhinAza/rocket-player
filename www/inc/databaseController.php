@@ -19,7 +19,7 @@
         $data = $stm->fetchAll();
         if (count($data) == 1) {
           $row = $data[0];
-          return password_verify($pass, $row[1]);
+          return password_verify($pass, $row["userPassword"]);
         }
       } else {
         error_log($this->connect->errorInfo()[2]);
@@ -77,18 +77,20 @@
     function checkUserUID($user,$UID) {
       $id = $this->getUserID($user);
       $data = $this->selectUIDRow($user);
-      if (count($data) == 1) {
+      if (count($data) ==  1) {
         $row = $data[0];
         if (($id == $row["uid"]) && ($UID == $row["token"])) {
           $uidDate = strtotime($row["date"]);
           $currentDate = time();
-          if ($uidDate + (40 * 60) > $currentDate) {
+          if ($uidDate + (50 * 60) > $currentDate) {
             // Si aun no han pasado mas de 40 minutos
-            if ($uidDate + (30 * 60) > $currentDate) {
+            if ($uidDate + (35 * 60) > $currentDate) {
               // Si aun no han pasado mas de 30 minutos
+              error_log("No hay problema con el token");
               return true;
             } else {
               // Si han pasado generamos uno nuevo
+              error_log("Generamos un nuevo token");
               session_start();
               $_SESSION["UID"] = $this->setUID($user);
               session_write_close();
@@ -96,6 +98,7 @@
             }
           } else {
             // El token ha caducado
+            error_log("El token ha caducado");
             $this->deleteUIDRow($user);
             return false;
           }
