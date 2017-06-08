@@ -386,14 +386,19 @@
 }
 
 .item {
+  padding: 0.5em 1.5em;
+  height: 10em;
+  overflow-y: hidden;
+}
+
+.item > .row {
   border-color: #375a7f;
   border-radius: 5px;
   border-style: solid;
   border-width: 3px;
-  padding: 0.5em 1.5em;
-  margin: 0em 0.5em;
-  height: 9em;
+  height: 100%;
   overflow-y: hidden;
+  padding: 0.5em 0em;
 }
 
 .item.user {

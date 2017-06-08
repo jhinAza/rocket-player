@@ -385,7 +385,7 @@
     }
 
     function getUserVideos($user, $start, $limit) {
-      $stm = $this->connect->prepare("SELECT v.videoname, v.id FROM `videos` as v WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
+      $stm = $this->connect->prepare("SELECT videoname, id, videoimg FROM videos WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
@@ -556,7 +556,7 @@
 
     function getVideosByQuery($query) {
       $query = "%".$query."%";
-      $stm = $this->connect->prepare("SELECT videoname, id, userid from videos where videoname like :query");
+      $stm = $this->connect->prepare("SELECT videoname, id, userid, videoimg from videos where videoname like :query");
       $stm->bindParam(":query", $query);
       $result = $stm->execute();
       if ($result) {
@@ -573,7 +573,7 @@
 
     function getUsersByQuery($query) {
       $query = "%".$query."%";
-      $stm = $this->connect->prepare("SELECT username, id from users where username like :query");
+      $stm = $this->connect->prepare("SELECT username, id, userimg from users where username like :query");
       $stm->bindParam(":query", $query);
       $result = $stm->execute();
       if ($result) {
