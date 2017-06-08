@@ -155,15 +155,17 @@
     }
   }
 
-  function getRowOfUploaded($uid, $start=0) {
+  function getRowOfUploaded($uid, $start=0, $limit=6, $col_size=4) {
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
-    $row = $db->getUserVideos($uid, $start, 3);
+    $row = $db->getUserVideos($uid, $start, $limit);
     if ($row) {
       print('<div class="row">');
       foreach ($row as $video) {
         ?>
-        <div class="col-md-4 item">
+        <?php
+          print('<div class="col-md-'.$col_size.' item">')
+        ?>
           <div class="row">
             <div class="col-md-6 video-data">
               <div class="row">

@@ -64,6 +64,9 @@
             <div class="panel-heading">
               <h4 class="panel-title">Videos subidos</h4>
             </div>
+            <div class="panel-body profile-scroll">
+              <?php getRowOfUploaded($uid, 0, 4, 6); ?>
+            </div>
           </div>
         </div>
         <div class="col-md-3">
@@ -71,7 +74,7 @@
             <div class="panel-heading">
               <h4 class="panel-title">Seguidores</h4>
             </div>
-            <div class="panel-body">
+            <div class="panel-body profile-scroll">
               <ul class="list-group">
                 <?php
                   $followers = $db->getFollowers($uid);
@@ -94,7 +97,7 @@
             <div class="panel-heading">
               <h4 class="panel-title">Siguiendo</h4>
             </div>
-            <div class="panel-body">
+            <div class="panel-body profile-scroll">
               <ul class="list-group">
                 <?php
                   $follows = $db->getFollows($uid);
@@ -119,7 +122,7 @@
             <div class="panel-heading">
               <h4 class="panel-tittle"> Historial </h4>
             </div>
-            <div class="panel-body">
+            <div class="panel-body profile-scroll">
               <?php getRowOfHistory($uid); ?>
             </div>
           </div>
