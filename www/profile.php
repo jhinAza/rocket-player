@@ -65,7 +65,7 @@
               <h4 class="panel-title">Videos subidos</h4>
             </div>
             <div class="panel-body profile-scroll">
-              <?php getRowOfUploaded($uid, 0, 6, 6); ?>
+              <?php getRowOfUploaded($uid, 0, 4, 6); ?>
             </div>
           </div>
         </div>
