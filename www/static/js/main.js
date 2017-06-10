@@ -7,11 +7,11 @@ $(function() {
     var isValid = true;
     if (user.value.length == 0) {
       isValid = false;
-      alert("El campo de usuario no puede estar vacio");
+      bsAlert("El campo de usuario no puede estar vacio", "danger");
     }
     if (pass.value.length == 0) {
       isValid = false;
-      alert("El campo de la contraseña no puede estar vacio");
+      bsAlert("El campo de la contraseña no puede estar vacio", "danger");
     }
     return isValid;
   });
@@ -67,7 +67,7 @@ $(function() {
     var isValid = true
     if (comment.length > 300) {
       isValid = false;
-      alert("El comentario es demasiado largo");
+      bsAlert("El comentario es demasiado largo", "danger");
     }
     if (isValid) {
       $.post({
@@ -80,7 +80,7 @@ $(function() {
 
   $(".comment-response").click(function(e) {
     console.log($(this).data("comment-id"));
-    var commentID = "#" + $(this).data("comment-id") + " ";
+    var commentID = "#" + $(this).parent().data("comment-id") + " ";
     $("#comment").val(commentID).focus();
   })
 
@@ -98,9 +98,7 @@ $(function() {
   })
 
   $("#follow").on("click", function(e) {
-    console.log($(this).data("following"));
     if ($(this).data("following") == true) {
-      console.log("true~");
       var type = "unfollow";
       var success = unfollowSuccess;
     } else {
@@ -112,20 +110,76 @@ $(function() {
       "success": success,
       "data": {
         "type": type,
-        "followed": url("?uid")
+        "followed": url("?uid") || $(this).data("uid")
       }
     })
   });
 
+  $("#vote-up").on("click", function(e) {
+    if ($(this).data("voted")) {
+      updateVideoVote(0);
+    } else {
+      updateVideoVote(1);
+    }
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+    $("#vote-down").removeClass("active").data("voted", false);
+  });
+
+  $("#vote-down").on("click", function(e) {
+    if ($(this).data("voted")) {
+      updateVideoVote(0);
+    } else {
+      updateVideoVote(-1);
+    }
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+    $("#vote-up").removeClass("active").data("voted", false);
+  });
+
+  $(".vote-comment").on("click", function(e) {
+    var comment = $(this).parent().data("comment-id");
+    if ($(this).data("voted")) {
+      updateCommentVote(0, comment);
+    } else {
+      var vote = $(this).data("vote");
+      updateCommentVote(vote, comment);
+    }
+    $(this).siblings(".vote-comment").removeClass("active").data("voted", false);
+    $(this).toggleClass("active").data("voted", !$(this).data("voted"));
+  })
+
   $("#send-search").click(function(e) {
-    var query = $("#search").val();
+    var query = $("#searching").val();
     console.log(query);
     if (query.length > 3) {
       var url = "/search.php?query=" + query;
       window.location = url;
     } else {
-      alert("El contenido del campo de busqueda debe ser mayor de 3 caracteres")
+      bsAlert("El contenido del campo de busqueda debe ser mayor de 3 caracteres", "warning")
     }
+  });
+
+  $("#searching").keydown(function(e) {
+    if (e.which == 13) {
+      e.stopPropagation();
+      e.preventDefault();
+      $("#send-search").click();
+    }
+  });
+
+  $(".user-img").click(function(e) {
+    $("#img-file").trigger("click");
+  });
+
+  $("#img-file").on("change", function(e) {
+    var options = {
+      "data":   {"type":"updateUserImage"},
+      "url": "/requests.php",
+      "type": "post",
+      "resetForm": false,
+      "success": genericSuccess,
+      "beforeSubmit": test
+    }
+    $("#img-form").ajaxSubmit(options);
   });
   // Functions
   /**
@@ -165,9 +219,59 @@ $(function() {
     $("#follow").removeClass("btn-info").addClass("btn-warning").html("Dejar de seguir!").data("following", "true");
     console.log(data);
   }
+
   function unfollowSuccess(data) {
     console.log("Unfollowed!!");
     $("#follow").removeClass("btn-warning").addClass("btn-info").html("Seguir!").data("following", "false");
     console.log(data);
   }
+
+  function genericSuccess(data) {
+    console.log(data);
+  }
+
+  function test() {
+    console.log("Hola!!");
+  }
+
+  function updateVideoVote(vote) {
+    options = {
+      "url": "/requests.php",
+      "success": genericSuccess,
+      "data": {
+        "type": "update-vote",
+        "vote": vote,
+        "video": url("?video")
+      }
+    };
+    $.post(options);
+  }
+
+  function updateCommentVote(vote, comment) {
+    options = {
+      "url": "/requests.php",
+      "success": genericSuccess,
+      "data": {
+        "type": "update-comment-vote",
+        "vote": vote,
+        "comment": comment
+      }
+    };
+    $.post(options);
+  }
+
+  if (url('?register')) {
+    if(url('?register') == 'error') {
+      bsAlert("El usuario o el correo ya existen", "danger")
+    } else if (url('?register') == 'ok') {
+      bsAlert("Se ha registrado correctamente", "success")
+    }
+  }
+
 });
+function bsAlert(message, alertType="warning") {
+  var bsAlert = "<div class=\"alert alert-" + alertType + "\">\n\
+  " + message + "\n\
+  </div>"
+  $("#alert-pos").append(bsAlert);
+}

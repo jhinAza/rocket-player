@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users
      useremail    VARCHAR(100) NOT NULL,
      userpassword VARCHAR(256),
      creationdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+     userimg      VARCHAR(100),
      active       BOOLEAN NOT NULL DEFAULT true,
      userrole     ENUM('user', 'admin') DEFAULT 'user',
      CONSTRAINT badusersprimarykey PRIMARY KEY (id)
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS videos
      creationdate DATETIME NOT NULL,
      userid       INT,
      cat          INT,
+     videoimg     VARCHAR(100),
      public       BOOLEAN,
      active       BOOLEAN,
      CONSTRAINT badvideosprimarykey PRIMARY KEY (id),

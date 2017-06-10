@@ -21,8 +21,14 @@
           ?>
           <script src="/static/js/videoController.js" charset="utf-8"></script>
           <script src="/static/js/video.min.js" charset="utf-8"></script>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
         } elseif ($type == "profile") {
+          ?>
+          <script src="http://malsup.github.com/jquery.form.js" charset="utf-8"></script>
+          <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
+          <?php
+        } elseif ($type == "login") {
           ?>
           <script src="/static/librerias/js/url.min.js" charset="utf-8"></script>
           <?php
@@ -56,6 +62,13 @@
       ?>
     </head>
     <body>
+    <?php
+    if ($type != "login" and $type != "error") {
+      writeNavbar();
+    }
+    ?>
+    <div class="container" style="padding-top:76px">
+      <div id="alert-pos"></div>
     <?php
   }
 
@@ -132,7 +145,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src="/static/img/video.jpg" alt="" style="width:100%">
+              <img src=<?php print('"/res/img/videos/'.$video["img"].'"') ?> style="width:100%">
             </div>
           </div>
         </div>
@@ -142,15 +155,17 @@
     }
   }
 
-  function getRowOfUploaded($uid, $start=0) {
+  function getRowOfUploaded($uid, $start=0, $limit=6, $col_size=4) {
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
-    $row = $db->getUserVideos($uid, $start, 3);
+    $row = $db->getUserVideos($uid, $start, $limit);
     if ($row) {
       print('<div class="row">');
       foreach ($row as $video) {
         ?>
-        <div class="col-md-4 item">
+        <?php
+          print('<div class="col-md-'.$col_size.' item">')
+        ?>
           <div class="row">
             <div class="col-md-6 video-data">
               <div class="row">
@@ -162,7 +177,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src="/static/img/video.jpg" alt="" style="width:100%">
+              <img src=<?php print('"/res/img/videos/'.$video["videoimg"].'"'); ?> alt="" style="width:100%">
             </div>
           </div>
         </div>
@@ -206,5 +221,37 @@
       return "res/signal/".$file;
     }
     return false;
+  }
+
+  function getColOfRecommendations($video, $offset=0, $limit=10) {
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $data = $db->getRecomendationFromVideo($video, $offset, $limit);
+    if ($data) {
+      foreach ($data as $video_data) {
+        ?>
+        <div class="panel panel-info">
+          <div class="panel-body">
+            <div class='row'>
+              <div class="col-xs-4 video-thumb">
+                <img src=<?php print('/res/img/videos/"'.$video_data["videoimg"].'"') ?>>
+              </div>
+              <div class="col-md-8">
+                <a href=<?php print("player.php?video=".$video_data["id"]) ?>>
+                  <?php print($video_data["videoname"]) ?>
+                </a>
+                <br>
+                <a href=<?php print("profile.php?uid=".$video_data["userid"]) ?>>
+                  <?php print($db->getUserName($video_data["userid"])) ?>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <?php
+      }
+    } else {
+      print("No hay mas videos para recomendar");
+    }
   }
 ?>

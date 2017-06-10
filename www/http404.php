@@ -1,6 +1,6 @@
 <?php
   require_once("inc/functions.php");
-  writeHeader("404");
+  writeHeader("404", "error");
   http_response_code(404);
 ?>
 <div class="container">

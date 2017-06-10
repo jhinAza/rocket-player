@@ -54,6 +54,13 @@
 .comment {
   text-align: justify;
   margin-bottom: 1em;
+  border-left-color: $border-color;
+  border-left-style: solid;
+  padding-left: 0.5em;
+  border-left-width: 1px;
+  .comment-response {
+    line-height: 1.6 !important
+  }
   .comments-btn {
     margin: 0.2em 0em;
     float: right;
@@ -141,6 +148,27 @@
     width: 100%;
     margin-top: 25%;
   }
+  .controls {
+    #playThrough {
+      width: 42% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 25%;
+      input {
+        width: 75% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
+  }
 }
 
 @media (max-width: 1199px) and (min-width: 992px) {
@@ -148,11 +176,55 @@
     width: 100%;
     margin-top: 20%;
   }
+
+  .controls {
+    #playThrough {
+      width: 39% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 27%;
+      input {
+        width: 70% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
+  }
 }
 
 @media (max-width: 991px) {
   .video-thumb img {
     width: 100%;
+  }
+
+  .controls {
+    #playThrough {
+      width: 42% !important;
+      input {
+        width: 100%;
+      }
+    }
+    #volume {
+      width: 25%;
+      input {
+        width: 70% !important;
+        margin-right: 0.5em;
+      }
+      .glyphicon-volume-down {
+        float: left;
+      }
+      .glyphicon-volume-up {
+        float: right;
+      }
+    }
   }
 }
 
@@ -200,25 +272,7 @@
     	background-color: $progress-bar-color;
     }
   }
-  #playThrough {
-    width: 42% !important;
-    input {
-      width: 100%;
-    }
-  }
-  #volume {
-    width: 25%;
-    input {
-      width: 75% !important;
-      margin-right: 0.5em;
-    }
-    .glyphicon-volume-down {
-      float: left;
-    }
-    .glyphicon-volume-up {
-      float: right;
-    }
-  }
+
   #subtitles,
   #fullscreen {
     float: right;
@@ -229,7 +283,8 @@
 }
 
 .fullscreen {
-  height: 96%;
+  height: 100%;
+  width: 100%;
   background-color: black;
   .fit-container {
     height: 96%;
@@ -255,6 +310,7 @@
     margin: 2%;
   }
 }
+
 #mainVideo {
   width: 100%;
 }
@@ -281,6 +337,7 @@
   }
   .sub {
     display: none;
+    color: white;
   }
 }
 
@@ -297,7 +354,7 @@
   }
   .trans.active {
     font-size: 130%;
-    color: rgb(0, 197, 250);
+    color: $trans-color;
     text-shadow: 2px  6px 4px #000;
   }
 
@@ -312,13 +369,38 @@
 }
 
 .item {
-  border-color: $background-color;
-  border-radius: 5px;
-  border-style: solid;
-  border-width: 3px;
   padding: 0.5em 1.5em;
-  min-height: 9em;
+  height: 10em;
+  overflow-y: hidden;
+  > .row {
+    border-color: $background-color;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 3px;
+    height: 100%;
+    overflow-y: hidden;
+    padding: 0.5em 0em;
+  }
 }
+
 .item.user {
   min-height: 3em;
+}
+
+.user-img {
+  &:hover {
+    background-color: #888888;
+    opacity: 0.5;
+    box-shadow: 5px 5px 5px #888888;
+    cursor: pointer;
+  }
+}
+
+#img-file {
+  display: none;
+}
+
+.profile-scroll {
+  max-height: 21em;
+  overflow-y: scroll;
 }

@@ -1,6 +1,6 @@
 <?php
   require_once("inc/functions.php");
-  writeHeader("500");
+  writeHeader("500", "error");
   http_response_code(500);
 ?>
 <div class="container">

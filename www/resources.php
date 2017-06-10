@@ -3,7 +3,6 @@ require_once("inc/functions.php");
   if ($_SERVER["REQUEST_METHOD"] === "GET") {
     // Then we will show the page.
     writeHeader("Upload", "upload");
-    writeNavbar();
     require_once("inc/databaseController.php");
     $db = new DatabaseController();
     $video = $db->getVideoInfo($_GET["video"]);

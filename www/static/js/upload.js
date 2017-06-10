@@ -6,34 +6,52 @@ $(function() {
     var isValid = true;
     if ($("#video-name").val().length < 10) {
       isValid = false;
-      alert("El contenido del campo nombre es demasiado corto.\
+      bsAlert("El contenido del campo nombre es demasiado corto.\
       Debe contener al menos 10 caracteres.");
     }
     if ($("#video-desc").val().length < 10) {
       isValid = false;
-      alert("El contenido del campo descripcion es demasiado corto.\
+      bsAlert("El contenido del campo descripcion es demasiado corto.\
       Debe contener al menos 10 caracteres.");
     }
     if ($("#video-tags")[0].selectedIndex === -1) {
       isValid = false;
-      alert("Debe seleccionar al menos un tag para el video");
+      bsAlert("Debe seleccionar al menos un tag para el video");
     }
     if ($("#video-input")[0].files.length === 0) {
       isValid = false;
-      alert("Debe seleccionar un fichero para subir");
+      bsAlert("Debe seleccionar un fichero para subir");
     }
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-      var fileSize = $("#video-input")[0].files[0].size;
-      if (fileSize > 524288000) {
-        alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
-        isValid =  false;
-      }
-    } else {
-      alert("Tu navegador no soporta nuestro sistema de subida de ficheros\
-      Por favor, descarga la ultima version de Google Chrome o Firefox");
+    if ($("#img-input")[0].files.length === 0) {
+      console.log("Hola!");
       isValid = false;
+      bsAlert("Debe seleccionar una portada para el video");
+    } else if($("#img-input")[0].files[0].type.indexOf("image") == -1) {
+      isValid = false;
+      bsAlert("El formato de la imagen no es soportado");
+    } else {
+      if (window.img.width > 0) {
+        if (window.img.width > 500 || window.img.height > 500) {
+          bsAlert("La imagen debe ser como maximo de 500px de ancho y alto");
+          isValid = false;
+        }
+      } else {
+        bsAlert("Por favor espere antes de volver a pulsar el boton de submit. Aun estamos preparando su formulario");
+        isValid = false;
+      }
     }
     if (isValid) {
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var fileSize = $("#video-input")[0].files[0].size;
+        if (fileSize > 524288000) {
+          bsAlert("El fichero es demasiado grande. No puede ser mayor de 500MB");
+          isValid =  false;
+        }
+      } else {
+        bsAlert("Tu navegador no soporta nuestro sistema de subida de ficheros\
+        Por favor, descarga la ultima version de Google Chrome o Firefox");
+        isValid = false;
+      }
       options = {
         target: "upload.php",
         beforeSubmit: prepareUpload,
@@ -56,35 +74,35 @@ $(function() {
     if ($("#resource-lang")[0].selectedIndex === -1 &&
         $("#resource-type").val() != "signal-language") {
       isValid = false;
-      alert("Debe seleccionar un lenguaje para el recurso a menos que el recurso\
+      bsAlert("Debe seleccionar un lenguaje para el recurso a menos que el recurso\
              sea de tipo lenguaje de señas");
     }
     if ($("#resource-type")[0].selectedIndex === -1) {
       isValid = false;
-      alert("Debe señeccionar un tipo de recurso");
+      bsAlert("Debe señeccionar un tipo de recurso");
     }
     if ($("#res-input")[0].files.length === 0) {
       isValid = false;
-      alert("Debe seleccionar un fichero para subir");
+      bsAlert("Debe seleccionar un fichero para subir");
     } else {
       switch ($("#resource-type").val()) {
         case "subtitles":
           if (!$("#res-input")[0].files[0].name.endsWith(".srt")) {
-            alert("Ha seleccionado subtitulos pero no un formato de subtitulos adecuado.\
+            bsAlert("Ha seleccionado subtitulos pero no un formato de subtitulos adecuado.\
             Por favor seleccione un fichero de tipo .srt");
             isValid = false;
           }
           break;
         case "transcription":
           if (!$("#res-input")[0].files[0].name.endsWith(".srt")) {
-            alert("Ha seleccionado trancripcion pero no un formato de transcripcion adecuado.\
+            bsAlert("Ha seleccionado trancripcion pero no un formato de transcripcion adecuado.\
             Por favor seleccione un fichero de tipo .srt");
             isValid = false;
           }
           break;
         case "signal-language":
           if (!$("#res-input")[0].files[0].name.endsWith(".mp4")) {
-            alert("Ha seleccionado lenguaje de señas pero no un formato de lenguaje de señas adecuado.\
+            bsAlert("Ha seleccionado lenguaje de señas pero no un formato de lenguaje de señas adecuado.\
             Por favor seleccione un fichero de tipo .mp4");
             isValid = false;
           }
@@ -94,11 +112,11 @@ $(function() {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       var fileSize = $("#res-input")[0].files[0].size;
       if (fileSize > 524288000) {
-        alert("El fichero es demasiado grande. No puede ser mayor de 500MB");
+        bsAlert("El fichero es demasiado grande. No puede ser mayor de 500MB");
         isValid =  false;
       }
     } else {
-      alert("Tu navegador no soporta nuestro sistema de subida de ficheros\
+      bsAlert("Tu navegador no soporta nuestro sistema de subida de ficheros\
       Por favor, descarga la ultima version de Google Chrome o Firefox");
       isValid = false;
     }
@@ -129,14 +147,28 @@ $(function() {
   $("#res-input").change(function(e) {
     $("#file-name").val(this.files[0].name);
   });
+  $("#img-input").change(function(e) {
+    var _URL = window.URL || window.webkitURL;
+    $("#img-name").val(this.files[0].name);
+    var file = $("#img-input")[0].files[0]
+    if (file) {
+      window.img = new Image();
+      window.loaded = false;
+      img.onload = function () {
+        window.loaded = true;
+      };
+      img.src = _URL.createObjectURL(file);
+      return false;
+    }
+  });
   /**
   * After the upload will clean the GUI and give feedback
   */
   function uploadSuccess(data) {
     console.log(data);
-    // $(".container").html("");
-    alert("Se ha subido el fichero correctamente, ahora seras redireccionado al inicio");
-    // setTimeout(function() {window.location.href="home.php", 5000});
+    $(".container").html("");
+    bsAlert("Se ha subido el fichero correctamente, ahora seras redireccionado al inicio");
+    setTimeout(function() {window.location.href="home.php", 5000});
 
   }
   /**
@@ -166,7 +198,7 @@ $(function() {
   }
 
   function uploadError(xhr, ajaxOptions, thrownError) {
-    alert("Ha ocurrido un error subiendo el archivo, por favor recarga la pagina\
+    bsAlert("Ha ocurrido un error subiendo el archivo, por favor recarga la pagina\
     y vuelve a intentarlo en unos minutos.");
   }
 

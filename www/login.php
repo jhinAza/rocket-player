@@ -1,7 +1,7 @@
 <!-- This file is for the sole purpose of log-in a user -->
 <?php
   require_once("inc/functions.php");
-  writeHeader("login");
+  writeHeader("login", "login");
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Then we will read the user and password data and try to check the credentials
     if (isset($_POST["user"]) && isset($_POST["pass"])) {

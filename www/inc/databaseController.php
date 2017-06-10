@@ -19,7 +19,7 @@
         $data = $stm->fetchAll();
         if (count($data) == 1) {
           $row = $data[0];
-          return password_verify($pass, $row[1]);
+          return password_verify($pass, $row["userPassword"]);
         }
       } else {
         error_log($this->connect->errorInfo()[2]);
@@ -77,18 +77,20 @@
     function checkUserUID($user,$UID) {
       $id = $this->getUserID($user);
       $data = $this->selectUIDRow($user);
-      if (count($data) == 1) {
+      if (count($data) ==  1) {
         $row = $data[0];
         if (($id == $row["uid"]) && ($UID == $row["token"])) {
           $uidDate = strtotime($row["date"]);
           $currentDate = time();
-          if ($uidDate + (40 * 60) > $currentDate) {
+          if ($uidDate + (50 * 60) > $currentDate) {
             // Si aun no han pasado mas de 40 minutos
-            if ($uidDate + (30 * 60) > $currentDate) {
+            if ($uidDate + (35 * 60) > $currentDate) {
               // Si aun no han pasado mas de 30 minutos
+              error_log("No hay problema con el token");
               return true;
             } else {
               // Si han pasado generamos uno nuevo
+              error_log("Generamos un nuevo token");
               session_start();
               $_SESSION["UID"] = $this->setUID($user);
               session_write_close();
@@ -96,6 +98,7 @@
             }
           } else {
             // El token ha caducado
+            error_log("El token ha caducado");
             $this->deleteUIDRow($user);
             return false;
           }
@@ -229,14 +232,14 @@
       $res = $stm->execute();
     }
 
-    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $public=true, $active=true) {
+    function saveVideoInfo($videoname, $tags, $desc, $cat, $videofile, $time, $img=false, $public=true, $active=true) {
       // We need to store all the data in the database
       session_start();
       $user = $_SESSION["user"];
       session_write_close();
       $uid = $this->getUserID($user);
       $date = date('Y-m-d H:i:s',$time);
-      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active)");
+      $stm = $this->connect->prepare("insert into videos (filename, videoname, description, creationdate, userID, cat, public, active, videoimg) values (:filename, :videoname, :desc, :date, :uid, :cat, :public, :active, :img)");
       $stm->bindParam(":filename", $videofile);
       $stm->bindParam(":videoname",$videoname);
       $stm->bindParam(":desc", $desc);
@@ -245,6 +248,7 @@
       $stm->bindParam(":cat",$cat);
       $stm->bindParam(":public",$public);
       $stm->bindParam(":active",$active);
+      $stm->bindParam(":img", $img);
       $result = $stm->execute();
       if ($result) {
         // Now that we have the video stored in the DB we need the ID
@@ -365,7 +369,7 @@
     }
 
     function getHistory($user, $start, $limit) {
-      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
+      $stm = $this->connect->prepare("SELECT u.username as 'creator', v.videoname, v.id as 'videoID', v.videoimg as 'img' FROM `history` as h, `users` as u, `videos` as v WHERE h.user = :user and v.userid = u.id and h.video = v.id order by date desc limit :offset,:limit");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
@@ -384,7 +388,7 @@
     }
 
     function getUserVideos($user, $start, $limit) {
-      $stm = $this->connect->prepare("SELECT v.videoname, v.id FROM `videos` as v WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
+      $stm = $this->connect->prepare("SELECT videoname, id, videoimg FROM videos WHERE userid = :user ORDER BY creationdate DESC limit :offset, :limit ");
       $stm->bindParam(":user", $user);
       $stm->bindValue(":offset", $start, PDO::PARAM_INT);
       $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
@@ -555,7 +559,7 @@
 
     function getVideosByQuery($query) {
       $query = "%".$query."%";
-      $stm = $this->connect->prepare("SELECT videoname, id, userid from videos where videoname like :query");
+      $stm = $this->connect->prepare("SELECT videoname, id, userid, videoimg from videos where videoname like :query");
       $stm->bindParam(":query", $query);
       $result = $stm->execute();
       if ($result) {
@@ -572,7 +576,7 @@
 
     function getUsersByQuery($query) {
       $query = "%".$query."%";
-      $stm = $this->connect->prepare("SELECT username, id from users where username like :query");
+      $stm = $this->connect->prepare("SELECT username, id, userimg from users where username like :query");
       $stm->bindParam(":query", $query);
       $result = $stm->execute();
       if ($result) {
@@ -663,6 +667,244 @@
         error_log($result);
       }
       return [];
+    }
+
+    function userHasProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"] != null;
+        }
+      }
+      return false;
+    }
+
+    function getUserProfileImage($uid) {
+      $stm = $this->connect->prepare("select userimg from users where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["userimg"];
+        }
+      }
+      return false;
+    }
+
+    function updateUserImage($user, $filename) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("update users set userimg = :filename where id = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":filename", $filename);
+      $result = $stm->execute();
+      return $result;
+    }
+
+    function userHasVotedVideo($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_video WHERE userid = :uid AND video = :video");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return count($data) > 0;
+      }
+      return false;
+    }
+
+    function addUserVideoVote($user, $video, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT INTO votos_video (userid, video, voto) VALUES (:uid, :video, :vote)");
+      $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
+      $stm->bindValue(":video", $video, PDO::PARAM_INT);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      error_log($result);
+      error_log("Insert!!");
+      if ($result) {
+        return true;
+      }
+      error_log($this->connect->errorCode());
+      return false;
+    }
+
+    function updateUserVideoVote($user, $video, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("UPDATE votos_video SET voto = :vote WHERE video = :video AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function deleteUserVote($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE FROM votos_video WHERE video = :video AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function getUserVideoVote($user, $video) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_video WHERE userid = :uid AND video = :video");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":video", $video);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["voto"];
+        }
+      }
+      return false;
+    }
+
+    function userHasVotedComment($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_comentario WHERE userid = :uid AND comments = :comments");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        return count($data) > 0;
+      }
+      return false;
+    }
+
+    function addUserCommentVote($user, $comments, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("INSERT INTO votos_comentario  (userid, comments, voto) VALUES (:uid, :comments, :vote)");
+      $stm->bindValue(":uid", $uid, PDO::PARAM_INT);
+      $stm->bindValue(":comments", $comments, PDO::PARAM_INT);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      error_log($this->connect->errorCode());
+      return false;
+    }
+
+    function updateUserCommentVote($user, $comments, $vote) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("UPDATE votos_comentario SET voto = :vote WHERE comments = :comments AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function deleteUserCommentVote($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("DELETE FROM votos_comentario WHERE comments = :comments AND userid = :uid");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        return true;
+      }
+      return false;
+    }
+
+    function getUserCommentVote($user, $comments) {
+      $uid = $this->getUserID($user);
+      $stm = $this->connect->prepare("SELECT * FROM votos_comentario WHERE userid = :uid AND comments = :comments");
+      $stm->bindParam(":uid", $uid);
+      $stm->bindParam(":comments", $comments);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data[0]["voto"];
+        }
+      }
+      return false;
+    }
+
+    function getCountsOfVideoVotes($video, $vote) {
+      $stm = $this->connect->prepare("SELECT count(*) as count FROM votos_video where video = :video and voto = :vote group by video");
+      $stm->bindParam(":video", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["count"];
+        }
+      }
+      return 0;
+    }
+
+    function getCountsOfCommentVotes($comment, $vote) {
+      $stm = $this->connect->prepare("SELECT count(*) as count FROM votos_comentario where comments = :comment and voto = :vote group by video");
+      $stm->bindParam(":comment", $video);
+      $stm->bindParam(":vote", $vote);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["count"];
+        }
+      }
+      return 0;
+    }
+
+    function getRecomendationFromVideo($video, $offset=0, $limit=10) {
+      $stm = $this->connect->prepare("SELECT Count(*) AS count,
+                 g.video,
+                 sum(vv.voto) as sum,
+                 v.id,
+                 v.videoname,
+                 v.userid,
+                 v.videoimg
+          FROM   video_genres g,
+                 videos v,
+                 votos_video vv
+          WHERE  g.genres IN (SELECT genres
+                            FROM   video_genres
+                            WHERE  video = :video)
+          AND g.video IN (SELECT id
+                       FROM   videos
+                       WHERE  cat = (SELECT cat
+                                     FROM   videos
+                                     WHERE  id = :video)
+                       AND NOT id = :video)
+          AND g.video = v.id
+          AND v.id = vv.video
+          GROUP  BY video
+          ORDER  BY count asc,
+                    sum desc
+          LIMIT :offset, :limit");
+      $stm->bindParam(":video", $video);
+      $stm->bindValue(":offset", $offset, PDO::PARAM_INT);
+      $stm->bindValue(":limit", $limit, PDO::PARAM_INT);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) > 0) {
+          return $data;
+        }
+      }
+      return false;
     }
   }
 

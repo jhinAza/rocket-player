@@ -2,7 +2,6 @@
   require_once("inc/functions.php");
   if (isUserLoggedIn()) {
     writeHeader("Reproductor", "player");
-    writeNavbar();
     $video = $_GET["video"];
     setcookie("video", $_GET["video"]);
     session_start();
@@ -20,6 +19,8 @@
     $reader = new UserSettingsReader($user);
     require_once("inc/resourcesParser.php");
     require_once("inc/functions.php");
+    $pos = $db->getCountsOfVideoVotes($video, 1);
+    $neg = $db->getCountsOfVideoVotes($video, -1);
     ?>
     <div class="container" style="padding-top:76px">
       <div class="video col-md-8 col-xs-12">
@@ -212,54 +213,7 @@
           </div>
           <div class="panel-body">
             <div class="panel-group">
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg">
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-info">
-                <div class="panel-body">
-                  <div class='row'>
-                    <div class="col-xs-4 video-thumb">
-                      <img src="/static/img/video.jpg" >
-                    </div>
-                    <div class="col-md-8">
-                      Titulo del video <br> Autor del video
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <?php getColOfRecommendations($video); ?>
             </div>
           </div>
         </div>
@@ -269,24 +223,61 @@
           <div class="row">
             <div class="col-md-4 buttons">
               <div class="row">
-                <div class="col-md-6">
-                  <div class="btn btn-success col-xs-12">
-                    <span class="glyphicon glyphicon-plus-sign"></span>
+                <?php if ($db->userHasVotedVideo($user, $video)): ?>
+                  <?php if ($db->getUserVideoVote($user, $video) == 1): ?>
+                    <div class="col-md-6">
+                      <div class="btn btn-success col-xs-12 active" id="vote-up" data-voted="true">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="badge"><?php print($pos) ?></span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                        <span class="badge"><?php print($neg) ?></span>
+                      </div>
+                    </div>
+                  <?php else: ?>
+                    <div class="col-md-6">
+                      <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <span class="badge"><?php print($pos) ?></span>
+
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="btn btn-danger col-xs-12 active" id="vote-down" data-voted="true">
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                        <span class="badge"><?php print($neg) ?></span>
+                      </div>
+                    </div>
+                  <?php endif; ?>
+                <?php else: ?>
+                  <div class="col-md-6">
+                    <div class="btn btn-success col-xs-12" id="vote-up" data-voted="false">
+                      <span class="glyphicon glyphicon-plus-sign"></span>
+                      <span class="badge"><?php print($pos) ?></span>
+                    </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="btn btn-danger col-xs-12">
-                    <span class="glyphicon glyphicon-minus-sign"></span>
+                  <div class="col-md-6">
+                    <div class="btn btn-danger col-xs-12" id="vote-down" data-voted="false">
+                      <span class="glyphicon glyphicon-minus-sign"></span>
+                      <span class="badge"><?php print($neg) ?></span>
+                    </div>
                   </div>
-                </div>
+                <?php endif; ?>
               </div>
-              <div class="row">
-                <div class="col-md-8 col-md-push-2">
-                  <div class="btn btn-info col-xs-12">
-                    <span>Subscribe!</span>
+              <?php if ($videoInfo["userid"] != $db->getUserID($user)): ?>
+                <div class="row">
+                  <div class="col-md-8 col-md-push-2">
+                      <?php if ($db->isFollowing($user, $videoInfo["userid"]) == 'false'): ?>
+                        <button type="button" name="follow" id="follow" class="btn btn-info" data-following="false" data-uid=<?php print('"'.$videoInfo["userid"].'"'); ?>>Seguir!</button>
+                      <?php else: ?>
+                        <button type="button" name="follow" id="follow" class="btn btn-warning" data-following="true" data-uid=<?php print('"'.$videoInfo["userid"].'"'); ?>>Dejar de seguir!</button>
+                      <?php endif; ?>
                   </div>
                 </div>
-              </div>
+              <?php endif; ?>
             </div>
             <div class="col-md-8">
               <div class="row">
@@ -296,7 +287,7 @@
                 <button type="button" name="send-comment" id="send-comment" class="btn btn-info col-md-4 col-md-push-4">Enviar comentario
                 </button>
                 <div class="col-md-2 btn btn-success col-md-push-6" id="length-btn">
-                  <span class="badge" id="length"></span>
+                  <span class="badge" id="length">0</span>
                 </div>
               </div>
             </div>

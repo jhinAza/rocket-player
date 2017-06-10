@@ -74,7 +74,7 @@
                 <label for='name-id' class="control-label col-md-6 radio-label">Transcripcion</label>
                 <div class="btn-group col-md-6 " data-toggle="buttons">
                   <?php
-                    if ($subs) {
+                    if ($trans) {
                   ?>
                   <label class="btn btn-primary radio active ">Si <input type="radio" name="trans" value="true" checked></label>
                   <label class="btn btn-primary radio">No <input type="radio" name="trans" value="false"></label>
