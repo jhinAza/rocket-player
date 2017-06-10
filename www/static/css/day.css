@@ -372,6 +372,7 @@ body {
 
 .subtitles .sub {
   display: none;
+  color: white;
 }
 
 #transcription-pane div {

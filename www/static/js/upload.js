@@ -166,9 +166,9 @@ $(function() {
   */
   function uploadSuccess(data) {
     console.log(data);
-    // $(".container").html("");
+    $(".container").html("");
     bsAlert("Se ha subido el fichero correctamente, ahora seras redireccionado al inicio");
-    // setTimeout(function() {window.location.href="home.php", 5000});
+    setTimeout(function() {window.location.href="home.php", 5000});
 
   }
   /**
