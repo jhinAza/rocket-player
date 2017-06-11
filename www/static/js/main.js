@@ -270,7 +270,8 @@ $(function() {
 
 });
 function bsAlert(message, alertType="warning") {
-  var bsAlert = "<div class=\"alert alert-" + alertType + "\">\n\
+  var bsAlert = "<div class=\"alert alert-dismissible alert-" + alertType + "\">\n\
+  <button type='button' class='close' data-dismiss='alert'>&times;</button>\n\
   " + message + "\n\
   </div>"
   $("#alert-pos").append(bsAlert);
