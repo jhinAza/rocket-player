@@ -145,7 +145,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src=<?php print('"/res/img/videos/'.$video["img"].'"') ?> style="width:100%">
+              <img src=<?php print(insertVideoImg($video["videoID"])) ?> style="width:100%">
             </div>
           </div>
         </div>
@@ -177,7 +177,8 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src=<?php print('"/res/img/videos/'.$video["videoimg"].'"'); ?> alt="" style="width:100%">
+              <img src=<?php print(insertVideoImg($video["videoID"])) ?> style="width:100%">
+
             </div>
           </div>
         </div>
@@ -253,5 +254,34 @@
     } else {
       print("No hay mas videos para recomendar");
     }
+  }
+
+  function insertUserPic($uid) {
+    error_log("Añadiendo avatar");
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    if ($db->userHasProfileImage($uid)) {
+      $img = "/res/img/users/".$db->getUserProfileImage($uid);
+    } else {
+      $img = "/static/img/user.png";
+    }
+    error_log("Imagen de usuario");
+    error_log($img);
+    return $img;
+  }
+
+  function insertVideoImg($video) {
+    error_log("Añadiendo thumbnail");
+    require_once("inc/databaseController.php");
+    $db = new DatabaseController();
+    $img = $db->getVideoImg($video);
+    if ($img) {
+      $img = "/res/img/videos/".$img;
+    } else {
+      $img = "/static/img/video.jpg";
+    }
+    error_log("Thefuck?");
+    error_log($img);
+    return $img;
   }
 ?>
