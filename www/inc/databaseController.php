@@ -86,11 +86,9 @@
             // Si aun no han pasado mas de 40 minutos
             if ($uidDate + (35 * 60) > $currentDate) {
               // Si aun no han pasado mas de 30 minutos
-              error_log("No hay problema con el token");
               return true;
             } else {
               // Si han pasado generamos uno nuevo
-              error_log("Generamos un nuevo token");
               session_start();
               $_SESSION["UID"] = $this->setUID($user);
               session_write_close();
@@ -98,7 +96,6 @@
             }
           } else {
             // El token ha caducado
-            error_log("El token ha caducado");
             $this->deleteUIDRow($user);
             return false;
           }
@@ -279,6 +276,19 @@
         $data = $stm->fetchAll();
         if (count($data) == 1) {
           return $data[0];
+        }
+      }
+      return false;
+    }
+
+    function getVideoImg($videoID) {
+      $stm = $this->connect->prepare("select videoimg from videos where id = :vid");
+      $stm->bindParam(":vid", $videoID);
+      $result = $stm->execute();
+      if ($result) {
+        $data = $stm->fetchAll();
+        if (count($data) == 1) {
+          return $data[0]["videoimg"];
         }
       }
       return false;

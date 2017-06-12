@@ -26,7 +26,14 @@ upload_max_filesize = 2G
 post_max_size = 2G
 ```
 
+It's also recommended to change the .conf file of your site on `/etc/apache2/sites-available` and add the following statement 
+```
+DirectoryIndex home.php
+```
+
+Once you have access to the login.php page with the correct styles you do need to connect to your MySQL server and execute the `structure.sql` file. In the future you can update the DB or set it to default with the admin user. 
+
 # A word from the creator
 Please before using this project take into account that this is a school project and can be improved in various ways, if you are interested in using it please before installing and using it in prod check that everything works great in your system and check the file at `universal-player/www/serverSettings/server_settings.xml` and add the info of the mysql server and the credentials as the credentials in this file are absolutely fake and you should never use them even if someone is pointing at you with a loaded gun. :fearful:
 
-A last thing before you can go ahead and lost yourself in my little project, please, check the security settings of the server, the ´DatabaseController´ is using MD5 to cypher the passwords (Nah, not really, I've used the crypto functions of PHP, but even so, please check the code to add any improvement to the security that you would like to have in your production server)
+A last thing before you can go ahead and lost yourself in my little project, please, check the security settings of the server, the `DatabaseController` is using MD5 to cypher the passwords (Nah, not really, I've used the crypto functions of PHP, but even so, please check the code to add any improvement to the security that you would like to have in your production server)

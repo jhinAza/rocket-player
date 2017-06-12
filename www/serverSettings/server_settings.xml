@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="server_settings.xsd">
-  <environment type="dev" inUse="true">
+  <environment type="dev" inUse="false">
     <database>webplayerdev</database>
     <user>jhin</user>
     <pass>pass</pass>
     <databaseServer>localhost</databaseServer>
     <databaseType>MySQL</databaseType>
   </environment>
-  <environment type="prod" inUse="false">
+  <environment type="prod" inUse="true">
     <database>webplayer</database>
     <user>jhin</user>
-    <pass>pass</pass>
+    <pass>String93</pass>
     <databaseServer>localhost</databaseServer>
     <databaseType>MySQL</databaseType>
   </environment>
