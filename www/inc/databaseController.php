@@ -251,7 +251,7 @@
         // Now that we have the video stored in the DB we need the ID
         $videoID = $this->connect->lastInsertId();
         print($videoID." video ID\n");
-        $this->addUserVideoVote($uid, $videoID, 1)
+        $this->addUserVideoVote($uid, $videoID, 1);
         foreach ($tags as $tag) {
           print($tag);
           $stm = $this->connect->prepare("insert into video_genres values (:video, :tag)");
