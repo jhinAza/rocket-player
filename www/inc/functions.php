@@ -235,7 +235,7 @@
           <div class="panel-body">
             <div class='row'>
               <div class="col-xs-4 video-thumb">
-                <img src=<?php print('/res/img/videos/"'.$video_data["videoimg"].'"') ?>>
+                <img src=<?php print(insertVideoImg($video_data["id"])) ?> style="width:100%">
               </div>
               <div class="col-md-8">
                 <a href=<?php print("player.php?video=".$video_data["id"]) ?>>
