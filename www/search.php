@@ -33,8 +33,7 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <img src=<?php print(insertVideoImg($video["videoID"])) ?> style="width:100%">
-
+                        <img src=<?php print(insertVideoImg($item["userid"])) ?> style="width:100%">
                       </div>
                     </div>
                   </div>
@@ -66,8 +65,7 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <img src=<?php print(insertVideoImg($video["videoID"])) ?> style="width:100%">
-
+                        <img src=<?php print(insertUserPic($item["id"])); ?> alt="" style="width:100%">
                       </div>
                     </div>
                   </div>
