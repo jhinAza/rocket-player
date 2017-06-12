@@ -123,7 +123,7 @@ $(function() {
     if (isValid) {
       options = {
         target: "resources.php",
-        // beforeSubmit: prepareUpload,
+        beforeSubmit: prepareUpload,
         success: uploadSuccess,
         error: uploadError,
         uploadProgress: updateProgressBar,
@@ -133,7 +133,6 @@ $(function() {
         dataType: "html"
       };
       $(this).ajaxSubmit(options);
-      console.log("YA?");
     }
     return false;
     // Always return false to avoid needless redirects
