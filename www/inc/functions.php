@@ -177,7 +177,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <img src=<?php print(insertVideoImg($video["videoID"])) ?> style="width:100%">
+              <img src=<?php print(insertVideoImg($video["id"])) ?> style="width:100%">
 
             </div>
           </div>
